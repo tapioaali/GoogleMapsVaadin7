@@ -2,7 +2,7 @@
 
 **Remember to get an API key from [https://code.google.com/apis/console/](https://code.google.com/apis/console/). It is normally not required when developing in localhost.**
 
-Check out demo @ [http://tapio.jelastic.servint.net/googlemaps/](http://tapio.jelastic.servint.net/googlemaps/)
+Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tapio.virtuallypreinstalled.com/googlemaps/)
 
 ## Supported features ##
 
