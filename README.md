@@ -8,10 +8,12 @@ Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tap
 
 - Setting center & zoom
 - Setting visible map controls
+- Limiting maximum & minimum zoom
 - Adding & dragging makers
 - Adding polygon overlays
 - Adding polyline overlays
-- Limiting center bounds
+- Limiting of the center bounds
+- Limiting of the visible area bounds
 - Enabling/disabling map dragging, keyboard shortcuts and scroll wheel zoom
 
 ## Supported events ##

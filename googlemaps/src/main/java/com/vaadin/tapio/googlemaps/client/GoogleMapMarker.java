@@ -1,11 +1,15 @@
 package com.vaadin.tapio.googlemaps.client;
 
+import java.io.Serializable;
+
 /**
  * The class representing a marker of the Google Map.
  * 
  * @author Tapio Aali <tapio@vaadin.com>
  */
-public class GoogleMapMarker {
+public class GoogleMapMarker implements Serializable {
+    private static final long serialVersionUID = 612346543243L;
+
     private LatLon position = new LatLon(0, 0);
 
     private String caption = "";

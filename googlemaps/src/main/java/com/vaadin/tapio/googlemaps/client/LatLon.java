@@ -1,12 +1,16 @@
 package com.vaadin.tapio.googlemaps.client;
 
+import java.io.Serializable;
+
 /**
- * Class representing coordiates of a point.
+ * Class representing coordinates of a point.
  * 
  * @author Tapio Aali <tapio@vaadin.com>
  * 
  */
-public class LatLon {
+public class LatLon implements Serializable {
+    private static final long serialVersionUID = 646346543243L;
+
     private double lat = 0.0;
     private double lon = 0.0;
 

@@ -55,6 +55,8 @@ public class DemoUI extends UI {
                 22.242415), true);
         googleMap.addMarker("NOT DRAGGABLE: Iso-Heikkilä", new LatLon(
                 60.450403, 22.230399), false);
+        googleMap.setMinZoom(4.0);
+        googleMap.setMaxZoom(16.0);
         layout.addComponent(googleMap);
         layout.setExpandRatio(googleMap, 1.0f);
 
@@ -93,7 +95,6 @@ public class DemoUI extends UI {
         });
 
         googleMap.addMarkerDragListener(new MarkerDragListener() {
-
             @Override
             public void markerDragged(GoogleMapMarker draggedMarker,
                     LatLon newPosition) {
@@ -106,17 +107,16 @@ public class DemoUI extends UI {
             }
         });
 
-        Button setCenterButton = new Button(
-                "Move over Luonnonmaa (60.447737, 21.991668), zoom 11",
+        Button moveCenterButton = new Button(
+                "Move over Luonnonmaa (60.447737, 21.991668), zoom 12",
                 new Button.ClickListener() {
-
                     @Override
                     public void buttonClick(ClickEvent event) {
                         googleMap.setCenter(new LatLon(60.447737, 21.991668));
-                        googleMap.setZoom(11.0);
+                        googleMap.setZoom(12.0);
                     }
                 });
-        buttonLayout.addComponent(setCenterButton);
+        buttonLayout.addComponent(moveCenterButton);
 
         Button limitCenterButton = new Button(
                 "Limit center between (60.619324, 22.712753), (60.373484, 21.945083)",
@@ -125,11 +125,23 @@ public class DemoUI extends UI {
                     public void buttonClick(ClickEvent event) {
                         googleMap.setCenterBoundLimits(new LatLon(60.619324,
                                 22.712753), new LatLon(60.373484, 21.945083));
-                        googleMap.setCenterBoundLimitsEnabled(true);
                         event.getButton().setEnabled(false);
                     }
                 });
         buttonLayout.addComponent(limitCenterButton);
+
+        Button limitVisibleAreaButton = new Button(
+                "Limit visible area between (60.494439, 22.397835), (60.373484, 21.945083)",
+                new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(ClickEvent event) {
+                        googleMap.setVisibleAreaBoundLimits(new LatLon(
+                                60.494439, 22.397835), new LatLon(60.420632,
+                                22.138626));
+                        event.getButton().setEnabled(false);
+                    }
+                });
+        buttonLayout.addComponent(limitVisibleAreaButton);
 
         Button addPolyOverlayButton = new Button("Add overlay over Luonnonmaa",
                 new Button.ClickListener() {

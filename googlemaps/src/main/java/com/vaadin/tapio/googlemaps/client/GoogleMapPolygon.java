@@ -1,5 +1,6 @@
 package com.vaadin.tapio.googlemaps.client;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import java.util.List;
  * @author Tapio Aali <tapio@vaadin.com>
  * 
  */
-public class GoogleMapPolygon {
+public class GoogleMapPolygon implements Serializable {
+
+    private static final long serialVersionUID = 646346543641L;
 
     private List<LatLon> coordinates = new ArrayList<LatLon>();
 

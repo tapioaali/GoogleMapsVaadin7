@@ -35,7 +35,9 @@ public class GoogleMapWidget extends FlowPanel {
     private MarkerDragListener markerDragListener = null;
 
     private MapMoveListener mapMoveListener = null;
-    private LatLngBounds allowedBounds = null;
+    private LatLngBounds allowedBoundsCenter = null;
+    private LatLngBounds allowedBoundsVisibleArea = null;
+
     private LatLng center = null;
     private double zoom = 0;
     private boolean forceBoundUpdate = false;
@@ -58,6 +60,7 @@ public class GoogleMapWidget extends FlowPanel {
         // the given bounds
         map.addCenterChangedListener(new GoogleMap.CenterChangedHandler() {
             public void handle() {
+                forceBoundUpdate = checkVisibleAreaBoundLimits();
                 forceBoundUpdate = checkCenterBoundLimits();
             }
         });
@@ -69,6 +72,50 @@ public class GoogleMapWidget extends FlowPanel {
                 updateBounds(forceBoundUpdate);
             }
         });
+    }
+
+    private boolean checkVisibleAreaBoundLimits() {
+        if (allowedBoundsVisibleArea == null) {
+            return false;
+        }
+        double newCenterLat = map.getCenter().lat();
+        double newCenterLng = map.getCenter().lng();
+
+        LatLng mapNE = map.getBounds().getNorthEast();
+        LatLng mapSW = map.getBounds().getSouthWest();
+
+        LatLng limitNE = allowedBoundsVisibleArea.getNorthEast();
+        LatLng limitSW = allowedBoundsVisibleArea.getSouthWest();
+
+        double mapWidth = mapNE.lng() - mapSW.lng();
+        double mapHeight = mapNE.lat() - mapSW.lat();
+
+        double maxWidth = limitNE.lng() - limitSW.lng();
+        double maxHeight = limitNE.lat() - limitSW.lat();
+
+        if (mapWidth > maxWidth) {
+            newCenterLng = allowedBoundsVisibleArea.getCenter().lng();
+        } else if (mapNE.lng() > limitNE.lng()) {
+            newCenterLng -= (mapNE.lng() - limitNE.lng());
+        } else if (mapSW.lng() < limitSW.lng()) {
+            newCenterLng += (limitSW.lng() - mapSW.lng());
+        }
+
+        if (mapHeight > maxHeight) {
+            newCenterLat = allowedBoundsVisibleArea.getCenter().lat();
+        } else if (mapNE.lat() > limitNE.lat()) {
+            newCenterLat -= (mapNE.lat() - limitNE.lat());
+        } else if (mapSW.lat() < limitSW.lat()) {
+            newCenterLat += (limitSW.lat() - mapSW.lat());
+        }
+
+        if (newCenterLat != map.getCenter().lat()
+                || newCenterLng != map.getCenter().lng()) {
+            setCenter(new LatLon(newCenterLat, newCenterLng));
+            return true;
+        }
+
+        return false;
     }
 
     private void updateBounds(boolean forceUpdate) {
@@ -93,15 +140,15 @@ public class GoogleMapWidget extends FlowPanel {
 
     private boolean checkCenterBoundLimits() {
         LatLng center = map.getCenter();
-        if (allowedBounds == null || allowedBounds.contains(center)) {
+        if (allowedBoundsCenter == null || allowedBoundsCenter.contains(center)) {
             return false;
         }
 
         double lat = center.lat();
         double lng = center.lng();
 
-        LatLng nortEast = allowedBounds.getNorthEast();
-        LatLng southWest = allowedBounds.getSouthWest();
+        LatLng nortEast = allowedBoundsCenter.getNorthEast();
+        LatLng southWest = allowedBoundsCenter.getSouthWest();
         if (lat > nortEast.lat()) {
             lat = nortEast.lat();
         }
@@ -115,12 +162,8 @@ public class GoogleMapWidget extends FlowPanel {
             lng = southWest.lng();
         }
 
-        if (lat != center.lat() || lng != center.lng()) {
-            setCenter(new LatLon(lat, lng));
-            return true;
-        }
-        return false;
-
+        setCenter(new LatLon(lat, lng));
+        return true;
     }
 
     public boolean isMapInitiated() {
@@ -211,13 +254,23 @@ public class GoogleMapWidget extends FlowPanel {
     }
 
     public void setCenterBoundLimits(LatLon limitNE, LatLon limitSW) {
-        allowedBounds = LatLngBounds.create(
+        allowedBoundsCenter = LatLngBounds.create(
                 LatLng.create(limitSW.getLat(), limitSW.getLon()),
                 LatLng.create(limitNE.getLat(), limitNE.getLon()));
     }
 
     public void clearCenterBoundLimits() {
-        allowedBounds = null;
+        allowedBoundsCenter = null;
+    }
+
+    public void setVisibleAreaBoundLimits(LatLon limitNE, LatLon limitSW) {
+        allowedBoundsVisibleArea = LatLngBounds.create(
+                LatLng.create(limitSW.getLat(), limitSW.getLon()),
+                LatLng.create(limitNE.getLat(), limitNE.getLon()));
+    }
+
+    public void clearVisibleAreaBoundLimits() {
+        allowedBoundsVisibleArea = null;
     }
 
     public void setPolygonOverlays(Set<GoogleMapPolygon> polyOverlays) {
@@ -313,6 +366,16 @@ public class GoogleMapWidget extends FlowPanel {
 
     public void setScrollWheelEnabled(boolean scrollWheelEnabled) {
         mapOptions.setScrollwheel(scrollWheelEnabled);
+        map.setOptions(mapOptions);
+    }
+
+    public void setMinZoom(double minZoom) {
+        mapOptions.setMinZoom(minZoom);
+        map.setOptions(mapOptions);
+    }
+
+    public void setMaxZoom(double maxZoom) {
+        mapOptions.setMaxZoom(maxZoom);
         map.setOptions(mapOptions);
     }
 

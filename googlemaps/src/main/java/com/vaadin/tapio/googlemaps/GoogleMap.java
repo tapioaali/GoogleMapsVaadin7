@@ -125,7 +125,6 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            The new coordinates of the center.
      */
     public void setCenter(LatLon center) {
-        getState().locationFromClient = false;
         getState().center = center;
     }
 
@@ -265,6 +264,15 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     }
 
     /**
+     * Checks if limiting of the center bounds is enabled.
+     * 
+     * @return true if enabled
+     */
+    public boolean isCenterBoundLimitsEnabled() {
+        return getState().limitCenterBounds;
+    }
+
+    /**
      * Enables/disables limiting of the center bounds.
      * 
      * @param enable
@@ -285,6 +293,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     public void setCenterBoundLimits(LatLon limitNE, LatLon limitSW) {
         getState().centerNELimit = limitNE;
         getState().centerSWLimit = limitSW;
+        getState().limitCenterBounds = true;
     }
 
     /**
@@ -308,7 +317,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     }
 
     /**
-     * Adds a GoogleMapPolyline to the map.
+     * Adds a polyline to the map.
      * 
      * @param polyline
      *            The GoogleMapPolyline to add.
@@ -318,7 +327,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     }
 
     /**
-     * Removes a GoogleMapPolyline from the map.
+     * Removes a polyline from the map.
      * 
      * @param polyline
      *            The GoogleMapPolyline to add.
@@ -442,6 +451,80 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      */
     public void removeControl(GoogleMapControl control) {
         getState().controls.remove(control);
+    }
+
+    /**
+     * Enables/disables limiting of the bounds of the visible area.
+     * 
+     * @param enable
+     *            Set true to enable the limiting.
+     */
+    public void setVisibleAreaBoundLimitsEnabled(boolean enabled) {
+        getState().limitVisibleAreaBounds = enabled;
+
+    }
+
+    /**
+     * Checks if limiting of the bounds of the visible area is enabled.
+     * 
+     * @return true if enabled
+     */
+    public boolean isVisibleAreaBoundLimitsEnabled() {
+        return getState().limitVisibleAreaBounds;
+    }
+
+    /**
+     * Sets the limits of the bounds of the visible area to the given values.
+     * NOTE: Using the feature does not affect zooming, consider using
+     * {@link #setMinZoom(double)} too.
+     * 
+     * @param limitNE
+     *            The coordinates of the northeast limit.
+     * @param limitSW
+     *            The coordinates of the southwest limit.
+     */
+    public void setVisibleAreaBoundLimits(LatLon limitNE, LatLon limitSW) {
+        getState().visibleAreaNELimit = limitNE;
+        getState().visibleAreaSWLimit = limitSW;
+        getState().limitVisibleAreaBounds = true;
+    }
+
+    /**
+     * Sets the maximum allowed amount of zoom (default 21.0).
+     * 
+     * @param maxZoom
+     *            The maximum amount for zoom.
+     */
+    public void setMaxZoom(double maxZoom) {
+        getState().maxZoom = maxZoom;
+    }
+
+    /**
+     * Returns the current maximum amount of zoom.
+     * 
+     * @return maximum amount of zoom
+     */
+    public double getMaxZoom() {
+        return getState().maxZoom;
+    }
+
+    /**
+     * Sets the minimum allowed amount of zoom (default 0.0).
+     * 
+     * @param minZoom
+     *            The minimum amount for zoom.
+     */
+    public void setMinZoom(double minZoom) {
+        getState().minZoom = minZoom;
+    }
+
+    /**
+     * Returns the current minimum amount of zoom.
+     * 
+     * @return minimum amount of zoom
+     */
+    public double getMinZoom() {
+        return getState().minZoom;
     }
 
 }

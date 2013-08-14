@@ -74,6 +74,14 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             getWidget().clearCenterBoundLimits();
         }
 
+        if (getState().limitVisibleAreaBounds) {
+            getWidget().setVisibleAreaBoundLimits(
+                    getState().visibleAreaNELimit,
+                    getState().visibleAreaSWLimit);
+        } else {
+            getWidget().clearVisibleAreaBoundLimits();
+        }
+
         if (!getWidget().isMapInitiated()) {
             deferred = true;
             return;
@@ -119,6 +127,13 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         if (stateChangeEvent.hasPropertyChanged("scrollWheelEnabled")) {
             getWidget().setScrollWheelEnabled(getState().scrollWheelEnabled);
         }
+        if (stateChangeEvent.hasPropertyChanged("minZoom")) {
+            getWidget().setMinZoom(getState().minZoom);
+        }
+        if (stateChangeEvent.hasPropertyChanged("maxZoom")) {
+            getWidget().setMaxZoom(getState().maxZoom);
+        }
+
     }
 
     private void loadMapApi() {
@@ -147,6 +162,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setKeyboardShortcutsEnabled(
                 getState().keyboardShortcutsEnabled);
         getWidget().setScrollWheelEnabled(getState().scrollWheelEnabled);
+        getWidget().setMinZoom(getState().minZoom);
+        getWidget().setMaxZoom(getState().maxZoom);
     }
 
     @Override

@@ -5,7 +5,7 @@
 	<groupId>com.vaadin.tapio</groupId>
 	<artifactId>googlemaps</artifactId>
 	<packaging>jar</packaging>
-	<version>0.3</version>
+	<version>0.4</version>
 	<name>GoogleMaps Add-on</name>
 
 	<properties>
