@@ -22,6 +22,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -43,9 +44,17 @@ public class DemoUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        setContent(layout);
+        VerticalLayout content = new VerticalLayout();
+        content.setSizeFull();
+        setContent(content);
+
+        TabSheet tabs = new TabSheet();
+        tabs.setSizeFull();
+        content.addComponent(tabs);
+
+        VerticalLayout tab1 = new VerticalLayout();
+        tab1.setSizeFull();
+        tab1.setCaption("MAP");
 
         googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
         googleMap.setSizeFull();
@@ -57,18 +66,22 @@ public class DemoUI extends UI {
                 60.450403, 22.230399), false);
         googleMap.setMinZoom(4.0);
         googleMap.setMaxZoom(16.0);
-        layout.addComponent(googleMap);
-        layout.setExpandRatio(googleMap, 1.0f);
+        tab1.addComponent(googleMap);
+        tab1.setExpandRatio(googleMap, 1.0f);
 
         Panel console = new Panel();
         console.setHeight("100px");
         final CssLayout consoleLayout = new CssLayout();
         console.setContent(consoleLayout);
-        layout.addComponent(console);
+        tab1.addComponent(console);
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setHeight("26px");
-        layout.addComponent(buttonLayout);
+        HorizontalLayout buttonLayoutRow1 = new HorizontalLayout();
+        buttonLayoutRow1.setHeight("26px");
+        tab1.addComponent(buttonLayoutRow1);
+
+        HorizontalLayout buttonLayoutRow2 = new HorizontalLayout();
+        buttonLayoutRow2.setHeight("26px");
+        tab1.addComponent(buttonLayoutRow2);
 
         googleMap.addMarkerClickListener(new MarkerClickListener() {
             @Override
@@ -116,7 +129,7 @@ public class DemoUI extends UI {
                         googleMap.setZoom(12.0);
                     }
                 });
-        buttonLayout.addComponent(moveCenterButton);
+        buttonLayoutRow1.addComponent(moveCenterButton);
 
         Button limitCenterButton = new Button(
                 "Limit center between (60.619324, 22.712753), (60.373484, 21.945083)",
@@ -128,7 +141,7 @@ public class DemoUI extends UI {
                         event.getButton().setEnabled(false);
                     }
                 });
-        buttonLayout.addComponent(limitCenterButton);
+        buttonLayoutRow1.addComponent(limitCenterButton);
 
         Button limitVisibleAreaButton = new Button(
                 "Limit visible area between (60.494439, 22.397835), (60.373484, 21.945083)",
@@ -141,7 +154,7 @@ public class DemoUI extends UI {
                         event.getButton().setEnabled(false);
                     }
                 });
-        buttonLayout.addComponent(limitVisibleAreaButton);
+        buttonLayoutRow1.addComponent(limitVisibleAreaButton);
 
         Button addPolyOverlayButton = new Button("Add overlay over Luonnonmaa",
                 new Button.ClickListener() {
@@ -160,7 +173,7 @@ public class DemoUI extends UI {
                         event.getButton().setEnabled(false);
                     }
                 });
-        buttonLayout.addComponent(addPolyOverlayButton);
+        buttonLayoutRow2.addComponent(addPolyOverlayButton);
 
         Button addPolyLineButton = new Button("Draw line from Turku to Raisio",
                 new Button.ClickListener() {
@@ -179,7 +192,7 @@ public class DemoUI extends UI {
                         event.getButton().setEnabled(false);
                     }
                 });
-        buttonLayout.addComponent(addPolyLineButton);
+        buttonLayoutRow2.addComponent(addPolyLineButton);
         Button changeToTerrainButton = new Button("Change to terrain map",
                 new Button.ClickListener() {
                     @Override
@@ -188,7 +201,7 @@ public class DemoUI extends UI {
                         event.getButton().setEnabled(false);
                     }
                 });
-        buttonLayout.addComponent(changeToTerrainButton);
+        buttonLayoutRow2.addComponent(changeToTerrainButton);
 
         Button changeControls = new Button("Remove street view control",
                 new Button.ClickListener() {
@@ -198,6 +211,11 @@ public class DemoUI extends UI {
                         event.getButton().setEnabled(false);
                     }
                 });
-        buttonLayout.addComponent(changeControls);
+        buttonLayoutRow2.addComponent(changeControls);
+        tabs.addTab(tab1);
+
+        Label tab2 = new Label("Tab2!");
+        tab2.setCaption("Tab 2");
+        tabs.addTab(tab2);
     }
 }

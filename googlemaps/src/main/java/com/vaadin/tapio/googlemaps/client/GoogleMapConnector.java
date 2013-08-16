@@ -38,6 +38,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         } else {
             initMap();
         }
+
     }
 
     private void initMap() {
@@ -87,51 +88,57 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             return;
         }
 
+        boolean initial = stateChangeEvent.isInitialStateChange();
         // do not set zoom/center again if the change orginated from client
-        if (!getState().locationFromClient) {
+        if (!getState().locationFromClient || initial) {
             if (getState().center.getLat() != getWidget().getLatitude()
                     || getState().center.getLon() != getWidget().getLongitude()) {
                 getWidget().setCenter(getState().center);
             }
-            if (stateChangeEvent.hasPropertyChanged("zoom")
-                    && getState().zoom != getWidget().getZoom()) {
+            if (getState().zoom != getWidget().getZoom()) {
                 getWidget().setZoom(getState().zoom);
             }
         }
 
-        if (stateChangeEvent.hasPropertyChanged("markers")) {
+        if (stateChangeEvent.hasPropertyChanged("markers") || initial) {
             getWidget().setMarkers(getState().markers);
         }
 
-        if (stateChangeEvent.hasPropertyChanged("polygons")) {
+        if (stateChangeEvent.hasPropertyChanged("polygons") || initial) {
             getWidget().setPolygonOverlays(getState().polygons);
         }
-        if (stateChangeEvent.hasPropertyChanged("polylines")) {
+        if (stateChangeEvent.hasPropertyChanged("polylines") || initial) {
             getWidget().setPolylineOverlays(getState().polylines);
         }
-        if (stateChangeEvent.hasPropertyChanged("mapTypeId")) {
+        if (stateChangeEvent.hasPropertyChanged("mapTypeId") || initial) {
             getWidget().setMapType(getState().mapTypeId);
         }
 
-        if (stateChangeEvent.hasPropertyChanged("controls")) {
+        if (stateChangeEvent.hasPropertyChanged("controls") || initial) {
             getWidget().setControls(getState().controls);
         }
 
-        if (stateChangeEvent.hasPropertyChanged("draggable")) {
+        if (stateChangeEvent.hasPropertyChanged("draggable") || initial) {
             getWidget().setDraggable(getState().draggable);
         }
-        if (stateChangeEvent.hasPropertyChanged("keyboardShortcutsEnabled")) {
+        if (stateChangeEvent.hasPropertyChanged("keyboardShortcutsEnabled")
+                || initial) {
             getWidget().setKeyboardShortcutsEnabled(
                     getState().keyboardShortcutsEnabled);
         }
-        if (stateChangeEvent.hasPropertyChanged("scrollWheelEnabled")) {
+        if (stateChangeEvent.hasPropertyChanged("scrollWheelEnabled")
+                || initial) {
             getWidget().setScrollWheelEnabled(getState().scrollWheelEnabled);
         }
-        if (stateChangeEvent.hasPropertyChanged("minZoom")) {
+        if (stateChangeEvent.hasPropertyChanged("minZoom") || initial) {
             getWidget().setMinZoom(getState().minZoom);
         }
-        if (stateChangeEvent.hasPropertyChanged("maxZoom")) {
+        if (stateChangeEvent.hasPropertyChanged("maxZoom") || initial) {
             getWidget().setMaxZoom(getState().maxZoom);
+        }
+
+        if (initial) {
+            getWidget().triggerResize();
         }
 
     }

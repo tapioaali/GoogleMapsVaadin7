@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.maps.gwt.client.Animation;
 import com.google.maps.gwt.client.GoogleMap;
@@ -379,4 +380,19 @@ public class GoogleMapWidget extends FlowPanel {
         map.setOptions(mapOptions);
     }
 
+    public GoogleMap getMap() {
+        return map;
+    }
+
+    public void triggerResize() {
+        Timer timer = new Timer() {
+            @Override
+            public void run() {
+                map.triggerResize();
+                map.setZoom(zoom);
+                map.setCenter(center);
+            }
+        };
+        timer.schedule(20);
+    }
 }
