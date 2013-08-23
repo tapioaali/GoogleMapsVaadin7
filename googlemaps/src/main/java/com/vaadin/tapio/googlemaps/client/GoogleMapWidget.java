@@ -8,6 +8,8 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.maps.gwt.client.Animation;
 import com.google.maps.gwt.client.GoogleMap;
+import com.google.maps.gwt.client.InfoWindow;
+import com.google.maps.gwt.client.InfoWindowOptions;
 import com.google.maps.gwt.client.LatLng;
 import com.google.maps.gwt.client.LatLngBounds;
 import com.google.maps.gwt.client.MVCArray;
@@ -20,6 +22,8 @@ import com.google.maps.gwt.client.Polygon;
 import com.google.maps.gwt.client.PolygonOptions;
 import com.google.maps.gwt.client.Polyline;
 import com.google.maps.gwt.client.PolylineOptions;
+import com.google.maps.gwt.client.Size;
+import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
@@ -30,10 +34,13 @@ public class GoogleMapWidget extends FlowPanel {
     private GoogleMap map;
     private MapOptions mapOptions;
     private Map<Marker, GoogleMapMarker> markerMap = new HashMap<Marker, GoogleMapMarker>();
+    private Map<GoogleMapMarker, Marker> gmMarkerMap = new HashMap<GoogleMapMarker, Marker>();
     private Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<Polygon, GoogleMapPolygon>();
     private Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<Polyline, GoogleMapPolyline>();
+    private Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<InfoWindow, GoogleMapInfoWindow>();
     private MarkerClickListener markerClickListener = null;
     private MarkerDragListener markerDragListener = null;
+    private InfoWindowClosedListener infoWindowClosedListener = null;
 
     private MapMoveListener mapMoveListener = null;
     private LatLngBounds allowedBoundsCenter = null;
@@ -189,10 +196,12 @@ public class GoogleMapWidget extends FlowPanel {
             marker.setMap((GoogleMap) null);
         }
         markerMap.clear();
+        gmMarkerMap.clear();
 
         for (GoogleMapMarker googleMapMarker : markers) {
             final Marker marker = addMarker(googleMapMarker);
             markerMap.put(marker, googleMapMarker);
+            gmMarkerMap.put(googleMapMarker, marker);
 
             marker.addClickListener(new Marker.ClickHandler() {
                 @Override
@@ -227,6 +236,10 @@ public class GoogleMapWidget extends FlowPanel {
         markerDragListener = listener;
     }
 
+    public void setInfoWindowClosedListener(InfoWindowClosedListener listener) {
+        infoWindowClosedListener = listener;
+    }
+
     private Marker addMarker(GoogleMapMarker googleMapMarker) {
         LatLng center = LatLng.create(googleMapMarker.getPosition().getLat(),
                 googleMapMarker.getPosition().getLon());
@@ -235,6 +248,9 @@ public class GoogleMapWidget extends FlowPanel {
         options.setTitle(googleMapMarker.getCaption());
         options.setDraggable(googleMapMarker.isDraggable());
         options.setAnimation(Animation.DROP);
+        if (googleMapMarker.getIconUrl() != null) {
+            options.setIcon(googleMapMarker.getIconUrl());
+        }
 
         final Marker marker = Marker.create(options);
         marker.setMap(map);
@@ -394,5 +410,53 @@ public class GoogleMapWidget extends FlowPanel {
             }
         };
         timer.schedule(20);
+    }
+
+    public void setInfoWindows(Set<GoogleMapInfoWindow> infoWindows) {
+        for (InfoWindow window : infoWindowMap.keySet()) {
+            window.close();
+        }
+        infoWindowMap.clear();
+
+        for (GoogleMapInfoWindow gmWindow : infoWindows) {
+            InfoWindowOptions options = InfoWindowOptions.create();
+            options.setContent(gmWindow.getContent());
+            options.setDisableAutoPan(gmWindow.isAutoPanDisabled());
+            if (gmWindow.getMaxWidth() != null) {
+                options.setMaxWidth(gmWindow.getMaxWidth());
+            }
+            if (gmWindow.getPixelOffsetHeight() != null
+                    && gmWindow.getPixelOffsetWidth() != null) {
+                options.setPixelOffset(Size.create(
+                        gmWindow.getPixelOffsetWidth(),
+                        gmWindow.getPixelOffsetHeight()));
+            }
+            if (gmWindow.getPosition() != null) {
+                options.setPosition(LatLng.create(gmWindow.getPosition()
+                        .getLat(), gmWindow.getPosition().getLon()));
+            }
+            if (gmWindow.getzIndex() != null) {
+                options.setZindex(gmWindow.getzIndex());
+            }
+            final InfoWindow window = InfoWindow.create(options);
+            if (gmMarkerMap.containsKey(gmWindow.getAnchorMarker())) {
+                window.open(map, gmMarkerMap.get(gmWindow.getAnchorMarker()));
+            } else {
+                window.open(map);
+            }
+            infoWindowMap.put(window, gmWindow);
+
+            window.addCloseClickListener(new InfoWindow.CloseClickHandler() {
+
+                @Override
+                public void handle() {
+                    if (infoWindowClosedListener != null) {
+                        infoWindowClosedListener.infoWindowClosed(infoWindowMap
+                                .get(window));
+                    }
+                }
+            });
+
+        }
     }
 }

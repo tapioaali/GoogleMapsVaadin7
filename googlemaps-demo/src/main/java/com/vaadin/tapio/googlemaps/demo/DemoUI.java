@@ -12,10 +12,12 @@ import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolyline;
+import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CssLayout;
@@ -35,6 +37,7 @@ import com.vaadin.ui.VerticalLayout;
 public class DemoUI extends UI {
 
     private GoogleMap googleMap;
+    private GoogleMapMarker kakolaMarker;
     private final String apiKey = "";
 
     @WebServlet(value = "/*", asyncSupported = true)
@@ -59,11 +62,11 @@ public class DemoUI extends UI {
         googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
         googleMap.setSizeFull();
         googleMap.addMarker("DRAGGABLE: Paavo Nurmi Stadion", new LatLon(
-                60.442423, 22.26044), true);
-        googleMap.addMarker("DRAGGABLE: Kakolan vankila", new LatLon(60.44291,
-                22.242415), true);
+                60.442423, 22.26044), true, "VAADIN/1377279006_stadium.png");
+        kakolaMarker = googleMap.addMarker("DRAGGABLE: Kakolan vankila",
+                new LatLon(60.44291, 22.242415), true, null);
         googleMap.addMarker("NOT DRAGGABLE: Iso-Heikkilä", new LatLon(
-                60.450403, 22.230399), false);
+                60.450403, 22.230399), false, null);
         googleMap.setMinZoom(4.0);
         googleMap.setMaxZoom(16.0);
         tab1.addComponent(googleMap);
@@ -116,7 +119,16 @@ public class DemoUI extends UI {
                         + newPosition.getLat() + ", " + newPosition.getLon()
                         + ")");
                 consoleLayout.addComponent(consoleEntry, 0);
+            }
+        });
 
+        googleMap.addInfoWindowClosedListener(new InfoWindowClosedListener() {
+
+            @Override
+            public void infoWindowClosed(GoogleMapInfoWindow window) {
+                Label consoleEntry = new Label("InfoWindow \""
+                        + window.getContent() + "\" closed");
+                consoleLayout.addComponent(consoleEntry, 0);
             }
         });
 
@@ -212,6 +224,19 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(changeControls);
+
+        Button addInfoWindowButton = new Button(
+                "Add InfoWindow to Kakola marker", new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(ClickEvent event) {
+                        GoogleMapInfoWindow window = new GoogleMapInfoWindow(
+                                "Kakola used to be a provincial prison.",
+                                kakolaMarker);
+                        googleMap.openInfoWindow(window);
+                    }
+                });
+        buttonLayoutRow2.addComponent(addInfoWindowButton);
+
         tabs.addTab(tab1);
 
         Label tab2 = new Label("Tab2!");

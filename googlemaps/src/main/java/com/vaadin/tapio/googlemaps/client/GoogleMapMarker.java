@@ -16,6 +16,8 @@ public class GoogleMapMarker implements Serializable {
 
     private boolean draggable = false;
 
+    private String iconUrl = null;
+
     /**
      * Instantiates a new GoogleMapMarker.
      */
@@ -36,6 +38,22 @@ public class GoogleMapMarker implements Serializable {
         this.caption = caption;
         this.position = position;
         this.draggable = draggable;
+    }
+
+    /**
+     * Instantiates a new GoogleMapMarker
+     * 
+     * @param caption
+     *            The caption to use.
+     * @param position
+     *            The position of the marker
+     * @param draggable
+     *            Can marker be dragged?
+     */
+    public GoogleMapMarker(String caption, LatLon position, boolean draggable,
+            String iconUrl) {
+        this(caption, position, draggable);
+        this.iconUrl = iconUrl;
     }
 
     /**
@@ -94,4 +112,63 @@ public class GoogleMapMarker implements Serializable {
     public void setDraggable(boolean draggable) {
         this.draggable = draggable;
     }
+
+    /**
+     * Returns the url of the icon of the marker.
+     * 
+     * @return the url of the icon, default null.
+     */
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    /**
+     * Sets the url of the icon of the marker.
+     * 
+     * @param iconUrl
+     *            The new url of the icon.
+     */
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((caption == null) ? 0 : caption.hashCode());
+        result = prime * result
+                + ((position == null) ? 0 : position.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        GoogleMapMarker other = (GoogleMapMarker) obj;
+        if (caption == null) {
+            if (other.caption != null) {
+                return false;
+            }
+        } else if (!caption.equals(other.caption)) {
+            return false;
+        }
+        if (position == null) {
+            if (other.position != null) {
+                return false;
+            }
+        } else if (!position.equals(other.position)) {
+            return false;
+        }
+        return true;
+    }
+
 }

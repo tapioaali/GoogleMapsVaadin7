@@ -231,4 +231,70 @@ public class GoogleMapPolygon implements Serializable {
     public void setGeodesic(boolean geodesic) {
         this.geodesic = geodesic;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((coordinates == null) ? 0 : coordinates.hashCode());
+        result = prime * result
+                + ((fillColor == null) ? 0 : fillColor.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(fillOpacity);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result
+                + ((strokeColor == null) ? 0 : strokeColor.hashCode());
+        temp = Double.doubleToLongBits(strokeOpacity);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + strokeWeight;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        GoogleMapPolygon other = (GoogleMapPolygon) obj;
+        if (coordinates == null) {
+            if (other.coordinates != null) {
+                return false;
+            }
+        } else if (!coordinates.equals(other.coordinates)) {
+            return false;
+        }
+        if (fillColor == null) {
+            if (other.fillColor != null) {
+                return false;
+            }
+        } else if (!fillColor.equals(other.fillColor)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(fillOpacity) != Double
+                .doubleToLongBits(other.fillOpacity)) {
+            return false;
+        }
+        if (strokeColor == null) {
+            if (other.strokeColor != null) {
+                return false;
+            }
+        } else if (!strokeColor.equals(other.strokeColor)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(strokeOpacity) != Double
+                .doubleToLongBits(other.strokeOpacity)) {
+            return false;
+        }
+        if (strokeWeight != other.strokeWeight) {
+            return false;
+        }
+        return true;
+    }
 }

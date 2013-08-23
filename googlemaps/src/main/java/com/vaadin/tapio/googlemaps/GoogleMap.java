@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
+import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
+import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindowClosedRpc;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarkerDraggedRpc;
@@ -13,6 +15,7 @@ import com.vaadin.tapio.googlemaps.client.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolyline;
 import com.vaadin.tapio.googlemaps.client.GoogleMapState;
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
@@ -64,11 +67,24 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         }
     };
 
+    private GoogleMapInfoWindowClosedRpc infoWindowClosedRpc = new GoogleMapInfoWindowClosedRpc() {
+
+        @Override
+        public void infoWindowClosed(GoogleMapInfoWindow window) {
+            for (InfoWindowClosedListener listener : infoWindowClosedListeners) {
+                listener.infoWindowClosed(window);
+            }
+            getState().infoWindows.remove(window);
+        }
+    };
+
     private List<MarkerClickListener> markerClickListeners = new ArrayList<MarkerClickListener>();
 
     private List<MapMoveListener> mapMoveListeners = new ArrayList<MapMoveListener>();
 
     private List<MarkerDragListener> markerDragListeners = new ArrayList<MarkerDragListener>();
+
+    private List<InfoWindowClosedListener> infoWindowClosedListeners = new ArrayList<InfoWindowClosedListener>();
 
     /**
      * Initiates a new GoogleMap object with default settings from the
@@ -79,6 +95,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         registerRpc(markerClickedRpc);
         registerRpc(mapMovedRpc);
         registerRpc(markerDraggedRpc);
+        registerRpc(infoWindowClosedRpc);
     }
 
     /**
@@ -166,12 +183,14 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            Coordinates of the marker on the map.
      * @param draggable
      *            Set true to enable dragging of the marker.
+     * @param iconUrl
+     *            The url of the icon of the marker.
      * @return GoogleMapMarker object created with the given settings.
      */
     public GoogleMapMarker addMarker(String caption, LatLon position,
-            boolean draggable) {
+            boolean draggable, String iconUrl) {
         GoogleMapMarker marker = new GoogleMapMarker(caption, position,
-                draggable);
+                draggable, iconUrl);
         getState().markers.add(marker);
         return marker;
     }
@@ -204,10 +223,30 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     }
 
     /**
+     * Checks if a marker has been added to the map.
+     * 
+     * @param marker
+     *            The marker to check.
+     * @return true, if the marker has been added to the map.
+     */
+    public boolean hasMarker(GoogleMapMarker marker) {
+        return getState().markers.contains(marker);
+    }
+
+    /**
+     * Returns the markers that have been added to he map.
+     * 
+     * @return Set of the markers.
+     */
+    public Set<GoogleMapMarker> getMarkers() {
+        return getState().markers;
+    }
+
+    /**
      * Adds a MarkerClickListener to the map.
      * 
      * @param listener
-     *            the listener
+     *            The listener to add.
      */
     public void addMarkerClickListener(MarkerClickListener listener) {
         markerClickListeners.add(listener);
@@ -217,7 +256,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * Removes a MarkerClickListener from the map.
      * 
      * @param listener
-     *            the listener
+     *            The listener to remove.
      */
     public void removeMarkerClickListener(MarkerClickListener listener) {
         markerClickListeners.remove(listener);
@@ -227,7 +266,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * Adds a MarkerDragListener to the map.
      * 
      * @param listener
-     *            the listener
+     *            The listener to add.
      */
     public void addMarkerDragListener(MarkerDragListener listener) {
         markerDragListeners.add(listener);
@@ -237,7 +276,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * Removes a MarkerDragListenr from the map.
      * 
      * @param listener
-     *            the listener
+     *            The listener to remove.
      */
     public void removeMarkerDragListener(MarkerDragListener listener) {
         markerDragListeners.remove(listener);
@@ -247,7 +286,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * Adds a MapMoveListener to the map.
      * 
      * @param listener
-     *            the listener
+     *            The listener to add.
      */
     public void addMapMoveListener(MapMoveListener listener) {
         mapMoveListeners.add(listener);
@@ -257,16 +296,36 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * Removes a MapMoveListener from the map.
      * 
      * @param listener
-     *            the listener
+     *            The listener to add.
      */
     public void removeMapMoveListener(MapMoveListener listener) {
         mapMoveListeners.remove(listener);
     }
 
     /**
+     * Adds an InfoWindowClosedListener to the map.
+     * 
+     * @param listener
+     *            The listener to add.
+     */
+    public void addInfoWindowClosedListener(InfoWindowClosedListener listener) {
+        infoWindowClosedListeners.add(listener);
+    }
+
+    /**
+     * Removes an InfoWindowClosedListener from the map.
+     * 
+     * @param listener
+     *            The listener to remove.
+     */
+    public void removeInfoWindowClosedListener(InfoWindowClosedListener listener) {
+        infoWindowClosedListeners.remove(listener);
+    }
+
+    /**
      * Checks if limiting of the center bounds is enabled.
      * 
-     * @return true if enabled
+     * @return true, if enabled
      */
     public boolean isCenterBoundLimitsEnabled() {
         return getState().limitCenterBounds;
@@ -456,7 +515,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     /**
      * Enables/disables limiting of the bounds of the visible area.
      * 
-     * @param enabled
+     * @param enable
      *            Set true to enable the limiting.
      */
     public void setVisibleAreaBoundLimitsEnabled(boolean enabled) {
@@ -527,4 +586,34 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         return getState().minZoom;
     }
 
+    /**
+     * Opens an info window.
+     * 
+     * @param infoWindow
+     *            The window to open.
+     */
+    public void openInfoWindow(GoogleMapInfoWindow infoWindow) {
+        getState().infoWindows.add(infoWindow);
+    }
+
+    /**
+     * Closes an info window.
+     * 
+     * @param infoWindow
+     *            The window to close.
+     */
+    public void closeInfoWindow(GoogleMapInfoWindow infoWindow) {
+        getState().infoWindows.remove(infoWindow);
+    }
+
+    /**
+     * Checks if an info window is open.
+     * 
+     * @param infoWindow
+     *            The window to check.
+     * @return true, if the window is open.
+     */
+    public boolean isInfoWindowOpen(GoogleMapInfoWindow infoWindow) {
+        return getState().infoWindows.contains(infoWindow);
+    }
 }

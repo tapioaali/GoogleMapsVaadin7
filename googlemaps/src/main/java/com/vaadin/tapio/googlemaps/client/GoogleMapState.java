@@ -43,4 +43,6 @@ public class GoogleMapState extends AbstractComponentState {
     public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
     public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
     public Set<GoogleMapMarker> markers = new HashSet<GoogleMapMarker>();
+
+    public Set<GoogleMapInfoWindow> infoWindows = new HashSet<GoogleMapInfoWindow>();
 }

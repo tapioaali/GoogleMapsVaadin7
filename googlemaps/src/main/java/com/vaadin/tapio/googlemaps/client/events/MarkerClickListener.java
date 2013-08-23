@@ -11,8 +11,7 @@ public interface MarkerClickListener {
      * Handle a MarkerClickEvent.
      * 
      * @param clickedMarker
-     *            the marker that was clicked.
-     * 
+     *            The marker that was clicked.
      */
     public void markerClicked(GoogleMapMarker clickedMarker);
 }

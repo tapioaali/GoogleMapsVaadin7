@@ -9,6 +9,7 @@ import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.tapio.googlemaps.GoogleMap;
+import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
@@ -20,7 +21,8 @@ import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
  */
 @Connect(GoogleMap.class)
 public class GoogleMapConnector extends AbstractComponentConnector implements
-        MarkerClickListener, MapMoveListener, MarkerDragListener {
+        MarkerClickListener, MapMoveListener, MarkerDragListener,
+        InfoWindowClosedListener {
 
     protected static boolean apiLoaded = false;
     private boolean deferred = false;
@@ -30,6 +32,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             GoogleMapMovedRpc.class, this);
     private GoogleMapMarkerDraggedRpc markerDraggedRpc = RpcProxy.create(
             GoogleMapMarkerDraggedRpc.class, this);
+    private GoogleMapInfoWindowClosedRpc infoWindowClosedRpc = RpcProxy.create(
+            GoogleMapInfoWindowClosedRpc.class, this);
 
     public GoogleMapConnector() {
         if (!apiLoaded) {
@@ -47,6 +51,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setMarkerClickListener(this);
         getWidget().setMapMoveListener(this);
         getWidget().setMarkerDragListener(this);
+        getWidget().setInfoWindowClosedListener(this);
     }
 
     @Override
@@ -137,6 +142,10 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             getWidget().setMaxZoom(getState().maxZoom);
         }
 
+        if (stateChangeEvent.hasPropertyChanged("infoWindows") || initial) {
+            getWidget().setInfoWindows(getState().infoWindows);
+        }
+
         if (initial) {
             getWidget().triggerResize();
         }
@@ -163,6 +172,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setMarkers(getState().markers);
         getWidget().setPolygonOverlays(getState().polygons);
         getWidget().setPolylineOverlays(getState().polylines);
+        getWidget().setInfoWindows(getState().infoWindows);
         getWidget().setMapType(getState().mapTypeId);
         getWidget().setControls(getState().controls);
         getWidget().setDraggable(getState().draggable);
@@ -187,5 +197,10 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     @Override
     public void markerDragged(GoogleMapMarker draggedMarker, LatLon newPosition) {
         markerDraggedRpc.markerDragged(draggedMarker, newPosition);
+    }
+
+    @Override
+    public void infoWindowClosed(GoogleMapInfoWindow window) {
+        infoWindowClosedRpc.infoWindowClosed(window);
     }
 }
