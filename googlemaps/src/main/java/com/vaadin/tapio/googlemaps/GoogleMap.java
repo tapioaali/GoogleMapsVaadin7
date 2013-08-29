@@ -142,6 +142,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            The new coordinates of the center.
      */
     public void setCenter(LatLon center) {
+        getState().locationFromClient = false;
         getState().center = center;
     }
 
@@ -515,7 +516,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     /**
      * Enables/disables limiting of the bounds of the visible area.
      * 
-     * @param enable
+     * @param enabled
      *            Set true to enable the limiting.
      */
     public void setVisibleAreaBoundLimitsEnabled(boolean enabled) {
