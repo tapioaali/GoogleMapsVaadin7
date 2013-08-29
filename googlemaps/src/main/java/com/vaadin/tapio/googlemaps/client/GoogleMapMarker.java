@@ -18,6 +18,8 @@ public class GoogleMapMarker implements Serializable {
 
     private String iconUrl = null;
 
+    private boolean animationEnabled = true;
+
     /**
      * Instantiates a new GoogleMapMarker.
      */
@@ -130,6 +132,25 @@ public class GoogleMapMarker implements Serializable {
      */
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
+    }
+
+    /**
+     * Checks if marker animation is enabled.
+     * 
+     * @return true, if enabled
+     */
+    public boolean isAnimationEnabled() {
+        return animationEnabled;
+    }
+
+    /**
+     * Enables/disables marker animation.
+     * 
+     * @param animationEnabled
+     *            Set true to enable (default true).
+     */
+    public void setAnimationEnabled(boolean animationEnabled) {
+        this.animationEnabled = animationEnabled;
     }
 
     @Override

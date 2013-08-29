@@ -5,7 +5,7 @@
 	<groupId>com.vaadin.tapio</groupId>
 	<artifactId>googlemaps-demo</artifactId>
 	<packaging>war</packaging>
-	<version>0.6</version>
+	<version>0.6.1</version>
 	<name>GoogleMaps Add-on Demo</name>
 
 	<properties>

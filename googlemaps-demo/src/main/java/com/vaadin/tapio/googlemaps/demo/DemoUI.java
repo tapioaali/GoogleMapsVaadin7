@@ -37,7 +37,9 @@ import com.vaadin.ui.VerticalLayout;
 public class DemoUI extends UI {
 
     private GoogleMap googleMap;
-    private GoogleMapMarker kakolaMarker;
+    private GoogleMapMarker kakolaMarker = new GoogleMapMarker(
+            "DRAGGABLE: Kakolan vankila", new LatLon(60.44291, 22.242415),
+            true, null);
     private final String apiKey = "";
 
     @WebServlet(value = "/*", asyncSupported = true)
@@ -47,7 +49,7 @@ public class DemoUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        VerticalLayout content = new VerticalLayout();
+		VerticalLayout content = new VerticalLayout();
         content.setSizeFull();
         setContent(content);
 
@@ -61,10 +63,10 @@ public class DemoUI extends UI {
 
         googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
         googleMap.setSizeFull();
+        kakolaMarker.setAnimationEnabled(false);
+        googleMap.addMarker(kakolaMarker);
         googleMap.addMarker("DRAGGABLE: Paavo Nurmi Stadion", new LatLon(
                 60.442423, 22.26044), true, "VAADIN/1377279006_stadium.png");
-        kakolaMarker = googleMap.addMarker("DRAGGABLE: Kakolan vankila",
-                new LatLon(60.44291, 22.242415), true, null);
         googleMap.addMarker("NOT DRAGGABLE: Iso-Heikkilä", new LatLon(
                 60.450403, 22.230399), false, null);
         googleMap.setMinZoom(4.0);

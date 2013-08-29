@@ -247,7 +247,10 @@ public class GoogleMapWidget extends FlowPanel {
         options.setPosition(center);
         options.setTitle(googleMapMarker.getCaption());
         options.setDraggable(googleMapMarker.isDraggable());
-        options.setAnimation(Animation.DROP);
+        if (googleMapMarker.isAnimationEnabled()) {
+            options.setAnimation(Animation.DROP);
+        }
+
         if (googleMapMarker.getIconUrl() != null) {
             options.setIcon(googleMapMarker.getIconUrl());
         }
