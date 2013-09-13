@@ -10,11 +10,14 @@ Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tap
 - Setting visible map controls
 - Limiting maximum & minimum zoom
 - Adding & dragging makers
+- Adding info windows
 - Adding polygon overlays
 - Adding polyline overlays
 - Limiting of the center bounds
 - Limiting of the visible area bounds
 - Enabling/disabling map dragging, keyboard shortcuts and scroll wheel zoom
+- Setting language of the map
+- Enabling/disabling the new visual style of Google Maps
 
 ## Supported events ##
 - Map move
@@ -23,4 +26,4 @@ Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tap
 
 ## Development notice ##
 
-If you want to use the add-on without Maven, grab **Mapsv3 bindings for GWT 3.8.0** from [https://code.google.com/p/gwt-google-apis/downloads/detail?name=gwt-maps-3.8.0-pre1.zip](https://code.google.com/p/gwt-google-apis/downloads/detail?name=gwt-maps-3.8.0-pre1.zip).
+If you want to use the add-on without Maven/Ivy, grab **Mapsv3 bindings for GWT 3.8.0** from [https://code.google.com/p/gwt-google-apis/downloads/detail?name=gwt-maps-3.8.0-pre1.zip](https://code.google.com/p/gwt-google-apis/downloads/detail?name=gwt-maps-3.8.0-pre1.zip).

@@ -16,6 +16,8 @@ public class GoogleMapState extends AbstractComponentState {
 
     public String apiKey = null;
 
+    // defaults to the language setting of the browser
+    public String language = null;
     public String mapTypeId = "Roadmap";
     public LatLon center = new LatLon(51.477811, -0.001475);
     public double zoom = 8.0;
@@ -25,6 +27,8 @@ public class GoogleMapState extends AbstractComponentState {
     public boolean draggable = true;
     public boolean keyboardShortcutsEnabled = true;
     public boolean scrollWheelEnabled = true;
+
+    public boolean visualRefreshEnabled = false;
 
     public Set<GoogleMapControl> controls = new HashSet<GoogleMapControl>(
             Arrays.asList(GoogleMapControl.MapType, GoogleMapControl.Pan,

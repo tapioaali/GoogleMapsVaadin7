@@ -89,6 +89,10 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     /**
      * Initiates a new GoogleMap object with default settings from the
      * {@link GoogleMapState state object}.
+     * 
+     * @param apiKey
+     *            The Maps API key from Google. Not required when developing in
+     *            localhost.
      */
     public GoogleMap(String apiKey) {
         getState().apiKey = apiKey;
@@ -104,6 +108,9 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * 
      * @param center
      *            Coordinates of the center.
+     * @param apiKey
+     *            The Maps API key from Google. Not required when developing in
+     *            localhost.
      */
     public GoogleMap(LatLon center, String apiKey) {
         this(apiKey);
@@ -118,11 +125,38 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            Coordinates of the center.
      * @param zoom
      *            Amount of zoom.
+     * @param apiKey
+     *            The Maps API key from Google. Not required when developing in
+     *            localhost.
      */
     public GoogleMap(LatLon center, double zoom, String apiKey) {
         this(apiKey);
         getState().zoom = zoom;
         getState().center = center;
+    }
+
+    /**
+     * Creates a new GoogleMap object with the given center, zoom and language.
+     * Other settings will be {@link GoogleMapState defaults of the state
+     * object}.
+     * 
+     * @param center
+     *            Coordinates of the center.
+     * @param zoom
+     *            Amount of zoom.
+     * @param apiKey
+     *            The Maps API key from Google. Not required when developing in
+     *            localhost.
+     * @param language
+     *            The language to use with maps. See
+     *            https://developers.google.com/maps/faq#languagesupport for the
+     *            list of the supported languages.
+     */
+    public GoogleMap(LatLon center, double zoom, String apiKey, String language) {
+        this(apiKey);
+        getState().zoom = zoom;
+        getState().center = center;
+        getState().language = language;
     }
 
     /*
@@ -616,5 +650,25 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      */
     public boolean isInfoWindowOpen(GoogleMapInfoWindow infoWindow) {
         return getState().infoWindows.contains(infoWindow);
+    }
+
+    /**
+     * Enables/disables new visual style of the map. NOTICE: this must be set
+     * before rendering the map.
+     * 
+     * @param enabled
+     *            Set true to enable (defaul false).
+     */
+    public void setVisualRefreshEnabled(boolean enabled) {
+        getState().visualRefreshEnabled = enabled;
+    }
+
+    /**
+     * Checks if the new visual style is enabled.
+     * 
+     * @return true, if visual refresh is enabled
+     */
+    public boolean isVisualRefreshEnabled() {
+        return getState().visualRefreshEnabled;
     }
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.maps.gwt.client.Animation;
 import com.google.maps.gwt.client.GoogleMap;
 import com.google.maps.gwt.client.InfoWindow;
@@ -28,7 +29,7 @@ import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 
-public class GoogleMapWidget extends FlowPanel {
+public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public static final String CLASSNAME = "googlemap";
     private GoogleMap map;
@@ -462,4 +463,15 @@ public class GoogleMapWidget extends FlowPanel {
 
         }
     }
+
+    public native void setVisualRefreshEnabled(boolean enabled)
+    /*-{
+        $wnd.google.maps.visualRefresh = enabled;
+    }-*/;
+
+    @Override
+    public void onResize() {
+        triggerResize();
+    }
+
 }

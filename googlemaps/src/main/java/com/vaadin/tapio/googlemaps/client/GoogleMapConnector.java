@@ -7,6 +7,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
+import com.vaadin.client.ui.layout.ElementResizeEvent;
+import com.vaadin.client.ui.layout.ElementResizeListener;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
@@ -25,6 +27,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         InfoWindowClosedListener {
 
     protected static boolean apiLoaded = false;
+    protected static boolean mapInitiated = false;
+
     private boolean deferred = false;
     private GoogleMapMarkerClickedRpc markerClickedRpc = RpcProxy.create(
             GoogleMapMarkerClickedRpc.class, this);
@@ -36,22 +40,27 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             GoogleMapInfoWindowClosedRpc.class, this);
 
     public GoogleMapConnector() {
-        if (!apiLoaded) {
-            loadMapApi();
-            apiLoaded = true;
-        } else {
-            initMap();
-        }
-
     }
 
     private void initMap() {
+        getWidget().setVisualRefreshEnabled(getState().visualRefreshEnabled);
         getWidget().initMap(getState().center, getState().zoom,
                 getState().mapTypeId);
         getWidget().setMarkerClickListener(this);
         getWidget().setMapMoveListener(this);
         getWidget().setMarkerDragListener(this);
         getWidget().setInfoWindowClosedListener(this);
+        if (deferred) {
+            loadDeferred();
+            deferred = false;
+        }
+        getLayoutManager().addElementResizeListener(getWidget().getElement(),
+                new ElementResizeListener() {
+                    @Override
+                    public void onElementResize(ElementResizeEvent e) {
+                        getWidget().triggerResize();
+                    }
+                });
     }
 
     @Override
@@ -73,6 +82,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
         super.onStateChanged(stateChangeEvent);
 
+        // settings that can be set without API being loaded/map initiated
         if (getState().limitCenterBounds) {
             getWidget().setCenterBoundLimits(getState().centerNELimit,
                     getState().centerSWLimit);
@@ -88,13 +98,21 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             getWidget().clearVisibleAreaBoundLimits();
         }
 
-        if (!getWidget().isMapInitiated()) {
+        // load API/init map
+        if (!apiLoaded) {
             deferred = true;
+            loadMapApi();
+            apiLoaded = true;
+            return;
+        } else if (!getWidget().isMapInitiated()) {
+            deferred = true;
+            initMap();
             return;
         }
 
+        // setting that require initiated map
         boolean initial = stateChangeEvent.isInitialStateChange();
-        // do not set zoom/center again if the change orginated from client
+        // do not set zoom/center again if the change originated from client
         if (!getState().locationFromClient || initial) {
             if (getState().center.getLat() != getWidget().getLatitude()
                     || getState().center.getLon() != getWidget().getLongitude()) {
@@ -146,6 +164,12 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             getWidget().setInfoWindows(getState().infoWindows);
         }
 
+        if (stateChangeEvent.hasPropertyChanged("visualRefreshEnabled")
+                || initial) {
+            getWidget()
+                    .setVisualRefreshEnabled(getState().visualRefreshEnabled);
+        }
+
         if (initial) {
             getWidget().triggerResize();
         }
@@ -154,14 +178,16 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
 
     private void loadMapApi() {
         AjaxLoaderOptions options = AjaxLoaderOptions.newInstance();
-        options.setOtherParms("sensor=false");
+
+        StringBuffer otherParams = new StringBuffer("sensor=false");
+
+        if (getState().language != null) {
+            otherParams.append("&language=" + getState().language);
+        }
+        options.setOtherParms(otherParams.toString());
         Runnable callback = new Runnable() {
             public void run() {
                 initMap();
-                if (deferred) {
-                    loadDeferred();
-                    deferred = false;
-                }
             }
         };
         AjaxLoader.init(getState().apiKey);
