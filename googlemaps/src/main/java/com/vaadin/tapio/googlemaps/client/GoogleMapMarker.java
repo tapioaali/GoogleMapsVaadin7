@@ -10,6 +10,10 @@ import java.io.Serializable;
 public class GoogleMapMarker implements Serializable {
     private static final long serialVersionUID = 612346543243L;
 
+    private static long idCounter = 0;
+
+    private long id;
+
     private LatLon position = new LatLon(0, 0);
 
     private String caption = "";
@@ -20,10 +24,14 @@ public class GoogleMapMarker implements Serializable {
 
     private boolean animationEnabled = true;
 
+    private boolean optimized = true;
+
     /**
      * Instantiates a new GoogleMapMarker.
      */
     public GoogleMapMarker() {
+        id = idCounter;
+        idCounter++;
     }
 
     /**
@@ -37,6 +45,7 @@ public class GoogleMapMarker implements Serializable {
      *            Can marker be dragged?
      */
     public GoogleMapMarker(String caption, LatLon position, boolean draggable) {
+        this();
         this.caption = caption;
         this.position = position;
         this.draggable = draggable;
@@ -153,13 +162,40 @@ public class GoogleMapMarker implements Serializable {
         this.animationEnabled = animationEnabled;
     }
 
+    /**
+     * Checks if optimization is enabled.
+     * 
+     * @return true, if enabled
+     */
+    public boolean isOptimized() {
+        return optimized;
+    }
+
+    /**
+     * Enables/disables marker optimization. If enabled, many markers are
+     * rendered as a single static element. Disable if you want to use animated
+     * GIFs or PNGs.
+     * 
+     * @param optimized
+     *            Set true to enable (default true).
+     */
+    public void setOptimized(boolean optimized) {
+        this.optimized = optimized;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((caption == null) ? 0 : caption.hashCode());
-        result = prime * result
-                + ((position == null) ? 0 : position.hashCode());
+        result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
 
@@ -175,18 +211,31 @@ public class GoogleMapMarker implements Serializable {
             return false;
         }
         GoogleMapMarker other = (GoogleMapMarker) obj;
-        if (caption == null) {
-            if (other.caption != null) {
-                return false;
-            }
-        } else if (!caption.equals(other.caption)) {
+        if (id != other.id) {
             return false;
         }
-        if (position == null) {
-            if (other.position != null) {
-                return false;
-            }
-        } else if (!position.equals(other.position)) {
+        return true;
+    }
+
+    public boolean hasSameFieldValues(GoogleMapMarker other) {
+        if ((other.getCaption() != null || getCaption() != null)
+                && !other.getCaption().equals(getCaption())) {
+            return false;
+        }
+        if ((other.getIconUrl() != null || getIconUrl() != null)
+                && !other.getIconUrl().equals(getIconUrl())) {
+            return false;
+        }
+        if (!other.getPosition().equals(getPosition())) {
+            return false;
+        }
+        if (other.isAnimationEnabled() != isAnimationEnabled()) {
+            return false;
+        }
+        if (other.isDraggable() != isDraggable()) {
+            return false;
+        }
+        if (other.isOptimized() != isOptimized()) {
             return false;
         }
         return true;

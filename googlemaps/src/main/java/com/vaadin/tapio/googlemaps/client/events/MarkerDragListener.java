@@ -13,9 +13,9 @@ public interface MarkerDragListener {
      * Handle a MarkerDragEvent.
      * 
      * @param draggedMarker
-     *            The marker that was dragged.
+     *            The marker that was dragged with position updated.
      * @param newPosition
-     *            The new position of the marker.
+     *            The old position of the marker.
      */
-    public void markerDragged(GoogleMapMarker draggedMarker, LatLon newPosition);
+    public void markerDragged(GoogleMapMarker draggedMarker, LatLon oldPosition);
 }

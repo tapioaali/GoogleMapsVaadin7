@@ -1,6 +1,7 @@
 package com.vaadin.tapio.googlemaps;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +37,9 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
 
     private GoogleMapMarkerClickedRpc markerClickedRpc = new GoogleMapMarkerClickedRpc() {
         @Override
-        public void markerClicked(GoogleMapMarker marker) {
+        public void markerClicked(long markerId) {
+
+            GoogleMapMarker marker = getState().markers.get(markerId);
             for (MarkerClickListener listener : markerClickListeners) {
                 listener.markerClicked(marker);
             }
@@ -45,9 +48,12 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
 
     private GoogleMapMarkerDraggedRpc markerDraggedRpc = new GoogleMapMarkerDraggedRpc() {
         @Override
-        public void markerDragged(GoogleMapMarker marker, LatLon newPosition) {
+        public void markerDragged(long markerId, LatLon newPosition) {
+            GoogleMapMarker marker = getState().markers.get(markerId);
+            LatLon oldPosition = marker.getPosition();
+            marker.setPosition(newPosition);
             for (MarkerDragListener listener : markerDragListeners) {
-                listener.markerDragged(marker, newPosition);
+                listener.markerDragged(marker, oldPosition);
             }
         }
     };
@@ -59,6 +65,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
             getState().locationFromClient = true;
             getState().zoom = zoomLevel;
             getState().center = center;
+            fitToBounds(null, null);
 
             for (MapMoveListener listener : mapMoveListeners) {
                 listener.mapMoved(zoomLevel, center, boundsNE, boundsSW);
@@ -70,11 +77,12 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     private GoogleMapInfoWindowClosedRpc infoWindowClosedRpc = new GoogleMapInfoWindowClosedRpc() {
 
         @Override
-        public void infoWindowClosed(GoogleMapInfoWindow window) {
+        public void infoWindowClosed(long windowId) {
+            GoogleMapInfoWindow window = getState().infoWindows.get(windowId);
             for (InfoWindowClosedListener listener : infoWindowClosedListeners) {
                 listener.infoWindowClosed(window);
             }
-            getState().infoWindows.remove(window);
+            getState().infoWindows.remove(windowId);
         }
     };
 
@@ -226,7 +234,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
             boolean draggable, String iconUrl) {
         GoogleMapMarker marker = new GoogleMapMarker(caption, position,
                 draggable, iconUrl);
-        getState().markers.add(marker);
+        getState().markers.put(marker.getId(), marker);
         return marker;
     }
 
@@ -237,7 +245,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            The marker to add.
      */
     public void addMarker(GoogleMapMarker marker) {
-        getState().markers.add(marker);
+        getState().markers.put(marker.getId(), marker);
     }
 
     /**
@@ -247,7 +255,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            The marker to remove.
      */
     public void removeMarker(GoogleMapMarker marker) {
-        getState().markers.remove(marker);
+        getState().markers.remove(marker.getId());
     }
 
     /**
@@ -265,7 +273,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * @return true, if the marker has been added to the map.
      */
     public boolean hasMarker(GoogleMapMarker marker) {
-        return getState().markers.contains(marker);
+        return getState().markers.containsKey(marker.getId());
     }
 
     /**
@@ -273,8 +281,8 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * 
      * @return Set of the markers.
      */
-    public Set<GoogleMapMarker> getMarkers() {
-        return getState().markers;
+    public Collection<GoogleMapMarker> getMarkers() {
+        return getState().markers.values();
     }
 
     /**
@@ -628,7 +636,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            The window to open.
      */
     public void openInfoWindow(GoogleMapInfoWindow infoWindow) {
-        getState().infoWindows.add(infoWindow);
+        getState().infoWindows.put(infoWindow.getId(), infoWindow);
     }
 
     /**
@@ -638,7 +646,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            The window to close.
      */
     public void closeInfoWindow(GoogleMapInfoWindow infoWindow) {
-        getState().infoWindows.remove(infoWindow);
+        getState().infoWindows.remove(infoWindow.getId());
     }
 
     /**
@@ -649,7 +657,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * @return true, if the window is open.
      */
     public boolean isInfoWindowOpen(GoogleMapInfoWindow infoWindow) {
-        return getState().infoWindows.contains(infoWindow);
+        return getState().infoWindows.containsKey(infoWindow.getId());
     }
 
     /**
@@ -670,5 +678,19 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      */
     public boolean isVisualRefreshEnabled() {
         return getState().visualRefreshEnabled;
+    }
+
+    /**
+     * Tries to fit the visible area of the map inside given boundaries by
+     * modifying zoom and/or center.
+     * 
+     * @param boundsNE
+     *            The northeast boundaries.
+     * @param boundsSW
+     *            The southwest boundaries.
+     */
+    public void fitToBounds(LatLon boundsNE, LatLon boundsSW) {
+        getState().fitToBoundsNE = boundsNE;
+        getState().fitToBoundsSW = boundsSW;
     }
 }

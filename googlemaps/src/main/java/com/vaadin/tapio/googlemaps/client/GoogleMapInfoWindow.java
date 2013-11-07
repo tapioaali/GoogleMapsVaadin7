@@ -13,6 +13,10 @@ public class GoogleMapInfoWindow implements Serializable {
 
     private static final long serialVersionUID = 646386543641L;
 
+    private static long idCounter = 0;
+
+    private long id;
+
     private String content = null;
     private boolean autoPanDisabled = false;
     private Integer maxWidth = null;
@@ -26,7 +30,8 @@ public class GoogleMapInfoWindow implements Serializable {
      * Instantiates a new info window.
      */
     public GoogleMapInfoWindow() {
-
+        id = idCounter;
+        idCounter++;
     }
 
     /**
@@ -36,6 +41,7 @@ public class GoogleMapInfoWindow implements Serializable {
      *            The content in HTML.
      */
     public GoogleMapInfoWindow(String content) {
+        this();
         this.content = content;
     }
 
@@ -205,28 +211,22 @@ public class GoogleMapInfoWindow implements Serializable {
         this.anchorMarker = anchorMarker;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((anchorMarker == null) ? 0 : anchorMarker.hashCode());
-        result = prime * result + ((content == null) ? 0 : content.hashCode());
-        result = prime * result
-                + ((position == null) ? 0 : position.hashCode());
+        result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -239,25 +239,7 @@ public class GoogleMapInfoWindow implements Serializable {
             return false;
         }
         GoogleMapInfoWindow other = (GoogleMapInfoWindow) obj;
-        if (anchorMarker == null) {
-            if (other.anchorMarker != null) {
-                return false;
-            }
-        } else if (!anchorMarker.equals(other.anchorMarker)) {
-            return false;
-        }
-        if (content == null) {
-            if (other.content != null) {
-                return false;
-            }
-        } else if (!content.equals(other.content)) {
-            return false;
-        }
-        if (position == null) {
-            if (other.position != null) {
-                return false;
-            }
-        } else if (!position.equals(other.position)) {
+        if (id != other.id) {
             return false;
         }
         return true;

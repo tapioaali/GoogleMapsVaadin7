@@ -1,5 +1,6 @@
 package com.vaadin.tapio.googlemaps.client;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -192,37 +193,65 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         map.setZoom(this.zoom);
     }
 
-    public void setMarkers(Set<GoogleMapMarker> markers) {
+    public void setMarkers(Collection<GoogleMapMarker> markers) {
+
+        // clear removed markers
         for (Marker marker : markerMap.keySet()) {
-            marker.setMap((GoogleMap) null);
+            GoogleMapMarker gMapMarker = markerMap.get(marker);
+            if (!markers.contains(gMapMarker)) {
+                marker.setMap((GoogleMap) null);
+                gmMarkerMap.remove(gMapMarker);
+                markerMap.remove(marker);
+            }
         }
-        markerMap.clear();
-        gmMarkerMap.clear();
 
         for (GoogleMapMarker googleMapMarker : markers) {
-            final Marker marker = addMarker(googleMapMarker);
-            markerMap.put(marker, googleMapMarker);
-            gmMarkerMap.put(googleMapMarker, marker);
+            if (!gmMarkerMap.containsKey(googleMapMarker)) {
 
-            marker.addClickListener(new Marker.ClickHandler() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (markerClickListener != null) {
-                        markerClickListener.markerClicked(markerMap.get(marker));
+                final Marker marker = addMarker(googleMapMarker);
+                markerMap.put(marker, googleMapMarker);
+                gmMarkerMap.put(googleMapMarker, marker);
+
+                marker.addClickListener(new Marker.ClickHandler() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if (markerClickListener != null) {
+                            markerClickListener.markerClicked(markerMap
+                                    .get(marker));
+                        }
                     }
-                }
-            });
-            marker.addDragEndListener(new Marker.DragEndHandler() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (markerDragListener != null) {
-                        markerDragListener.markerDragged(markerMap.get(marker),
-                                new LatLon(marker.getPosition().lat(), marker
-                                        .getPosition().lng()));
+                });
+                marker.addDragEndListener(new Marker.DragEndHandler() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        GoogleMapMarker gMarker = markerMap.get(marker);
+                        LatLon oldPosition = gMarker.getPosition();
+                        gMarker.setPosition(new LatLon(marker.getPosition()
+                                .lat(), marker.getPosition().lng()));
+
+                        if (markerDragListener != null) {
+                            markerDragListener.markerDragged(gMarker,
+                                    oldPosition);
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                updateMarker(googleMapMarker);
+            }
         }
+    }
+
+    private void updateMarker(GoogleMapMarker googleMapMarker) {
+        Marker marker = gmMarkerMap.get(googleMapMarker);
+        GoogleMapMarker oldGmMarker = markerMap.get(marker);
+
+        if (!oldGmMarker.hasSameFieldValues(googleMapMarker)) {
+            MarkerOptions options = createMarkerOptions(googleMapMarker);
+            marker.setOptions(options);
+        }
+
+        gmMarkerMap.put(googleMapMarker, marker);
+        markerMap.put(marker, googleMapMarker);
     }
 
     public void setMarkerClickListener(MarkerClickListener listener) {
@@ -242,12 +271,23 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     private Marker addMarker(GoogleMapMarker googleMapMarker) {
+        MarkerOptions options = createMarkerOptions(googleMapMarker);
+
+        final Marker marker = Marker.create(options);
+        marker.setMap(map);
+
+        return marker;
+    }
+
+    private MarkerOptions createMarkerOptions(GoogleMapMarker googleMapMarker) {
         LatLng center = LatLng.create(googleMapMarker.getPosition().getLat(),
                 googleMapMarker.getPosition().getLon());
         MarkerOptions options = MarkerOptions.create();
         options.setPosition(center);
         options.setTitle(googleMapMarker.getCaption());
         options.setDraggable(googleMapMarker.isDraggable());
+        options.setOptimized(googleMapMarker.isOptimized());
+
         if (googleMapMarker.isAnimationEnabled()) {
             options.setAnimation(Animation.DROP);
         }
@@ -255,11 +295,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         if (googleMapMarker.getIconUrl() != null) {
             options.setIcon(googleMapMarker.getIconUrl());
         }
-
-        final Marker marker = Marker.create(options);
-        marker.setMap(map);
-
-        return marker;
+        return options;
     }
 
     public double getZoom() {
@@ -416,7 +452,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         timer.schedule(20);
     }
 
-    public void setInfoWindows(Set<GoogleMapInfoWindow> infoWindows) {
+    public void setInfoWindows(Collection<GoogleMapInfoWindow> infoWindows) {
         for (InfoWindow window : infoWindowMap.keySet()) {
             window.close();
         }
@@ -462,6 +498,15 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             });
 
         }
+    }
+
+    public void fitToBounds(LatLon boundsNE, LatLon boundsSW) {
+        LatLng ne = LatLng.create(boundsNE.getLat(), boundsNE.getLon());
+        LatLng sw = LatLng.create(boundsSW.getLat(), boundsSW.getLon());
+
+        LatLngBounds bounds = LatLngBounds.create(sw, ne);
+        map.fitBounds(bounds);
+        updateBounds(false);
     }
 
     public native void setVisualRefreshEnabled(boolean enabled)

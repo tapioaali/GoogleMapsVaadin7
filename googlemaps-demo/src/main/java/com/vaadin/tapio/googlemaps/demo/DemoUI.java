@@ -9,15 +9,15 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
+import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolyline;
-import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
-import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CssLayout;
@@ -49,7 +49,7 @@ public class DemoUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-		VerticalLayout content = new VerticalLayout();
+        VerticalLayout content = new VerticalLayout();
         content.setSizeFull();
         setContent(content);
 
@@ -115,11 +115,12 @@ public class DemoUI extends UI {
         googleMap.addMarkerDragListener(new MarkerDragListener() {
             @Override
             public void markerDragged(GoogleMapMarker draggedMarker,
-                    LatLon newPosition) {
+                    LatLon oldPosition) {
                 Label consoleEntry = new Label("Marker \""
-                        + draggedMarker.getCaption() + "\" dragged to ("
-                        + newPosition.getLat() + ", " + newPosition.getLon()
-                        + ")");
+                        + draggedMarker.getCaption() + "\" dragged from ("
+                        + oldPosition.getLat() + ", " + oldPosition.getLon()
+                        + ") to (" + draggedMarker.getPosition().getLat()
+                        + ", " + draggedMarker.getPosition().getLon() + ")");
                 consoleLayout.addComponent(consoleEntry, 0);
             }
         });
@@ -207,6 +208,20 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(addPolyLineButton);
+        Button addPolyLineButton2 = new Button(
+                "Draw line from Turku to Raisio2", new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(ClickEvent event) {
+                        ArrayList<LatLon> points2 = new ArrayList<LatLon>();
+                        points2.add(new LatLon(60.448118, 22.253738));
+                        points2.add(new LatLon(60.486025, 22.169195));
+                        GoogleMapPolyline overlay2 = new GoogleMapPolyline(
+                                points2, "#d31717", 0.8, 10);
+                        googleMap.addPolyline(overlay2);
+                        event.getButton().setEnabled(false);
+                    }
+                });
+        buttonLayoutRow2.addComponent(addPolyLineButton2);
         Button changeToTerrainButton = new Button("Change to terrain map",
                 new Button.ClickListener() {
                     @Override
@@ -238,6 +253,17 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(addInfoWindowButton);
+
+        Button moveMarkerButton = new Button("Move kakola marker",
+                new Button.ClickListener() {
+
+                    @Override
+                    public void buttonClick(ClickEvent event) {
+                        kakolaMarker.setPosition(new LatLon(60.3, 22.242415));
+                        googleMap.addMarker(kakolaMarker);
+                    }
+                });
+        buttonLayoutRow2.addComponent(moveMarkerButton);
 
         tabs.addTab(tab1);
 

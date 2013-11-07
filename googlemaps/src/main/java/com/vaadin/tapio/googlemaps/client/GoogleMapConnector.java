@@ -124,7 +124,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         }
 
         if (stateChangeEvent.hasPropertyChanged("markers") || initial) {
-            getWidget().setMarkers(getState().markers);
+            getWidget().setMarkers(getState().markers.values());
         }
 
         if (stateChangeEvent.hasPropertyChanged("polygons") || initial) {
@@ -161,13 +161,23 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         }
 
         if (stateChangeEvent.hasPropertyChanged("infoWindows") || initial) {
-            getWidget().setInfoWindows(getState().infoWindows);
+            getWidget().setInfoWindows(getState().infoWindows.values());
         }
 
         if (stateChangeEvent.hasPropertyChanged("visualRefreshEnabled")
                 || initial) {
             getWidget()
                     .setVisualRefreshEnabled(getState().visualRefreshEnabled);
+        }
+
+        if (stateChangeEvent.hasPropertyChanged("fitToBoundsNE")
+                || stateChangeEvent.hasPropertyChanged("fitToBoundsSW")
+                || initial) {
+            if (getState().fitToBoundsNE != null
+                    && getState().fitToBoundsSW != null) {
+                getWidget().fitToBounds(getState().fitToBoundsNE,
+                        getState().fitToBoundsSW);
+            }
         }
 
         if (initial) {
@@ -195,10 +205,10 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     }
 
     private void loadDeferred() {
-        getWidget().setMarkers(getState().markers);
+        getWidget().setMarkers(getState().markers.values());
         getWidget().setPolygonOverlays(getState().polygons);
         getWidget().setPolylineOverlays(getState().polylines);
-        getWidget().setInfoWindows(getState().infoWindows);
+        getWidget().setInfoWindows(getState().infoWindows.values());
         getWidget().setMapType(getState().mapTypeId);
         getWidget().setControls(getState().controls);
         getWidget().setDraggable(getState().draggable);
@@ -207,11 +217,16 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setScrollWheelEnabled(getState().scrollWheelEnabled);
         getWidget().setMinZoom(getState().minZoom);
         getWidget().setMaxZoom(getState().maxZoom);
+        if (getState().fitToBoundsNE != null
+                && getState().fitToBoundsSW != null) {
+            getWidget().fitToBounds(getState().fitToBoundsNE,
+                    getState().fitToBoundsSW);
+        }
     }
 
     @Override
     public void markerClicked(GoogleMapMarker clickedMarker) {
-        markerClickedRpc.markerClicked(clickedMarker);
+        markerClickedRpc.markerClicked(clickedMarker.getId());
     }
 
     @Override
@@ -221,12 +236,13 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     }
 
     @Override
-    public void markerDragged(GoogleMapMarker draggedMarker, LatLon newPosition) {
-        markerDraggedRpc.markerDragged(draggedMarker, newPosition);
+    public void markerDragged(GoogleMapMarker draggedMarker, LatLon oldPosition) {
+        markerDraggedRpc.markerDragged(draggedMarker.getId(),
+                draggedMarker.getPosition());
     }
 
     @Override
     public void infoWindowClosed(GoogleMapInfoWindow window) {
-        infoWindowClosedRpc.infoWindowClosed(window);
+        infoWindowClosedRpc.infoWindowClosed(window.getId());
     }
 }

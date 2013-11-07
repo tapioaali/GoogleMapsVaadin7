@@ -14,6 +14,10 @@ public class GoogleMapPolyline implements Serializable {
 
     private static final long serialVersionUID = 646346543563L;
 
+    private static long idCounter = 0;
+
+    private long id;
+
     private List<LatLon> coordinates = new ArrayList<LatLon>();
 
     private String strokeColor = "#000000";
@@ -27,15 +31,18 @@ public class GoogleMapPolyline implements Serializable {
     private boolean geodesic = false;
 
     public GoogleMapPolyline() {
+        id = idCounter;
+        idCounter++;
     }
 
     public GoogleMapPolyline(List<LatLon> coordinates) {
+        this();
         this.coordinates = coordinates;
     }
 
     public GoogleMapPolyline(List<LatLon> coordinates, String strokeColor,
             double strokeOpacity, int strokeWeight) {
-        this.coordinates = coordinates;
+        this(coordinates);
         this.strokeColor = strokeColor;
         this.strokeOpacity = strokeOpacity;
         this.strokeWeight = strokeWeight;
@@ -156,18 +163,19 @@ public class GoogleMapPolyline implements Serializable {
         this.geodesic = geodesic;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((coordinates == null) ? 0 : coordinates.hashCode());
-        result = prime * result
-                + ((strokeColor == null) ? 0 : strokeColor.hashCode());
-        long temp;
-        temp = Double.doubleToLongBits(strokeOpacity);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + strokeWeight;
+        result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
 
@@ -183,28 +191,9 @@ public class GoogleMapPolyline implements Serializable {
             return false;
         }
         GoogleMapPolyline other = (GoogleMapPolyline) obj;
-        if (coordinates == null) {
-            if (other.coordinates != null) {
-                return false;
-            }
-        } else if (!coordinates.equals(other.coordinates)) {
-            return false;
-        }
-        if (strokeColor == null) {
-            if (other.strokeColor != null) {
-                return false;
-            }
-        } else if (!strokeColor.equals(other.strokeColor)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(strokeOpacity) != Double
-                .doubleToLongBits(other.strokeOpacity)) {
-            return false;
-        }
-        if (strokeWeight != other.strokeWeight) {
+        if (id != other.id) {
             return false;
         }
         return true;
     }
-
 }

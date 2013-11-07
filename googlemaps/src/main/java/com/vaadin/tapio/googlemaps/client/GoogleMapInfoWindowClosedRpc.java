@@ -10,5 +10,5 @@ import com.vaadin.shared.communication.ServerRpc;
  * 
  */
 public interface GoogleMapInfoWindowClosedRpc extends ServerRpc {
-    public void infoWindowClosed(GoogleMapInfoWindow window);
+    public void infoWindowClosed(long windowId);
 }

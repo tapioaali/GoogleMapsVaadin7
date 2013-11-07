@@ -14,6 +14,10 @@ public class GoogleMapPolygon implements Serializable {
 
     private static final long serialVersionUID = 646346543641L;
 
+    private static long idCounter = 0;
+
+    private long id;
+
     private List<LatLon> coordinates = new ArrayList<LatLon>();
 
     private String fillColor = "#ffffff";
@@ -34,6 +38,8 @@ public class GoogleMapPolygon implements Serializable {
      * Instantiates a new polygon overlay using default values.
      */
     public GoogleMapPolygon() {
+        id = idCounter;
+        idCounter++;
     }
 
     /**
@@ -46,6 +52,7 @@ public class GoogleMapPolygon implements Serializable {
      *            doesn't have to be same as the first.
      */
     public GoogleMapPolygon(List<LatLon> coordinates) {
+        this();
         this.coordinates = coordinates;
     }
 
@@ -70,7 +77,7 @@ public class GoogleMapPolygon implements Serializable {
     public GoogleMapPolygon(List<LatLon> coordinates, String fillColor,
             double fillOpacity, String strokeColor, double strokeOpacity,
             int strokeWeight) {
-        this.coordinates = coordinates;
+        this(coordinates);
         this.fillColor = fillColor;
         this.fillOpacity = fillOpacity;
         this.strokeColor = strokeColor;
@@ -232,22 +239,19 @@ public class GoogleMapPolygon implements Serializable {
         this.geodesic = geodesic;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((coordinates == null) ? 0 : coordinates.hashCode());
-        result = prime * result
-                + ((fillColor == null) ? 0 : fillColor.hashCode());
-        long temp;
-        temp = Double.doubleToLongBits(fillOpacity);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result
-                + ((strokeColor == null) ? 0 : strokeColor.hashCode());
-        temp = Double.doubleToLongBits(strokeOpacity);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + strokeWeight;
+        result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
 
@@ -263,36 +267,7 @@ public class GoogleMapPolygon implements Serializable {
             return false;
         }
         GoogleMapPolygon other = (GoogleMapPolygon) obj;
-        if (coordinates == null) {
-            if (other.coordinates != null) {
-                return false;
-            }
-        } else if (!coordinates.equals(other.coordinates)) {
-            return false;
-        }
-        if (fillColor == null) {
-            if (other.fillColor != null) {
-                return false;
-            }
-        } else if (!fillColor.equals(other.fillColor)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(fillOpacity) != Double
-                .doubleToLongBits(other.fillOpacity)) {
-            return false;
-        }
-        if (strokeColor == null) {
-            if (other.strokeColor != null) {
-                return false;
-            }
-        } else if (!strokeColor.equals(other.strokeColor)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(strokeOpacity) != Double
-                .doubleToLongBits(other.strokeOpacity)) {
-            return false;
-        }
-        if (strokeWeight != other.strokeWeight) {
+        if (id != other.id) {
             return false;
         }
         return true;

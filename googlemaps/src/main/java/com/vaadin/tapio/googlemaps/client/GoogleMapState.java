@@ -1,7 +1,9 @@
 package com.vaadin.tapio.googlemaps.client;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.vaadin.shared.AbstractComponentState;
@@ -44,9 +46,14 @@ public class GoogleMapState extends AbstractComponentState {
     public LatLon visibleAreaSWLimit = new LatLon(0.0, 0.0);
     public LatLon visibleAreaNELimit = new LatLon(0.0, 0.0);
 
+    public LatLon fitToBoundsNE = null;
+    public LatLon fitToBoundsSW = null;
+
     public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
     public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
-    public Set<GoogleMapMarker> markers = new HashSet<GoogleMapMarker>();
 
-    public Set<GoogleMapInfoWindow> infoWindows = new HashSet<GoogleMapInfoWindow>();
+    public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
+
+    public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
+
 }

@@ -10,5 +10,5 @@ import com.vaadin.shared.communication.ServerRpc;
  * 
  */
 public interface GoogleMapMarkerDraggedRpc extends ServerRpc {
-    public void markerDragged(GoogleMapMarker marker, LatLon newPosition);
+    public void markerDragged(long markerId, LatLon newPosition);
 }
