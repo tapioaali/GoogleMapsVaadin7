@@ -2,6 +2,8 @@
 
 **Remember to get an API key from [https://code.google.com/apis/console/](https://code.google.com/apis/console/). It is normally not required when developing in localhost.**
 
+Grab it from [Vaadin Directory](https://vaadin.com/directory#addon/googlemaps-add-on:vaadin).
+
 Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tapio.virtuallypreinstalled.com/googlemaps/)
 
 ## Supported features ##

@@ -171,6 +171,18 @@ public class DemoUI extends UI {
                 });
         buttonLayoutRow1.addComponent(limitVisibleAreaButton);
 
+        Button zoomToBoundsButton = new Button("Zoom to bounds",
+                new Button.ClickListener() {
+
+                    @Override
+                    public void buttonClick(ClickEvent event) {
+                        googleMap.fitToBounds(new LatLon(60.45685853323144,
+                                22.320034754486073), new LatLon(
+                                60.4482979242303, 22.27887893936156));
+
+                    }
+                });
+        buttonLayoutRow1.addComponent(zoomToBoundsButton);
         Button addPolyOverlayButton = new Button("Add overlay over Luonnonmaa",
                 new Button.ClickListener() {
                     @Override
