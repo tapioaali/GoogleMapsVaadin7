@@ -17,6 +17,7 @@ public class GoogleMapState extends AbstractComponentState {
     private static final long serialVersionUID = 646346522643L;
 
     public String apiKey = null;
+    public String clientId = null;
 
     // defaults to the language setting of the browser
     public String language = null;
@@ -55,5 +56,9 @@ public class GoogleMapState extends AbstractComponentState {
     public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
 
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
+    
+    public boolean isBusiness() {
+    	return clientId != null;
+    }
 
 }
