@@ -98,12 +98,17 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * Initiates a new GoogleMap object with default settings from the
      * {@link GoogleMapState state object}.
      * 
-     * @param apiKey
-     *            The Maps API key from Google. Not required when developing in
-     *            localhost.
+     * @param apiKeyOrClientId
+     *            The Maps API key from Google or the client ID for the
+     *            Business API. All client IDs begin with a gme- prefix.
+     *            Not required when developing in localhost.
      */
-    public GoogleMap(String apiKey) {
-        getState().apiKey = apiKey;
+    public GoogleMap(String apiKeyOrClientId) {
+    	if (isClientId(apiKeyOrClientId)) {
+    		getState().clientId = apiKeyOrClientId;
+    	} else {
+    		getState().apiKey = apiKeyOrClientId;
+    	}
         registerRpc(markerClickedRpc);
         registerRpc(mapMovedRpc);
         registerRpc(markerDraggedRpc);
@@ -116,12 +121,13 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * 
      * @param center
      *            Coordinates of the center.
-     * @param apiKey
-     *            The Maps API key from Google. Not required when developing in
-     *            localhost.
+     * @param apiKeyOrClientId
+     *            The Maps API key from Google or the client ID for the
+     *            Business API. All client IDs begin with a gme- prefix.
+     *            Not required when developing in localhost.
      */
-    public GoogleMap(LatLon center, String apiKey) {
-        this(apiKey);
+    public GoogleMap(LatLon center, String apiKeyOrClientId) {
+        this(apiKeyOrClientId);
         getState().center = center;
     }
 
@@ -133,12 +139,13 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            Coordinates of the center.
      * @param zoom
      *            Amount of zoom.
-     * @param apiKey
-     *            The Maps API key from Google. Not required when developing in
-     *            localhost.
+     * @param apiKeyOrClientId
+     *            The Maps API key from Google or the client ID for the
+     *            Business API. All client IDs begin with a gme- prefix.
+     *            Not required when developing in localhost.
      */
-    public GoogleMap(LatLon center, double zoom, String apiKey) {
-        this(apiKey);
+    public GoogleMap(LatLon center, double zoom, String apiKeyOrClientId) {
+        this(apiKeyOrClientId);
         getState().zoom = zoom;
         getState().center = center;
     }
@@ -152,16 +159,17 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            Coordinates of the center.
      * @param zoom
      *            Amount of zoom.
-     * @param apiKey
-     *            The Maps API key from Google. Not required when developing in
-     *            localhost.
+     * @param apiKeyOrClientId
+     *            The Maps API key from Google or the client ID for the
+     *            Business API. All client IDs begin with a gme- prefix.
+     *            Not required when developing in localhost.
      * @param language
      *            The language to use with maps. See
      *            https://developers.google.com/maps/faq#languagesupport for the
      *            list of the supported languages.
      */
-    public GoogleMap(LatLon center, double zoom, String apiKey, String language) {
-        this(apiKey);
+    public GoogleMap(LatLon center, double zoom, String apiKeyOrClientId, String language) {
+        this(apiKeyOrClientId);
         getState().zoom = zoom;
         getState().center = center;
         getState().language = language;
@@ -692,5 +700,9 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     public void fitToBounds(LatLon boundsNE, LatLon boundsSW) {
         getState().fitToBoundsNE = boundsNE;
         getState().fitToBoundsSW = boundsSW;
+    }
+    
+    private boolean isClientId(String apiKeyOrClientId) {
+    	return apiKeyOrClientId != null && apiKeyOrClientId.startsWith("gme-");
     }
 }

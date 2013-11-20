@@ -194,13 +194,18 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         if (getState().language != null) {
             otherParams.append("&language=" + getState().language);
         }
+        if (getState().isBusiness()) {
+        	otherParams.append("&client=" + getState().clientId);
+        }
         options.setOtherParms(otherParams.toString());
         Runnable callback = new Runnable() {
             public void run() {
                 initMap();
             }
         };
-        AjaxLoader.init(getState().apiKey);
+        if (!getState().isBusiness()) {
+        	AjaxLoader.init(getState().apiKey);
+        }
         AjaxLoader.loadApi("maps", "3", callback, options);
     }
 
