@@ -88,6 +88,10 @@ public class DemoUI extends UI {
         buttonLayoutRow2.setHeight("26px");
         tab1.addComponent(buttonLayoutRow2);
 
+        GoogleMapInfoWindow window = new GoogleMapInfoWindow(
+            "Kakola used to be a provincial prison.",
+             kakolaMarker);
+                
         googleMap.addMarkerClickListener(new MarkerClickListener() {
             @Override
             public void markerClicked(GoogleMapMarker clickedMarker) {
@@ -96,6 +100,9 @@ public class DemoUI extends UI {
                         + clickedMarker.getPosition().getLat() + ", "
                         + clickedMarker.getPosition().getLon() + ") clicked.");
                 consoleLayout.addComponent(consoleEntry, 0);
+                if(clickedMarker.infoWindow()!=null){
+                    googleMap.openInfoWindow(clickedMarker.infoWindow());
+               }
             }
         });
 
@@ -253,18 +260,6 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(changeControls);
-
-        Button addInfoWindowButton = new Button(
-                "Add InfoWindow to Kakola marker", new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(ClickEvent event) {
-                        GoogleMapInfoWindow window = new GoogleMapInfoWindow(
-                                "Kakola used to be a provincial prison.",
-                                kakolaMarker);
-                        googleMap.openInfoWindow(window);
-                    }
-                });
-        buttonLayoutRow2.addComponent(addInfoWindowButton);
 
         Button moveMarkerButton = new Button("Move kakola marker",
                 new Button.ClickListener() {
