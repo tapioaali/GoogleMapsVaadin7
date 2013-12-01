@@ -25,8 +25,10 @@ public class GoogleMapMarker implements Serializable {
     private boolean animationEnabled = true;
 
     private boolean optimized = true;
+    
+    private GoogleMapInfoWindow window=null;
 
-    /**
+	/**
      * Instantiates a new GoogleMapMarker.
      */
     public GoogleMapMarker() {
@@ -191,7 +193,17 @@ public class GoogleMapMarker implements Serializable {
         this.id = id;
     }
 
-    @Override
+    public GoogleMapInfoWindow infoWindow() {
+		return window;
+	}
+
+	public void infoWindow(GoogleMapInfoWindow window) {
+		if (this == window.getAnchorMarker()){  // method should be called only by GoogleMapInfoWindow
+		    this.window = window;               // constructor
+		}
+	}
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
