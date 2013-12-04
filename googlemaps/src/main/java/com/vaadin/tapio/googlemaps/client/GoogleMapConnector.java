@@ -26,6 +26,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         MarkerClickListener, MapMoveListener, MarkerDragListener,
         InfoWindowClosedListener {
 
+    private static final long serialVersionUID = 646346521643L;
+
     protected static boolean apiLoaded = false;
     protected static boolean mapInitiated = false;
 
@@ -194,18 +196,13 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         if (getState().language != null) {
             otherParams.append("&language=" + getState().language);
         }
-        if (getState().isBusiness()) {
-        	otherParams.append("&client=" + getState().clientId);
-        }
         options.setOtherParms(otherParams.toString());
         Runnable callback = new Runnable() {
             public void run() {
                 initMap();
             }
         };
-        if (!getState().isBusiness()) {
-        	AjaxLoader.init(getState().apiKey);
-        }
+        AjaxLoader.init(getState().apiKey);
         AjaxLoader.loadApi("maps", "3", callback, options);
     }
 
