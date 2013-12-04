@@ -12,6 +12,8 @@ import com.google.maps.gwt.client.Animation;
 import com.google.maps.gwt.client.GoogleMap;
 import com.google.maps.gwt.client.InfoWindow;
 import com.google.maps.gwt.client.InfoWindowOptions;
+import com.google.maps.gwt.client.KmlLayer;
+import com.google.maps.gwt.client.KmlLayerOptions;
 import com.google.maps.gwt.client.LatLng;
 import com.google.maps.gwt.client.LatLngBounds;
 import com.google.maps.gwt.client.MVCArray;
@@ -40,6 +42,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     private Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<Polygon, GoogleMapPolygon>();
     private Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<Polyline, GoogleMapPolyline>();
     private Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<InfoWindow, GoogleMapInfoWindow>();
+    private Map<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = new HashMap<KmlLayer, GoogleMapKmlLayer>();
     private MarkerClickListener markerClickListener = null;
     private MarkerDragListener markerDragListener = null;
     private InfoWindowClosedListener infoWindowClosedListener = null;
@@ -253,7 +256,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         gmMarkerMap.put(googleMapMarker, marker);
         markerMap.put(marker, googleMapMarker);
     }
-
+    
     public void setMarkerClickListener(MarkerClickListener listener) {
         markerClickListener = listener;
     }
@@ -391,6 +394,36 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         }
     }
 
+  //mrn begin
+    public void setKmlLayers(Collection<GoogleMapKmlLayer> layers) {
+        for (KmlLayer kmlLayer : kmlLayerMap.keySet()) {
+        	kmlLayer.setMap((GoogleMap) null);
+        }
+        kmlLayerMap.clear();
+
+        for (GoogleMapKmlLayer gmLayer : layers) {
+
+            KmlLayerOptions options = KmlLayerOptions.create();
+            /*
+            options.setGeodesic(overlay.isGeodesic());
+            options.setStrokeColor(overlay.getStrokeColor());
+            options.setStrokeOpacity(overlay.getStrokeOpacity());
+            options.setStrokeWeight(overlay.getStrokeWeight());
+            options.setZindex(overlay.getzIndex());
+*/
+            KmlLayer kmlLayer = KmlLayer.create(gmLayer.getUrl(), options);
+            kmlLayer.setMap(map);
+
+            kmlLayerMap.put(kmlLayer, gmLayer);
+        }
+    }
+    
+//mrn end    
+    
+    
+    
+    
+    
     public void setMapType(String mapTypeId) {
         mapOptions.setMapTypeId(MapTypeId.fromValue(mapTypeId.toLowerCase()));
         map.setOptions(mapOptions);
