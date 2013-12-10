@@ -394,7 +394,6 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         }
     }
 
-  //mrn begin
     public void setKmlLayers(Collection<GoogleMapKmlLayer> layers) {
         for (KmlLayer kmlLayer : kmlLayerMap.keySet()) {
         	kmlLayer.setMap((GoogleMap) null);
@@ -404,26 +403,17 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         for (GoogleMapKmlLayer gmLayer : layers) {
 
             KmlLayerOptions options = KmlLayerOptions.create();
-            /*
-            options.setGeodesic(overlay.isGeodesic());
-            options.setStrokeColor(overlay.getStrokeColor());
-            options.setStrokeOpacity(overlay.getStrokeOpacity());
-            options.setStrokeWeight(overlay.getStrokeWeight());
-            options.setZindex(overlay.getzIndex());
-*/
+            options.setClickable(gmLayer.isClickable());
+            options.setPreserveViewport(gmLayer.isPreserveViewport());
+            options.setSuppressInfoWindows(gmLayer.isSuppressInfoWindows());
+
             KmlLayer kmlLayer = KmlLayer.create(gmLayer.getUrl(), options);
             kmlLayer.setMap(map);
 
             kmlLayerMap.put(kmlLayer, gmLayer);
         }
     }
-    
-//mrn end    
-    
-    
-    
-    
-    
+   
     public void setMapType(String mapTypeId) {
         mapOptions.setMapTypeId(MapTypeId.fromValue(mapTypeId.toLowerCase()));
         map.setOptions(mapOptions);

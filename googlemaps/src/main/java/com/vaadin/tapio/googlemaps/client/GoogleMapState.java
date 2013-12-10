@@ -1,7 +1,6 @@
 package com.vaadin.tapio.googlemaps.client;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -60,7 +59,7 @@ public class GoogleMapState extends AbstractComponentState {
 
 	public Set<GoogleMapKmlLayer> kmlLayers = new HashSet<GoogleMapKmlLayer>();
     
-    public boolean isBusiness() {
+	public boolean isBusiness() {
     	return clientId != null;
     }
 

@@ -11,6 +11,12 @@ public class GoogleMapKmlLayer implements Serializable {
 
 	private String url=null;
 
+	private boolean clickable = true;
+	
+	private boolean preserveViewport = false;
+	
+	private boolean suppressInfoWindows = false;
+
 	/**
      * Instantiates a new GoogleMapKmlLayer.
      */
@@ -29,15 +35,87 @@ public class GoogleMapKmlLayer implements Serializable {
         this();
         this.url = url;
     }
-	
-	
-	public String getUrl(){
+
+    /**
+     * Instantiates a new GoogleMapKmlLayer
+     * 
+     * @param url
+     *            The kmlLayer url.
+     * @param clickable
+     *            Defines if kmlLayer is clickable.
+     */
+    public GoogleMapKmlLayer(String url, boolean clickable) {
+        this(url);
+        this.clickable = clickable;
+    }
+    
+    /**
+     * Instantiates a new GoogleMapKmlLayer
+     * 
+     * @param url
+     *            The kmlLayer url.
+     * @param clickable
+     *            Defines if kmlLayer is clickable.
+     * @param preserveViewport
+     *            Specifies if the map should be adjusted to the bounds of the KmlLayer's contents 
+     *            when showing the layer.
+     */
+    public GoogleMapKmlLayer(String url, boolean clickable, boolean preserveViewport) {
+        this(url, clickable);
+        this.preserveViewport = preserveViewport;
+    }
+
+    /**
+     * Instantiates a new GoogleMapKmlLayer
+     * 
+     * @param url
+     *            The kmlLayer url.
+     * @param clickable
+     *            Defines if kmlLayer is clickable.
+     * @param preserveViewport
+     *            Specifies if the map should be adjusted to the bounds of the KmlLayer's contents 
+     *            when showing the layer.
+     * @param suppressInfoWindows
+     *            Indicates if clickable features within the KmlLayer should trigger the display of 
+     *            InfoWindow objects.
+     */
+    public GoogleMapKmlLayer(String url, 
+    		                  boolean clickable, 
+    		                  boolean preserveViewport, boolean suppressInfoWindows) {
+        this(url, clickable, preserveViewport);
+        this.suppressInfoWindows = suppressInfoWindows;
+    }
+    
+    public String getUrl(){
 		return url;
 	}
 	public void setUrl(String url){
 		this.url=url;		
 	}
 	
+	public boolean isClickable() {
+		return clickable;
+	}
+
+	public void setClickable(boolean clickable) {
+		this.clickable = clickable;
+	}
+
+	public boolean isPreserveViewport() {
+		return preserveViewport;
+	}
+
+	public void setPreserveViewport(boolean preserveViewport) {
+		this.preserveViewport = preserveViewport;
+	}
+
+	public boolean isSuppressInfoWindows() {
+		return suppressInfoWindows;
+	}
+
+	public void setSuppressInfoWindows(boolean suppressInfoWindows) {
+		this.suppressInfoWindows = suppressInfoWindows;
+	}
 
 	@Override
     public int hashCode() {

@@ -457,15 +457,26 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     }
 
     /**
+     * Adds a kmlLayer to the map.
+     * 
+     * @param kmlLayerUrl
+     *            Url of the kmlLayer to add.
+     */
+    public void addKmlLayer(String kmlLayerUrl) {
+    	GoogleMapKmlLayer kmlLayer = new GoogleMapKmlLayer(kmlLayerUrl);
+        getState().kmlLayers.add(kmlLayer);
+    }
+    
+    /**
      * Removes a kmlLayer from the map.
      * 
      * @param kmlLayer
-     *            The GoogleMapKmlLayer to add.
+     *            The GoogleMapKmlLayer to remove.
      */
     public void removeKmlLayer(GoogleMapKmlLayer kmlLayer) {
         getState().kmlLayers.remove(kmlLayer);
     }
-    
+ 
     /**
      * Sets the type of the base map.
      * 
