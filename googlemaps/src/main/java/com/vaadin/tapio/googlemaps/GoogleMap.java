@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.vaadin.tapio.googlemaps.client.GoogleMapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
 import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindowClosedRpc;
@@ -17,6 +18,7 @@ import com.vaadin.tapio.googlemaps.client.GoogleMapPolyline;
 import com.vaadin.tapio.googlemaps.client.GoogleMapState;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
+import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
@@ -74,6 +76,15 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         }
     };
 
+    private GoogleMapClickedRpc mapClickedRpc = new GoogleMapClickedRpc() {
+        @Override
+        public void mapClicked(LatLon position) {
+            for (MapClickListener listener : mapClickListeners) {
+                listener.mapClicked(position);
+            }
+        }
+    };
+
     private GoogleMapInfoWindowClosedRpc infoWindowClosedRpc = new GoogleMapInfoWindowClosedRpc() {
 
         @Override
@@ -90,6 +101,8 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
 
     private List<MapMoveListener> mapMoveListeners = new ArrayList<MapMoveListener>();
 
+    private List<MapClickListener> mapClickListeners = new ArrayList<MapClickListener>();
+
     private List<MarkerDragListener> markerDragListeners = new ArrayList<MarkerDragListener>();
 
     private List<InfoWindowClosedListener> infoWindowClosedListeners = new ArrayList<InfoWindowClosedListener>();
@@ -104,13 +117,14 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      *            Not required when developing in localhost.
      */
     public GoogleMap(String apiKeyOrClientId) {
-    	if (isClientId(apiKeyOrClientId)) {
-    		getState().clientId = apiKeyOrClientId;
-    	} else {
-    		getState().apiKey = apiKeyOrClientId;
-    	}
+        if (isClientId(apiKeyOrClientId)) {
+            getState().clientId = apiKeyOrClientId;
+        } else {
+            getState().apiKey = apiKeyOrClientId;
+        }
         registerRpc(markerClickedRpc);
         registerRpc(mapMovedRpc);
+        registerRpc(mapClickedRpc);
         registerRpc(markerDraggedRpc);
         registerRpc(infoWindowClosedRpc);
     }
@@ -351,6 +365,26 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      */
     public void removeMapMoveListener(MapMoveListener listener) {
         mapMoveListeners.remove(listener);
+    }
+
+   /**
+     * Adds a MapClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addMapClickListener(MapClickListener listener) {
+        mapClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a MapClickListener from the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void removeMapClickListener(MapClickListener listener) {
+        mapClickListeners.remove(listener);
     }
 
     /**
