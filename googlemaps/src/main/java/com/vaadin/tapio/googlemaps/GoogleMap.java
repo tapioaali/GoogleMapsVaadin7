@@ -9,6 +9,7 @@ import com.vaadin.tapio.googlemaps.client.GoogleMapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
 import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.GoogleMapKmlLayer;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarkerDraggedRpc;
@@ -479,7 +480,37 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
     public void removePolyline(GoogleMapPolyline polyline) {
         getState().polylines.remove(polyline);
     }
+    /**
+     * Adds a kmlLayer to the map.
+     * 
+     * @param kmlLayer
+     *            The GoogleMapKmlLayer to add.
+     */
+    public void addKmlLayer(GoogleMapKmlLayer kmlLayer) {
+        getState().kmlLayers.add(kmlLayer);
+    }
 
+    /**
+     * Adds a kmlLayer to the map.
+     * 
+     * @param kmlLayerUrl
+     *            Url of the kmlLayer to add.
+     */
+    public void addKmlLayer(String kmlLayerUrl) {
+    	GoogleMapKmlLayer kmlLayer = new GoogleMapKmlLayer(kmlLayerUrl);
+        getState().kmlLayers.add(kmlLayer);
+    }
+    
+    /**
+     * Removes a kmlLayer from the map.
+     * 
+     * @param kmlLayer
+     *            The GoogleMapKmlLayer to remove.
+     */
+    public void removeKmlLayer(GoogleMapKmlLayer kmlLayer) {
+        getState().kmlLayers.remove(kmlLayer);
+    }
+ 
     /**
      * Sets the type of the base map.
      * 

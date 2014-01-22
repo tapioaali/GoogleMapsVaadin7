@@ -57,6 +57,7 @@ public class GoogleMapInfoWindow implements Serializable {
     public GoogleMapInfoWindow(String content, GoogleMapMarker anchorMarker) {
         this(content);
         this.anchorMarker = anchorMarker;
+        anchorMarker.infoWindow(this);
     }
 
     /**

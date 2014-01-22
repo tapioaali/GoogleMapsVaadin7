@@ -10,6 +10,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
 import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
+import com.vaadin.tapio.googlemaps.client.GoogleMapKmlLayer;
 import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolyline;
@@ -64,7 +65,14 @@ public class DemoUI extends UI {
 
         googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
         googleMap.setSizeFull();
-        kakolaMarker.setAnimationEnabled(false);
+        kakolaMarker.setAnimationEnabled(false);        
+        //
+        // kml link to my google map 
+        // (http://maps.google.it/maps/ms?msid=212897908682884215672.0004ecbac547d2d635ff5&msa=0)
+        //
+        googleMap.addKmlLayer(new GoogleMapKmlLayer("http://maps.google.it/maps/"+
+                               "ms?authuser=0&ie=UTF8&hl=it&oe=UTF8&msa=0&"+
+                               "output=kml&msid=212897908682884215672.0004ecbac547d2d635ff5"));
         googleMap.addMarker(kakolaMarker);
         googleMap.addMarker("DRAGGABLE: Paavo Nurmi Stadion", new LatLon(
                 60.442423, 22.26044), true, "VAADIN/1377279006_stadium.png");
@@ -89,6 +97,10 @@ public class DemoUI extends UI {
         buttonLayoutRow2.setHeight("26px");
         tab1.addComponent(buttonLayoutRow2);
 
+        GoogleMapInfoWindow window = new GoogleMapInfoWindow(
+            "Kakola used to be a provincial prison.",
+             kakolaMarker);
+                
         googleMap.addMarkerClickListener(new MarkerClickListener() {
             @Override
             public void markerClicked(GoogleMapMarker clickedMarker) {
@@ -97,6 +109,9 @@ public class DemoUI extends UI {
                         + clickedMarker.getPosition().getLat() + ", "
                         + clickedMarker.getPosition().getLon() + ") clicked.");
                 consoleLayout.addComponent(consoleEntry, 0);
+                if(clickedMarker.infoWindow()!=null){
+                    googleMap.openInfoWindow(clickedMarker.infoWindow());
+               }
             }
         });
 
@@ -263,18 +278,6 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(changeControls);
-
-        Button addInfoWindowButton = new Button(
-                "Add InfoWindow to Kakola marker", new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(ClickEvent event) {
-                        GoogleMapInfoWindow window = new GoogleMapInfoWindow(
-                                "Kakola used to be a provincial prison.",
-                                kakolaMarker);
-                        googleMap.openInfoWindow(window);
-                    }
-                });
-        buttonLayoutRow2.addComponent(addInfoWindowButton);
 
         Button moveMarkerButton = new Button("Move kakola marker",
                 new Button.ClickListener() {

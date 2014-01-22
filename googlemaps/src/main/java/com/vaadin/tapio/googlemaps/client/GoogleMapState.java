@@ -56,8 +56,10 @@ public class GoogleMapState extends AbstractComponentState {
     public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
 
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
+
+	public Set<GoogleMapKmlLayer> kmlLayers = new HashSet<GoogleMapKmlLayer>();
     
-    public boolean isBusiness() {
+	public boolean isBusiness() {
     	return clientId != null;
     }
 
