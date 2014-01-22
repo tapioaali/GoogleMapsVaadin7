@@ -1,8 +1,10 @@
-package com.vaadin.tapio.googlemaps.client;
+package com.vaadin.tapio.googlemaps.client.overlays;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * A class representing a polygon overlay of Google Maps.

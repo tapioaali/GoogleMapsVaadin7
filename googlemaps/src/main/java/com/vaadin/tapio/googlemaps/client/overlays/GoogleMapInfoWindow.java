@@ -1,6 +1,8 @@
-package com.vaadin.tapio.googlemaps.client;
+package com.vaadin.tapio.googlemaps.client.overlays;
 
 import java.io.Serializable;
+
+import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * A class representing a pop-up window with HTML contents. They are often

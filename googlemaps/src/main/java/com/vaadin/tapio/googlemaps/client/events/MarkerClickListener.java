@@ -1,12 +1,14 @@
 package com.vaadin.tapio.googlemaps.client.events;
 
-import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
+import java.io.Serializable;
+
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 /**
  * Interface for listening marker click events.
  * 
  */
-public interface MarkerClickListener {
+public interface MarkerClickListener extends Serializable {
     /**
      * Handle a MarkerClickEvent.
      * 

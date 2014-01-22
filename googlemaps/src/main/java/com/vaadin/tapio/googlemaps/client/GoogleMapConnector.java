@@ -16,6 +16,13 @@ import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapInfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerDraggedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMovedRpc;
 
 /**
  * The connector for the Google Maps JavaScript API v3.

@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.vaadin.shared.AbstractComponentState;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 
 /**
  * The shared state of the Google Maps. Contains also the default

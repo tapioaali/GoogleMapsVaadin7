@@ -1,5 +1,7 @@
 package com.vaadin.tapio.googlemaps.client.events;
 
+import java.io.Serializable;
+
 import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
@@ -7,7 +9,7 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
  * 
  * @author Henri Muurimaa
  */
-public interface MapMoveListener {
+public interface MapMoveListener extends Serializable {
     /**
      * Handle a MapMoveEvent.
      * 

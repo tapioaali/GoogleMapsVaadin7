@@ -5,16 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.vaadin.tapio.googlemaps.client.GoogleMapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
-import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindow;
-import com.vaadin.tapio.googlemaps.client.GoogleMapInfoWindowClosedRpc;
-import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
-import com.vaadin.tapio.googlemaps.client.GoogleMapMarkerClickedRpc;
-import com.vaadin.tapio.googlemaps.client.GoogleMapMarkerDraggedRpc;
-import com.vaadin.tapio.googlemaps.client.GoogleMapMovedRpc;
-import com.vaadin.tapio.googlemaps.client.GoogleMapPolygon;
-import com.vaadin.tapio.googlemaps.client.GoogleMapPolyline;
 import com.vaadin.tapio.googlemaps.client.GoogleMapState;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
@@ -22,6 +13,15 @@ import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapInfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerDraggedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMovedRpc;
 
 /**
  * The class representing Google Maps.

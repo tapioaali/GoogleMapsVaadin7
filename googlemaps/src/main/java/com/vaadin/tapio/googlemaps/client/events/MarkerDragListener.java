@@ -1,14 +1,16 @@
 package com.vaadin.tapio.googlemaps.client.events;
 
-import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
+import java.io.Serializable;
+
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 /**
  * Interface for listening marker drag events.
  * 
  * @author Tapio Aali <tapio@vaadin.com>
  */
-public interface MarkerDragListener {
+public interface MarkerDragListener extends Serializable {
     /**
      * Handle a MarkerDragEvent.
      * 

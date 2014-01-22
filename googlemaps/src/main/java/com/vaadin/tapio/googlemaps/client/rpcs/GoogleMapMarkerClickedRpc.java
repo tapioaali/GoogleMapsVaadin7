@@ -1,4 +1,4 @@
-package com.vaadin.tapio.googlemaps.client;
+package com.vaadin.tapio.googlemaps.client.rpcs;
 
 import com.vaadin.shared.communication.ServerRpc;
 
