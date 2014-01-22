@@ -12,6 +12,7 @@ import com.vaadin.client.ui.layout.ElementResizeListener;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
+import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
@@ -23,7 +24,7 @@ import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
  */
 @Connect(GoogleMap.class)
 public class GoogleMapConnector extends AbstractComponentConnector implements
-        MarkerClickListener, MapMoveListener, MarkerDragListener,
+        MarkerClickListener, MapMoveListener, MapClickListener, MarkerDragListener,
         InfoWindowClosedListener {
 
     private static final long serialVersionUID = 646346521643L;
@@ -36,6 +37,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             GoogleMapMarkerClickedRpc.class, this);
     private GoogleMapMovedRpc mapMovedRpc = RpcProxy.create(
             GoogleMapMovedRpc.class, this);
+    private GoogleMapClickedRpc mapClickRpc = RpcProxy.create(
+            GoogleMapClickedRpc.class, this);
     private GoogleMapMarkerDraggedRpc markerDraggedRpc = RpcProxy.create(
             GoogleMapMarkerDraggedRpc.class, this);
     private GoogleMapInfoWindowClosedRpc infoWindowClosedRpc = RpcProxy.create(
@@ -50,6 +53,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
                 getState().mapTypeId);
         getWidget().setMarkerClickListener(this);
         getWidget().setMapMoveListener(this);
+        getWidget().setMapClickListener(this);
         getWidget().setMarkerDragListener(this);
         getWidget().setInfoWindowClosedListener(this);
         if (deferred) {
@@ -246,5 +250,10 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     @Override
     public void infoWindowClosed(GoogleMapInfoWindow window) {
         infoWindowClosedRpc.infoWindowClosed(window.getId());
+    }
+
+    @Override
+    public void mapClicked(LatLon position) {
+        mapClickRpc.mapClicked(position);
     }
 }

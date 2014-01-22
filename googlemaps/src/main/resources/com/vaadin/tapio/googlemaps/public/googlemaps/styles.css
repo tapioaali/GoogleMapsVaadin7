@@ -5,3 +5,7 @@ div.googlemaps {
 	-moz-user-select: none;
 	-ms-user-select: none;
 }
+
+.googlemap img {
+	max-width: none;
+}

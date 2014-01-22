@@ -15,6 +15,7 @@ import com.vaadin.tapio.googlemaps.client.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.GoogleMapPolyline;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
+import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
@@ -108,6 +109,15 @@ public class DemoUI extends UI {
                         + zoomLevel + ", boundsNE: (" + boundsNE.getLat()
                         + ", " + boundsNE.getLon() + "), boundsSW: ("
                         + boundsSW.getLat() + ", " + boundsSW.getLon() + ")");
+                consoleLayout.addComponent(consoleEntry, 0);
+            }
+        });
+
+        googleMap.addMapClickListener(new MapClickListener() {
+            @Override
+            public void mapClicked(LatLon position) {
+                Label consoleEntry = new Label("Map click to ("
+                        + position.getLat() + ", " + position.getLon() + ")");
                 consoleLayout.addComponent(consoleEntry, 0);
             }
         });

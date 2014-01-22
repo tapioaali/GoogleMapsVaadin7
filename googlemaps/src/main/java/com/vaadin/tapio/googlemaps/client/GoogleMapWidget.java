@@ -26,6 +26,7 @@ import com.google.maps.gwt.client.Polyline;
 import com.google.maps.gwt.client.PolylineOptions;
 import com.google.maps.gwt.client.Size;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
+import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
@@ -47,6 +48,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     private MapMoveListener mapMoveListener = null;
     private LatLngBounds allowedBoundsCenter = null;
     private LatLngBounds allowedBoundsVisibleArea = null;
+
+    private MapClickListener mapClickListener = null;
 
     private LatLng center = null;
     private double zoom = 0;
@@ -80,6 +83,18 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             @Override
             public void handle() {
                 updateBounds(forceBoundUpdate);
+            }
+        });
+
+        map.addClickListener(new GoogleMap.ClickHandler() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                if (mapClickListener != null) {
+                    LatLon position = new LatLon(event.getLatLng().lat(), event.getLatLng().lng());
+                    mapClickListener.mapClicked(position);
+                }
+
             }
         });
     }
@@ -260,6 +275,10 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public void setMapMoveListener(MapMoveListener listener) {
         mapMoveListener = listener;
+    }
+
+    public void setMapClickListener(MapClickListener listener) {
+        mapClickListener = listener;
     }
 
     public void setMarkerDragListener(MarkerDragListener listener) {
