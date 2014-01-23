@@ -20,6 +20,7 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
+import com.vaadin.tapio.googlemaps.demo.events.OpenInfoWindowOnMarkerClickListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CssLayout;
@@ -64,6 +65,8 @@ public class DemoUI extends UI {
         final VerticalLayout tab1 = new VerticalLayout();
         tab1.setSizeFull();
         tab1.setCaption("MAP");
+        tab1.addComponent(googleMap);
+        tab1.setExpandRatio(googleMap, 1.0f);
 
         googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
         googleMap.setSizeFull();
@@ -95,6 +98,10 @@ public class DemoUI extends UI {
         HorizontalLayout buttonLayoutRow2 = new HorizontalLayout();
         buttonLayoutRow2.setHeight("26px");
         tab1.addComponent(buttonLayoutRow2);
+
+        OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
+                googleMap, kakolaMarker, kakolaInfoWindow);
+        googleMap.addMarkerClickListener(infoWindowOpener);
 
         googleMap.addMarkerClickListener(new MarkerClickListener() {
             @Override
@@ -290,18 +297,6 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(moveMarkerButton);
-
-        Button attachMapButton = new Button("Attach map",
-                new Button.ClickListener() {
-
-                    @Override
-                    public void buttonClick(ClickEvent event) {
-                        tab1.addComponent(googleMap);
-                        tab1.setExpandRatio(googleMap, 1.0f);
-                    }
-                });
-        buttonLayoutRow2.addComponent(attachMapButton);
-
         tabs.addTab(tab1);
 
         Label tab2 = new Label("Tab2!");
