@@ -18,11 +18,11 @@ import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapClickedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapInfoWindowClosedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerClickedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerDraggedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMovedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
 
 /**
  * The connector for the Google Maps JavaScript API v3.
@@ -40,16 +40,16 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     protected static boolean mapInitiated = false;
 
     private boolean deferred = false;
-    private GoogleMapMarkerClickedRpc markerClickedRpc = RpcProxy.create(
-            GoogleMapMarkerClickedRpc.class, this);
-    private GoogleMapMovedRpc mapMovedRpc = RpcProxy.create(
-            GoogleMapMovedRpc.class, this);
-    private GoogleMapClickedRpc mapClickRpc = RpcProxy.create(
-            GoogleMapClickedRpc.class, this);
-    private GoogleMapMarkerDraggedRpc markerDraggedRpc = RpcProxy.create(
-            GoogleMapMarkerDraggedRpc.class, this);
-    private GoogleMapInfoWindowClosedRpc infoWindowClosedRpc = RpcProxy.create(
-            GoogleMapInfoWindowClosedRpc.class, this);
+    private MarkerClickedRpc markerClickedRpc = RpcProxy.create(
+            MarkerClickedRpc.class, this);
+    private MapMovedRpc mapMovedRpc = RpcProxy.create(
+            MapMovedRpc.class, this);
+    private MapClickedRpc mapClickRpc = RpcProxy.create(
+            MapClickedRpc.class, this);
+    private MarkerDraggedRpc markerDraggedRpc = RpcProxy.create(
+            MarkerDraggedRpc.class, this);
+    private InfoWindowClosedRpc infoWindowClosedRpc = RpcProxy.create(
+            InfoWindowClosedRpc.class, this);
 
     public GoogleMapConnector() {
     }

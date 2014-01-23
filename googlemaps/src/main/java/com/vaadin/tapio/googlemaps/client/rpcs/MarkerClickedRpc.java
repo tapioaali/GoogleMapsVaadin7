@@ -9,6 +9,6 @@ import com.vaadin.shared.communication.ServerRpc;
  * @author Tapio Aali <tapio@vaadin.com>
  * 
  */
-public interface GoogleMapMarkerClickedRpc extends ServerRpc {
+public interface MarkerClickedRpc extends ServerRpc {
     public void markerClicked(long markerId);
 }

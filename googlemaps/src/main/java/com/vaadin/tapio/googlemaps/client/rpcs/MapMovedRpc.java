@@ -9,7 +9,7 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
  * @author Tapio Aali <tapio@vaadin.com>
  * 
  */
-public interface GoogleMapMovedRpc extends ServerRpc {
+public interface MapMovedRpc extends ServerRpc {
     public void mapMoved(double zoomLevel, LatLon center, LatLon boundsNE,
             LatLon boundsSW);
 }

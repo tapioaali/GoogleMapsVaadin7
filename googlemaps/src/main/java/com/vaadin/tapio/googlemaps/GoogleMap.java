@@ -18,11 +18,11 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapClickedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapInfoWindowClosedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerClickedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMarkerDraggedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMovedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
 
 /**
  * The class representing Google Maps.
@@ -38,7 +38,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         Hybrid, Roadmap, Satellite, Terrain
     }
 
-    private GoogleMapMarkerClickedRpc markerClickedRpc = new GoogleMapMarkerClickedRpc() {
+    private MarkerClickedRpc markerClickedRpc = new MarkerClickedRpc() {
         @Override
         public void markerClicked(long markerId) {
 
@@ -49,7 +49,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         }
     };
 
-    private GoogleMapMarkerDraggedRpc markerDraggedRpc = new GoogleMapMarkerDraggedRpc() {
+    private MarkerDraggedRpc markerDraggedRpc = new MarkerDraggedRpc() {
         @Override
         public void markerDragged(long markerId, LatLon newPosition) {
             GoogleMapMarker marker = getState().markers.get(markerId);
@@ -61,7 +61,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         }
     };
 
-    private GoogleMapMovedRpc mapMovedRpc = new GoogleMapMovedRpc() {
+    private MapMovedRpc mapMovedRpc = new MapMovedRpc() {
         @Override
         public void mapMoved(double zoomLevel, LatLon center, LatLon boundsNE,
                 LatLon boundsSW) {
@@ -77,7 +77,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         }
     };
 
-    private GoogleMapClickedRpc mapClickedRpc = new GoogleMapClickedRpc() {
+    private MapClickedRpc mapClickedRpc = new MapClickedRpc() {
         @Override
         public void mapClicked(LatLon position) {
             for (MapClickListener listener : mapClickListeners) {
@@ -86,7 +86,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         }
     };
 
-    private GoogleMapInfoWindowClosedRpc infoWindowClosedRpc = new GoogleMapInfoWindowClosedRpc() {
+    private InfoWindowClosedRpc infoWindowClosedRpc = new InfoWindowClosedRpc() {
 
         @Override
         public void infoWindowClosed(long windowId) {

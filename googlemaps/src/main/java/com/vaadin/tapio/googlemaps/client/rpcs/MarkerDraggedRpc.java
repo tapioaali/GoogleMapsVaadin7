@@ -10,6 +10,6 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
  * @author Tapio Aali <tapio@vaadin.com>
  * 
  */
-public interface GoogleMapMarkerDraggedRpc extends ServerRpc {
+public interface MarkerDraggedRpc extends ServerRpc {
     public void markerDragged(long markerId, LatLon newPosition);
 }

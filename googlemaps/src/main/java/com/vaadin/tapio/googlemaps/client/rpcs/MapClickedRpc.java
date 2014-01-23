@@ -10,6 +10,6 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
  * @author Ivano Selvaggi <ivoselva@gmail.com>
  * 
  */
-public interface GoogleMapClickedRpc extends ServerRpc {
+public interface MapClickedRpc extends ServerRpc {
     public void mapClicked(LatLon position);
 }
