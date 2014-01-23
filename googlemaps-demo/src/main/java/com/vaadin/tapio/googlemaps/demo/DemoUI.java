@@ -77,11 +77,6 @@ public class DemoUI extends UI {
         googleMap.setMinZoom(4.0);
         googleMap.setMaxZoom(16.0);
 
-        googleMap
-                .addKmlLayer(new GoogleMapKmlLayer(
-                        "http://maps.google.it/maps/"
-                                + "ms?authuser=0&ie=UTF8&hl=it&oe=UTF8&msa=0&"
-                                + "output=kml&msid=212897908682884215672.0004ecbac547d2d635ff5"));
         tab1.addComponent(googleMap);
         tab1.setExpandRatio(googleMap, 1.0f);
 
@@ -297,6 +292,21 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(moveMarkerButton);
+
+        Button addKmlLayerButton = new Button("Add KML layer",
+                new Button.ClickListener() {
+
+                    @Override
+                    public void buttonClick(ClickEvent event) {
+                        googleMap
+                                .addKmlLayer(new GoogleMapKmlLayer(
+                                        "http://maps.google.it/maps/"
+                                                + "ms?authuser=0&ie=UTF8&hl=it&oe=UTF8&msa=0&"
+                                                + "output=kml&msid=212897908682884215672.0004ecbac547d2d635ff5"));
+                    }
+                });
+        buttonLayoutRow2.addComponent(addKmlLayerButton);
+
         tabs.addTab(tab1);
 
         Label tab2 = new Label("Tab2!");
