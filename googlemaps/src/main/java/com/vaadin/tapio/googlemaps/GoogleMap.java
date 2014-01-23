@@ -13,6 +13,7 @@ import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
@@ -112,9 +113,9 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * {@link GoogleMapState state object}.
      * 
      * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the
-     *            Business API. All client IDs begin with a gme- prefix.
-     *            Not required when developing in localhost.
+     *            The Maps API key from Google or the client ID for the Business
+     *            API. All client IDs begin with a gme- prefix. Not required
+     *            when developing in localhost.
      */
     public GoogleMap(String apiKeyOrClientId) {
         if (isClientId(apiKeyOrClientId)) {
@@ -136,9 +137,9 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * @param center
      *            Coordinates of the center.
      * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the
-     *            Business API. All client IDs begin with a gme- prefix.
-     *            Not required when developing in localhost.
+     *            The Maps API key from Google or the client ID for the Business
+     *            API. All client IDs begin with a gme- prefix. Not required
+     *            when developing in localhost.
      */
     public GoogleMap(LatLon center, String apiKeyOrClientId) {
         this(apiKeyOrClientId);
@@ -154,9 +155,9 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * @param zoom
      *            Amount of zoom.
      * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the
-     *            Business API. All client IDs begin with a gme- prefix.
-     *            Not required when developing in localhost.
+     *            The Maps API key from Google or the client ID for the Business
+     *            API. All client IDs begin with a gme- prefix. Not required
+     *            when developing in localhost.
      */
     public GoogleMap(LatLon center, double zoom, String apiKeyOrClientId) {
         this(apiKeyOrClientId);
@@ -174,15 +175,16 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      * @param zoom
      *            Amount of zoom.
      * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the
-     *            Business API. All client IDs begin with a gme- prefix.
-     *            Not required when developing in localhost.
+     *            The Maps API key from Google or the client ID for the Business
+     *            API. All client IDs begin with a gme- prefix. Not required
+     *            when developing in localhost.
      * @param language
      *            The language to use with maps. See
      *            https://developers.google.com/maps/faq#languagesupport for the
      *            list of the supported languages.
      */
-    public GoogleMap(LatLon center, double zoom, String apiKeyOrClientId, String language) {
+    public GoogleMap(LatLon center, double zoom, String apiKeyOrClientId,
+            String language) {
         this(apiKeyOrClientId);
         getState().zoom = zoom;
         getState().center = center;
@@ -367,9 +369,9 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         mapMoveListeners.remove(listener);
     }
 
-   /**
+    /**
      * Adds a MapClickListener to the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -379,7 +381,7 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
 
     /**
      * Removes a MapClickListener from the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -478,6 +480,26 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
      */
     public void removePolyline(GoogleMapPolyline polyline) {
         getState().polylines.remove(polyline);
+    }
+
+    /**
+     * Adds a KML layer to the map.
+     * 
+     * @param kmlLayer
+     *            The KML layer to add.
+     */
+    public void addKmlLayer(GoogleMapKmlLayer kmlLayer) {
+        getState().kmlLayers.add(kmlLayer);
+    }
+
+    /**
+     * Removes a KML layer from the map.
+     * 
+     * @param kmlLayer
+     *            The KML layer to remove.
+     */
+    public void removeKmlLayer(GoogleMapKmlLayer kmlLayer) {
+        getState().kmlLayers.remove(kmlLayer);
     }
 
     /**
@@ -735,8 +757,8 @@ public class GoogleMap extends com.vaadin.ui.AbstractComponent {
         getState().fitToBoundsNE = boundsNE;
         getState().fitToBoundsSW = boundsSW;
     }
-    
+
     private boolean isClientId(String apiKeyOrClientId) {
-    	return apiKeyOrClientId != null && apiKeyOrClientId.startsWith("gme-");
+        return apiKeyOrClientId != null && apiKeyOrClientId.startsWith("gme-");
     }
 }

@@ -12,6 +12,8 @@ import com.google.maps.gwt.client.Animation;
 import com.google.maps.gwt.client.GoogleMap;
 import com.google.maps.gwt.client.InfoWindow;
 import com.google.maps.gwt.client.InfoWindowOptions;
+import com.google.maps.gwt.client.KmlLayer;
+import com.google.maps.gwt.client.KmlLayerOptions;
 import com.google.maps.gwt.client.LatLng;
 import com.google.maps.gwt.client.LatLngBounds;
 import com.google.maps.gwt.client.MVCArray;
@@ -30,6 +32,7 @@ import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
@@ -45,6 +48,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     private Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<Polygon, GoogleMapPolygon>();
     private Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<Polyline, GoogleMapPolyline>();
     private Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<InfoWindow, GoogleMapInfoWindow>();
+    private Map<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = new HashMap<KmlLayer, GoogleMapKmlLayer>();
     private MarkerClickListener markerClickListener = null;
     private MarkerDragListener markerDragListener = null;
     private InfoWindowClosedListener infoWindowClosedListener = null;
@@ -95,7 +99,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             public void handle(MouseEvent event) {
 
                 if (mapClickListener != null) {
-                    LatLon position = new LatLon(event.getLatLng().lat(), event.getLatLng().lng());
+                    LatLon position = new LatLon(event.getLatLng().lat(), event
+                            .getLatLng().lng());
                     mapClickListener.mapClicked(position);
                 }
 
@@ -411,6 +416,26 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             polyline.setMap(map);
 
             polylineMap.put(polyline, overlay);
+        }
+    }
+
+    public void setKmlLayers(Collection<GoogleMapKmlLayer> layers) {
+        for (KmlLayer kmlLayer : kmlLayerMap.keySet()) {
+            kmlLayer.setMap((GoogleMap) null);
+        }
+        kmlLayerMap.clear();
+
+        for (GoogleMapKmlLayer gmLayer : layers) {
+            KmlLayerOptions options = KmlLayerOptions.create();
+            options.setClickable(gmLayer.isClickable());
+            options.setPreserveViewport(gmLayer.isViewportPreserved());
+            options.setSuppressInfoWindows(gmLayer
+                    .isInfoWindowRenderingDisabled());
+
+            KmlLayer kmlLayer = KmlLayer.create(gmLayer.getUrl(), options);
+            kmlLayer.setMap(map);
+
+            kmlLayerMap.put(kmlLayer, gmLayer);
         }
     }
 

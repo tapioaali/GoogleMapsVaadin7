@@ -31,8 +31,8 @@ import com.vaadin.tapio.googlemaps.client.rpcs.GoogleMapMovedRpc;
  */
 @Connect(GoogleMap.class)
 public class GoogleMapConnector extends AbstractComponentConnector implements
-        MarkerClickListener, MapMoveListener, MapClickListener, MarkerDragListener,
-        InfoWindowClosedListener {
+        MarkerClickListener, MapMoveListener, MapClickListener,
+        MarkerDragListener, InfoWindowClosedListener {
 
     private static final long serialVersionUID = 646346521643L;
 
@@ -123,7 +123,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             return;
         }
 
-        // setting that require initiated map
+        // settings that require initiated map
         boolean initial = stateChangeEvent.isInitialStateChange();
         // do not set zoom/center again if the change originated from client
         if (!getState().locationFromClient || initial) {
@@ -145,6 +145,9 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         }
         if (stateChangeEvent.hasPropertyChanged("polylines") || initial) {
             getWidget().setPolylineOverlays(getState().polylines);
+        }
+        if (stateChangeEvent.hasPropertyChanged("kmlLayers") || initial) {
+            getWidget().setKmlLayers(getState().kmlLayers);
         }
         if (stateChangeEvent.hasPropertyChanged("mapTypeId") || initial) {
             getWidget().setMapType(getState().mapTypeId);
@@ -221,6 +224,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setMarkers(getState().markers.values());
         getWidget().setPolygonOverlays(getState().polygons);
         getWidget().setPolylineOverlays(getState().polylines);
+        getWidget().setKmlLayers(getState().kmlLayers);
         getWidget().setInfoWindows(getState().infoWindows.values());
         getWidget().setMapType(getState().mapTypeId);
         getWidget().setControls(getState().controls);

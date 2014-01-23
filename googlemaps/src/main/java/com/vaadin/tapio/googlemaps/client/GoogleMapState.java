@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.vaadin.shared.AbstractComponentState;
+import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
@@ -56,13 +57,14 @@ public class GoogleMapState extends AbstractComponentState {
 
     public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
     public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
+    public Set<GoogleMapKmlLayer> kmlLayers = new HashSet<GoogleMapKmlLayer>();
 
     public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
 
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
-    
+
     public boolean isBusiness() {
-    	return clientId != null;
+        return clientId != null;
     }
 
 }
