@@ -65,8 +65,6 @@ public class DemoUI extends UI {
         final VerticalLayout tab1 = new VerticalLayout();
         tab1.setSizeFull();
         tab1.setCaption("MAP");
-        tab1.addComponent(googleMap);
-        tab1.setExpandRatio(googleMap, 1.0f);
 
         googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
         googleMap.setSizeFull();
@@ -84,6 +82,8 @@ public class DemoUI extends UI {
                         "http://maps.google.it/maps/"
                                 + "ms?authuser=0&ie=UTF8&hl=it&oe=UTF8&msa=0&"
                                 + "output=kml&msid=212897908682884215672.0004ecbac547d2d635ff5"));
+        tab1.addComponent(googleMap);
+        tab1.setExpandRatio(googleMap, 1.0f);
 
         Panel console = new Panel();
         console.setHeight("100px");
