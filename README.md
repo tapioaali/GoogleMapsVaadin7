@@ -17,6 +17,7 @@ Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tap
 - Adding info windows
 - Adding polygon overlays
 - Adding polyline overlays
+- Adding KML layers
 - Limiting of the center bounds
 - Limiting of the visible area bounds
 - Enabling/disabling map dragging, keyboard shortcuts and scroll wheel zoom
@@ -27,6 +28,7 @@ Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tap
 - Map move
 - Marker click
 - Marker drag
+- Map click
 
 ## Development notice ##
 
