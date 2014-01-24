@@ -77,6 +77,9 @@ public class DemoUI extends UI {
         googleMap.setMinZoom(4.0);
         googleMap.setMaxZoom(16.0);
 
+        kakolaInfoWindow.setWidth("400px");
+        kakolaInfoWindow.setHeight("500px");
+
         tab1.addComponent(googleMap);
         tab1.setExpandRatio(googleMap, 1.0f);
 

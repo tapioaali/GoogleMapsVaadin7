@@ -27,6 +27,8 @@ public class GoogleMapInfoWindow implements Serializable {
     private Integer zIndex = null;
     private LatLon position = null;
     private GoogleMapMarker anchorMarker = null;
+    private String width = null;
+    private String height = null;
 
     /**
      * Instantiates a new info window.
@@ -197,7 +199,7 @@ public class GoogleMapInfoWindow implements Serializable {
     /**
      * Returns the marker in which the window has been anchored.
      * 
-     * @return The anchor marker or null if the window has not been anchored.
+     * @return The anchor marker or null if the window has not been anchored
      */
     public GoogleMapMarker getAnchorMarker() {
         return anchorMarker;
@@ -211,6 +213,48 @@ public class GoogleMapInfoWindow implements Serializable {
      */
     public void setAnchorMarker(GoogleMapMarker anchorMarker) {
         this.anchorMarker = anchorMarker;
+    }
+
+    /**
+     * Returns the current width for the contens of the info window.
+     * 
+     * @return The width as a CSS string or null if the width should be
+     *         calculated automatically.
+     */
+    public String getWidth() {
+        return width;
+    }
+
+    /**
+     * Sets the width of the contents of the info window.
+     * 
+     * @param width
+     *            The wanted width as CSS string. Set to null to if the width
+     *            should be calculated automatically (default null).
+     */
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    /**
+     * Returns the current height for the contens of the info window.
+     * 
+     * @return The height as a CSS string or null if the width should be
+     *         calculated automatically.
+     */
+    public String getHeight() {
+        return height;
+    }
+
+    /**
+     * Sets the height of the contents of the info window.
+     * 
+     * @param width
+     *            The wanted height as CSS string. Set to null to if the height
+     *            should be calculated automatically (default null).
+     */
+    public void setHeight(String height) {
+        this.height = height;
     }
 
     public long getId() {

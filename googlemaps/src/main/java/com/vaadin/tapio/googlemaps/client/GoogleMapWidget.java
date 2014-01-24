@@ -508,7 +508,29 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
         for (GoogleMapInfoWindow gmWindow : infoWindows) {
             InfoWindowOptions options = InfoWindowOptions.create();
-            options.setContent(gmWindow.getContent());
+            String contents = gmWindow.getContent();
+
+            // wrap the contents inside a div if there's a defined width or
+            // height
+            if (gmWindow.getHeight() != null || gmWindow.getWidth() != null) {
+                StringBuffer contentWrapper = new StringBuffer("<div style=\"");
+                if (gmWindow.getWidth() != null) {
+                    contentWrapper.append("width:");
+                    contentWrapper.append(gmWindow.getWidth());
+                    contentWrapper.append(";");
+                }
+                if (gmWindow.getHeight() != null) {
+                    contentWrapper.append("height:");
+                    contentWrapper.append(gmWindow.getHeight());
+                    contentWrapper.append(";");
+                }
+                contentWrapper.append("\" >");
+                contentWrapper.append(contents);
+                contentWrapper.append("</div>");
+                contents = contentWrapper.toString();
+            }
+
+            options.setContent(contents);
             options.setDisableAutoPan(gmWindow.isAutoPanDisabled());
             if (gmWindow.getMaxWidth() != null) {
                 options.setMaxWidth(gmWindow.getMaxWidth());

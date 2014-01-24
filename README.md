@@ -14,7 +14,7 @@ Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tap
 - Setting visible map controls
 - Limiting maximum & minimum zoom
 - Adding & dragging makers
-- Adding info windows
+- Adding info windows with size settings
 - Adding polygon overlays
 - Adding polyline overlays
 - Adding KML layers
@@ -29,6 +29,7 @@ Check out demo @ [http://tapio.virtuallypreinstalled.com/googlemaps/](http://tap
 - Marker click
 - Marker drag
 - Map click
+- Info window close
 
 ## Development notice ##
 
