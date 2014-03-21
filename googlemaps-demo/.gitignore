@@ -1,1 +1,6 @@
 /target
+src/main/resources/rebel.xml
+.classpath
+.project
+.settings/
+src/main/webapp/VAADIN/widgetsets

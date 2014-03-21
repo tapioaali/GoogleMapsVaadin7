@@ -1,9 +1,2 @@
 .project
-.settings/
-googlemaps-demo/.classpath
-googlemaps-demo/.project
-googlemaps-demo/.settings/
-googlemaps-demo/src/main/webapp/VAADIN/
-googlemaps/.classpath
-googlemaps/.project
-googlemaps/.settings/
+.settings
