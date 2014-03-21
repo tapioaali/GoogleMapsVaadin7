@@ -5,12 +5,16 @@
 	<groupId>com.vaadin.tapio</groupId>
 	<artifactId>googlemaps-demo</artifactId>
 	<packaging>war</packaging>
-	<version>0.8.0</version>
+	<version>0.8.1</version>
 	<name>GoogleMaps Add-on Demo</name>
+    <organization>
+        <name>Vaadin/Tapio Aali</name>
+    </organization>
+	
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.1.10</vaadin.version>
+		<vaadin.version>7.1.12</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 	</properties>
 
