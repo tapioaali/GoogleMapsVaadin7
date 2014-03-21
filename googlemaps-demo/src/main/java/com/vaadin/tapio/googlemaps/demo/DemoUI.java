@@ -59,7 +59,6 @@ public class DemoUI extends UI {
         setContent(content);
 
         TabSheet tabs = new TabSheet();
-        tabs.setSizeFull();
         content.addComponent(tabs);
 
         final VerticalLayout tab1 = new VerticalLayout();

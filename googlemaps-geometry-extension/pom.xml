@@ -3,13 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.vaadin.tapio</groupId>
-	<artifactId>googlemaps</artifactId>
+	<artifactId>googlemaps-geometry-extension</artifactId>
 	<packaging>jar</packaging>
 	<version>0.9.0</version>
-	<name>GoogleMaps Add-on</name>
-	<organization>
-		<name>Vaadin Ltd.</name>
-	</organization>
+	<name>GoogleMaps Geometry Extension</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,6 +60,17 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.vaadin.tapio</groupId>
+			<artifactId>googlemaps</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.gwt</groupId>
+					<artifactId>gwt-user</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>	
+		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
 			<version>${vaadin.version}</version>
@@ -73,12 +81,6 @@
 			<version>${vaadin.version}</version>
 			<scope>provided</scope>
 		</dependency>
-       	<dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-shared-deps</artifactId>
-            <version>1.0.3</version>
-        </dependency>
-            
 		
 		<!-- This can be replaced with TestNG or some other test framework supported by the surefire plugin -->
 		<dependency>

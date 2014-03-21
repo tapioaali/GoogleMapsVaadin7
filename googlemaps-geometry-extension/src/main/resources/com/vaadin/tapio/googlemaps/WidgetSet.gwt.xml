@@ -1,0 +1,13 @@
+<module>
+
+	<!-- WS Compiler: manually edited -->
+
+	<!-- Inherit DefaultWidgetSet -->
+	<inherits name="com.vaadin.DefaultWidgetSet" /> 
+	<inherits name="com.google.maps.gwt.GoogleMaps" />
+	<inherits name="com.google.gwt.ajaxloader.AjaxLoader" />	
+
+	<!-- Widget styles in public -directory -->
+	<stylesheet src="googlemaps/styles.css"/>
+
+</module>

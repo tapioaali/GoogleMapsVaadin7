@@ -1,14 +1,13 @@
 package com.vaadin.tapio.googlemaps.client;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.thirdparty.guava.common.collect.BiMap;
+import com.google.gwt.thirdparty.guava.common.collect.HashBiMap;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.maps.gwt.client.Animation;
 import com.google.maps.gwt.client.GoogleMap;
 import com.google.maps.gwt.client.InfoWindow;
 import com.google.maps.gwt.client.InfoWindowOptions;
@@ -20,7 +19,6 @@ import com.google.maps.gwt.client.MVCArray;
 import com.google.maps.gwt.client.MapOptions;
 import com.google.maps.gwt.client.MapTypeId;
 import com.google.maps.gwt.client.Marker;
-import com.google.maps.gwt.client.MarkerOptions;
 import com.google.maps.gwt.client.MouseEvent;
 import com.google.maps.gwt.client.Polygon;
 import com.google.maps.gwt.client.PolygonOptions;
@@ -37,18 +35,19 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
+import com.vaadin.tapio.googlemaps.client.util.MarkerUtil;
 
 public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public static final String CLASSNAME = "googlemap";
     private GoogleMap map;
     private MapOptions mapOptions;
-    private Map<Marker, GoogleMapMarker> markerMap = new HashMap<Marker, GoogleMapMarker>();
-    private Map<GoogleMapMarker, Marker> gmMarkerMap = new HashMap<GoogleMapMarker, Marker>();
-    private Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<Polygon, GoogleMapPolygon>();
-    private Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<Polyline, GoogleMapPolyline>();
-    private Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<InfoWindow, GoogleMapInfoWindow>();
-    private Map<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = new HashMap<KmlLayer, GoogleMapKmlLayer>();
+    private BiMap<Marker, GoogleMapMarker> markerMap = HashBiMap.create();
+    private BiMap<Polygon, GoogleMapPolygon> polygonMap = HashBiMap.create();
+    private BiMap<Polyline, GoogleMapPolyline> polylineMap = HashBiMap.create();
+    private BiMap<InfoWindow, GoogleMapInfoWindow> infoWindowMap = HashBiMap
+            .create();
+    private BiMap<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = HashBiMap.create();
     private MarkerClickListener markerClickListener = null;
     private MarkerDragListener markerDragListener = null;
     private InfoWindowClosedListener infoWindowClosedListener = null;
@@ -218,68 +217,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void setMarkers(Collection<GoogleMapMarker> markers) {
-
-        // clear removed markers
-        for (Marker marker : markerMap.keySet()) {
-            GoogleMapMarker gMapMarker = markerMap.get(marker);
-            if (!markers.contains(gMapMarker)) {
-                marker.setMap((GoogleMap) null);
-                gmMarkerMap.remove(gMapMarker);
-                markerMap.remove(marker);
-            }
-        }
-
-        for (GoogleMapMarker googleMapMarker : markers) {
-            if (!gmMarkerMap.containsKey(googleMapMarker)) {
-
-                final Marker marker = addMarker(googleMapMarker);
-                markerMap.put(marker, googleMapMarker);
-                gmMarkerMap.put(googleMapMarker, marker);
-
-                marker.addClickListener(new Marker.ClickHandler() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (markerClickListener != null) {
-                            markerClickListener.markerClicked(markerMap
-                                    .get(marker));
-                        }
-                    }
-                });
-                marker.addDragEndListener(new Marker.DragEndHandler() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        GoogleMapMarker gMarker = markerMap.get(marker);
-                        LatLon oldPosition = gMarker.getPosition();
-                        gMarker.setPosition(new LatLon(marker.getPosition()
-                                .lat(), marker.getPosition().lng()));
-
-                        if (markerDragListener != null) {
-                            markerDragListener.markerDragged(gMarker,
-                                    oldPosition);
-                        }
-                    }
-                });
-            } else {
-                updateMarker(googleMapMarker);
-            }
-        }
-    }
-
-    private void updateMarker(GoogleMapMarker googleMapMarker) {
-        Marker marker = gmMarkerMap.get(googleMapMarker);
-        GoogleMapMarker oldGmMarker = markerMap.get(marker);
-
-        if (!oldGmMarker.hasSameFieldValues(googleMapMarker)) {
-            MarkerOptions options = createMarkerOptions(googleMapMarker);
-            marker.setOptions(options);
-        }
-
-        gmMarkerMap.put(googleMapMarker, marker);
-        markerMap.put(marker, googleMapMarker);
-    }
-
-    public void setMarkerClickListener(MarkerClickListener listener) {
-        markerClickListener = listener;
+        MarkerUtil.updateMarkerMap(markerMap, markers, markerClickListener,
+                markerDragListener, map);
     }
 
     public void setMapMoveListener(MapMoveListener listener) {
@@ -290,40 +229,16 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         mapClickListener = listener;
     }
 
+    public void setMarkerClickListener(MarkerClickListener listener) {
+        markerClickListener = listener;
+    }
+
     public void setMarkerDragListener(MarkerDragListener listener) {
         markerDragListener = listener;
     }
 
     public void setInfoWindowClosedListener(InfoWindowClosedListener listener) {
         infoWindowClosedListener = listener;
-    }
-
-    private Marker addMarker(GoogleMapMarker googleMapMarker) {
-        MarkerOptions options = createMarkerOptions(googleMapMarker);
-
-        final Marker marker = Marker.create(options);
-        marker.setMap(map);
-
-        return marker;
-    }
-
-    private MarkerOptions createMarkerOptions(GoogleMapMarker googleMapMarker) {
-        LatLng center = LatLng.create(googleMapMarker.getPosition().getLat(),
-                googleMapMarker.getPosition().getLon());
-        MarkerOptions options = MarkerOptions.create();
-        options.setPosition(center);
-        options.setTitle(googleMapMarker.getCaption());
-        options.setDraggable(googleMapMarker.isDraggable());
-        options.setOptimized(googleMapMarker.isOptimized());
-
-        if (googleMapMarker.isAnimationEnabled()) {
-            options.setAnimation(Animation.DROP);
-        }
-
-        if (googleMapMarker.getIconUrl() != null) {
-            options.setIcon(googleMapMarker.getIconUrl());
-        }
-        return options;
     }
 
     public double getZoom() {
@@ -549,8 +464,9 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                 options.setZindex(gmWindow.getzIndex());
             }
             final InfoWindow window = InfoWindow.create(options);
-            if (gmMarkerMap.containsKey(gmWindow.getAnchorMarker())) {
-                window.open(map, gmMarkerMap.get(gmWindow.getAnchorMarker()));
+            if (markerMap.containsValue(gmWindow.getAnchorMarker())) {
+                window.open(map,
+                        markerMap.inverse().get(gmWindow.getAnchorMarker()));
             } else {
                 window.open(map);
             }
