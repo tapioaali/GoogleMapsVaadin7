@@ -27,7 +27,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -58,14 +57,6 @@ public class DemoUI extends UI {
         content.setSizeFull();
         setContent(content);
 
-        TabSheet tabs = new TabSheet();
-        tabs.setSizeFull();
-        content.addComponent(tabs);
-
-        final VerticalLayout tab1 = new VerticalLayout();
-        tab1.setSizeFull();
-        tab1.setCaption("MAP");
-
         googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
         googleMap.setSizeFull();
         kakolaMarker.setAnimationEnabled(false);
@@ -80,22 +71,22 @@ public class DemoUI extends UI {
         kakolaInfoWindow.setWidth("400px");
         kakolaInfoWindow.setHeight("500px");
 
-        tab1.addComponent(googleMap);
-        tab1.setExpandRatio(googleMap, 1.0f);
+        content.addComponent(googleMap);
+        content.setExpandRatio(googleMap, 1.0f);
 
         Panel console = new Panel();
         console.setHeight("100px");
         final CssLayout consoleLayout = new CssLayout();
         console.setContent(consoleLayout);
-        tab1.addComponent(console);
+        content.addComponent(console);
 
         HorizontalLayout buttonLayoutRow1 = new HorizontalLayout();
         buttonLayoutRow1.setHeight("26px");
-        tab1.addComponent(buttonLayoutRow1);
+        content.addComponent(buttonLayoutRow1);
 
         HorizontalLayout buttonLayoutRow2 = new HorizontalLayout();
         buttonLayoutRow2.setHeight("26px");
-        tab1.addComponent(buttonLayoutRow2);
+        content.addComponent(buttonLayoutRow2);
 
         OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
                 googleMap, kakolaMarker, kakolaInfoWindow);
@@ -309,11 +300,5 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(addKmlLayerButton);
-
-        tabs.addTab(tab1);
-
-        Label tab2 = new Label("Tab2!");
-        tab2.setCaption("Tab 2");
-        tabs.addTab(tab2);
     }
 }
