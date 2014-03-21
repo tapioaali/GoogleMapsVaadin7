@@ -10,7 +10,6 @@
 	<organization>
 		<name>Vaadin/Tapio Aali</name>
 	</organization>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<vaadin.version>7.1.12</vaadin.version>
@@ -22,7 +21,6 @@
 		<Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
 		<Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
 	</properties>
-
 	<licenses>
 		<license>
 			<name>Apache 2</name>
@@ -30,7 +28,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 	<repositories>
 		<repository>
 			<id>vaadin-addons</id>
@@ -47,7 +44,6 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>vaadin-snapshots</id>
@@ -60,7 +56,6 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.vaadin.tapio</groupId>
@@ -84,7 +79,6 @@
 			<version>${vaadin.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
 		<!-- This can be replaced with TestNG or some other test framework supported by the surefire plugin -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -93,9 +87,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.rwl</groupId>
-		    <artifactId>gwt-maps</artifactId>
-		    <version>3.8.0-pre1</version>
+			<groupId>com.github.rwl</groupId>
+			<artifactId>gwt-maps</artifactId>
+			<version>3.8.0-pre1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.google.gwt</groupId>
@@ -103,12 +97,9 @@
 				</exclusion>			
 			</exclusions>
 		</dependency>
-            		
 	</dependencies>
-
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -118,7 +109,6 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -139,7 +129,6 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -153,7 +142,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -167,7 +155,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -187,7 +174,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<!-- Testing -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -195,21 +181,18 @@
 				<version>2.14.1</version>
 			</plugin>
 		</plugins>
-
 		<!-- This is needed for the sources required by the client-side compiler to be 
 			included in the produced JARs -->
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
 				<excludes>
-                    <exclude>rebel.xml</exclude>
-                </excludes>
+					<exclude>rebel.xml</exclude>
+				</excludes>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
-		
 	</build>
-
 </project>

@@ -7,10 +7,8 @@
 	<packaging>pom</packaging>
 	<version>0.8.1</version>
 	<name>GoogleMaps Add-on Root Project</name>
-
 	<modules>
 		<module>googlemaps</module>
 		<module>googlemaps-demo</module>
 	</modules>
-
 </project>
