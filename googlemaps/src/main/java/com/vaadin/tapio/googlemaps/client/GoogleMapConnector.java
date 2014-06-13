@@ -3,10 +3,12 @@ package com.vaadin.tapio.googlemaps.client;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.ajaxloader.client.AjaxLoader.AjaxLoaderOptions;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.maps.client.LoadApi;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
+import com.vaadin.client.ui.VLabel;
 import com.vaadin.client.ui.layout.ElementResizeEvent;
 import com.vaadin.client.ui.layout.ElementResizeListener;
 import com.vaadin.shared.ui.Connect;
@@ -23,6 +25,8 @@ import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
+
+import java.util.ArrayList;
 
 /**
  * The connector for the Google Maps JavaScript API v3.
@@ -203,21 +207,19 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     }
 
     private void loadMapApi() {
-        AjaxLoaderOptions options = AjaxLoaderOptions.newInstance();
-
-        StringBuffer otherParams = new StringBuffer("sensor=false");
-
-        if (getState().language != null) {
-            otherParams.append("&language=" + getState().language);
-        }
-        options.setOtherParms(otherParams.toString());
-        Runnable callback = new Runnable() {
+        ArrayList<LoadApi.LoadLibrary> loadLibraries = new ArrayList<LoadApi.LoadLibrary>();
+        Runnable onLoad = new Runnable() {
+            @Override
             public void run() {
                 initMap();
             }
         };
-        AjaxLoader.init(getState().apiKey);
-        AjaxLoader.loadApi("maps", "3", callback, options);
+
+        if(getState().language != null) {
+            LoadApi.go(onLoad, loadLibraries, false, LoadApi.Language.fromValue(getState().language), "APIKEY="+getState().apiKey);
+        } else {
+            LoadApi.go(onLoad, loadLibraries, false, "APIKEY="+getState().apiKey);
+        }
     }
 
     private void loadDeferred() {
@@ -247,7 +249,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     }
 
     @Override
-    public void mapMoved(double zoomLevel, LatLon center, LatLon boundsNE,
+    public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
             LatLon boundsSW) {
         mapMovedRpc.mapMoved(zoomLevel, center, boundsNE, boundsSW);
     }

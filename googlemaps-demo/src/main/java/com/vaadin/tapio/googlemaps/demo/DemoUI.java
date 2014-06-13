@@ -1,9 +1,5 @@
 package com.vaadin.tapio.googlemaps.demo;
 
-import java.util.ArrayList;
-
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -30,6 +26,9 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import javax.servlet.annotation.WebServlet;
+import java.util.ArrayList;
+
 /**
  * Google Maps UI for testing and demoing.
  * 
@@ -47,7 +46,7 @@ public class DemoUI extends UI {
     private final String apiKey = "";
 
     @WebServlet(value = "/*", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class, widgetset = "com.vaadin.tapio.googlemaps.demo.DemoWidgetSet")
+    @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class, widgetset = "com.vaadin.tapio.googlemaps.demo.DemoWidgetset")
     public static class Servlet extends VaadinServlet {
     }
 
@@ -57,7 +56,7 @@ public class DemoUI extends UI {
         content.setSizeFull();
         setContent(content);
 
-        googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10.0, apiKey);
+        googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10, apiKey);
         googleMap.setSizeFull();
         kakolaMarker.setAnimationEnabled(false);
         googleMap.addMarker(kakolaMarker);
@@ -65,8 +64,8 @@ public class DemoUI extends UI {
                 60.442423, 22.26044), true, "VAADIN/1377279006_stadium.png");
         googleMap.addMarker("NOT DRAGGABLE: Iso-Heikkilä", new LatLon(
                 60.450403, 22.230399), false, null);
-        googleMap.setMinZoom(4.0);
-        googleMap.setMaxZoom(16.0);
+        googleMap.setMinZoom(4);
+        googleMap.setMaxZoom(16);
 
         kakolaInfoWindow.setWidth("400px");
         kakolaInfoWindow.setHeight("500px");
@@ -105,7 +104,7 @@ public class DemoUI extends UI {
 
         googleMap.addMapMoveListener(new MapMoveListener() {
             @Override
-            public void mapMoved(double zoomLevel, LatLon center,
+            public void mapMoved(int zoomLevel, LatLon center,
                     LatLon boundsNE, LatLon boundsSW) {
                 Label consoleEntry = new Label("Map moved to ("
                         + center.getLat() + ", " + center.getLon() + "), zoom "
@@ -154,7 +153,7 @@ public class DemoUI extends UI {
                     @Override
                     public void buttonClick(ClickEvent event) {
                         googleMap.setCenter(new LatLon(60.447737, 21.991668));
-                        googleMap.setZoom(12.0);
+                        googleMap.setZoom(12);
                     }
                 });
         buttonLayoutRow1.addComponent(moveCenterButton);

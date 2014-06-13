@@ -10,6 +10,6 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
  * 
  */
 public interface MapMovedRpc extends ServerRpc {
-    public void mapMoved(double zoomLevel, LatLon center, LatLon boundsNE,
-            LatLon boundsSW);
+    public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
+        LatLon boundsSW);
 }

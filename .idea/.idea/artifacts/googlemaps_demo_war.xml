@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="googlemaps-demo:war">
+    <output-path>$PROJECT_DIR$/../googlemaps-demo/target</output-path>
+    <root id="archive" name="googlemaps-demo-0.9.0.war">
+      <element id="artifact" artifact-name="googlemaps-demo:war exploded" />
+    </root>
+  </artifact>
+</component>

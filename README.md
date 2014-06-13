@@ -51,9 +51,10 @@ to web.xml.
 - API for creating extensions for the map, providing an easy way to add support for new features like:
 	- Libraries including Drawing, Geometry, Visualization and Weather
 	- Services like Geocoder. Directions and Distance Matrix
-
+	
+	
 Notice that these are not in any order and there's high possibility that some of them will never be implemented.
 
 ## Development notice ##
 
-If you want to use the add-on without Maven/Ivy, grab **Mapsv3 bindings for GWT 3.8.0** from [https://code.google.com/p/gwt-google-apis/downloads/detail?name=gwt-maps-3.8.0-pre1.zip](https://code.google.com/p/gwt-google-apis/downloads/detail?name=gwt-maps-3.8.0-pre1.zip).
+If you want to use the add-on without Maven/Ivy, grab **GWT-Maps-V3-Api** from [https://github.com/branflake2267/GWT-Maps-V3-Api](https://github.com/branflake2267/GWT-Maps-V3-Api).

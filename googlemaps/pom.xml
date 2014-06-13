@@ -5,22 +5,23 @@
 	<groupId>com.vaadin.tapio</groupId>
 	<artifactId>googlemaps</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.1</version>
-	<name>GoogleMaps Add-on</name>
-	<organization>
-		<name>Vaadin/Tapio Aali</name>
-	</organization>
+	<version>0.9.0</version>
+	<name>Google Maps Add-on</name>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.1.12</vaadin.version>
+		<vaadin.version>7.2.2</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
+		<!-- ZIP Manifest fields -->
 		<Implementation-Version>${project.version}</Implementation-Version>
+		<!-- Must not change this because of the Directory -->
 		<Implementation-Title>${project.name}</Implementation-Title>
 		<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
 		<Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
-		<Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
+		<Vaadin-Addon>${artifactId}-${project.version}.jar</Vaadin-Addon>
 	</properties>
+
 	<licenses>
 		<license>
 			<name>Apache 2</name>
@@ -28,6 +29,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
 	<repositories>
 		<repository>
 			<id>vaadin-addons</id>
@@ -44,6 +46,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>vaadin-snapshots</id>
@@ -56,6 +59,7 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.vaadin</groupId>
@@ -68,29 +72,31 @@
 			<version>${vaadin.version}</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>com.github.branflake2267</groupId>
+            <artifactId>gwt-maps-api</artifactId>
+            <version>3.10.0-alpha-7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-user</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-servlet</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-dev</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- This can be replaced with TestNG or some other test framework supported by the surefire plugin -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.rwl</groupId>
-			<artifactId>gwt-maps</artifactId>
-			<version>3.8.0-pre1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.gwt</groupId>
-					<artifactId>gwt-user</artifactId>
-				</exclusion>			
-			</exclusions>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -100,6 +106,7 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -115,11 +122,12 @@
 							<!-- Package format version - do not change -->
 							<Vaadin-Package-Version>1</Vaadin-Package-Version>
 							<Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-							<Vaadin-Widgetsets>com.vaadin.tapio.googlemaps.WidgetSet</Vaadin-Widgetsets>
+							<Vaadin-Widgetsets>com.vaadin.tapio.googlemaps.Widgetset</Vaadin-Widgetsets>
 						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -133,6 +141,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -146,6 +155,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -165,6 +175,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<!-- Testing -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -172,18 +183,21 @@
 				<version>2.14.1</version>
 			</plugin>
 		</plugins>
+
 		<!-- This is needed for the sources required by the client-side compiler to be 
 			included in the produced JARs -->
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
 				<excludes>
-					<exclude>rebel.xml</exclude>
-				</excludes>
+                    <exclude>rebel.xml</exclude>
+                </excludes>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
+		
 	</build>
+
 </project>

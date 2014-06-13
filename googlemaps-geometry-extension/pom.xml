@@ -5,14 +5,11 @@
 	<groupId>com.vaadin.tapio</groupId>
 	<artifactId>googlemaps-geometry-extension</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.1</version>
+	<version>0.9.0</version>
 	<name>GoogleMaps Geometry Extension</name>
-	<organization>
-		<name>Vaadin/Tapio Aali</name>
-	</organization>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.1.12</vaadin.version>
+		<vaadin.version>7.2.2</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
 		<Implementation-Version>${project.version}</Implementation-Version>
@@ -61,12 +58,6 @@
 			<groupId>com.vaadin.tapio</groupId>
 			<artifactId>googlemaps</artifactId>
 			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.gwt</groupId>
-					<artifactId>gwt-user</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>	
 		<dependency>
 			<groupId>com.vaadin</groupId>
@@ -79,23 +70,24 @@
 			<version>${vaadin.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- This can be replaced with TestNG or some other test framework supported by the surefire plugin -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.rwl</groupId>
-			<artifactId>gwt-maps</artifactId>
-			<version>3.8.0-pre1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.gwt</groupId>
-					<artifactId>gwt-user</artifactId>
-				</exclusion>			
-			</exclusions>
+            <groupId>com.github.branflake2267</groupId>
+            <artifactId>gwt-maps-api</artifactId>
+            <version>3.10.0-alpha-7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-user</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-servlet</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-dev</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 	</dependencies>
 	<build>

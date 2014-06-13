@@ -28,9 +28,9 @@ public class GoogleMapState extends AbstractComponentState {
     public String language = null;
     public String mapTypeId = "Roadmap";
     public LatLon center = new LatLon(51.477811, -0.001475);
-    public double zoom = 8.0;
-    public double maxZoom = 21.0;
-    public double minZoom = 0.0;
+    public int zoom = 8;
+    public int maxZoom = 21;
+    public int minZoom = 0;
 
     public boolean draggable = true;
     public boolean keyboardShortcutsEnabled = true;

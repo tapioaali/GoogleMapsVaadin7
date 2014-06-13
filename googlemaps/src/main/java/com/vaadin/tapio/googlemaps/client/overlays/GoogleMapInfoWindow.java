@@ -6,7 +6,7 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * A class representing a pop-up window with HTML contents. They are often
- * anchored to {@link GoogleMapMarker markers}.
+ * anchored to {@link com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker markers}.
  * 
  * @author Tapio Aali <tapio@vaadin.com>
  * 
@@ -249,7 +249,7 @@ public class GoogleMapInfoWindow implements Serializable {
     /**
      * Sets the height of the contents of the info window.
      * 
-     * @param width
+     * @param height
      *            The wanted height as CSS string. Set to null to if the height
      *            should be calculated automatically (default null).
      */
