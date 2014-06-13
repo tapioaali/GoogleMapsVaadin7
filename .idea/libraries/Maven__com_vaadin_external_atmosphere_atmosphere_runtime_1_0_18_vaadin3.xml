@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.vaadin.external.atmosphere:atmosphere-runtime:1.0.18.vaadin3">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/vaadin/external/atmosphere/atmosphere-runtime/1.0.18.vaadin3/atmosphere-runtime-1.0.18.vaadin3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/vaadin/external/atmosphere/atmosphere-runtime/1.0.18.vaadin3/atmosphere-runtime-1.0.18.vaadin3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/vaadin/external/atmosphere/atmosphere-runtime/1.0.18.vaadin3/atmosphere-runtime-1.0.18.vaadin3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
