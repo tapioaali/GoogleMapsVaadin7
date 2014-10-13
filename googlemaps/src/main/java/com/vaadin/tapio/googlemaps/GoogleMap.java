@@ -113,83 +113,36 @@ public class GoogleMap extends AbstractComponent {
      * Initiates a new GoogleMap object with default settings from the
      * {@link GoogleMapState state object}.
      *
-     * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the Business
-     *            API. All client IDs begin with a gme- prefix. Not required
-     *            when developing in localhost.
+     * @param apiKey
+     *            The Maps API key from Google. Not required when developing in
+     *            localhost or when using a client id. Use null or empty string
+     *            to disable.
+     * @param clientId
+     *            Google Maps API for Work client ID. Use this instead of API key
+     *            if available. Use null or empty string to disable.
+     * @param language
+     *            The language to use with maps. See
+     *            https://developers.google.com/maps/faq#languagesupport for the
+     *            list of the supported languages. Use null or empty string to
+     *            disable.
      */
-    public GoogleMap(String apiKeyOrClientId) {
-        if (isClientId(apiKeyOrClientId)) {
-            getState().clientId = apiKeyOrClientId;
-        } else {
-            getState().apiKey = apiKeyOrClientId;
+    public GoogleMap(String apiKey, String clientId, String language) {
+        if(apiKey != null && !apiKey.isEmpty())      {
+            getState().apiKey = apiKey;
         }
+        if(clientId != null && !clientId.isEmpty()) {
+            getState().clientId = clientId;
+        }
+
+        if(language != null && !language.isEmpty()) {
+            getState().language = language;
+        }
+
         registerRpc(markerClickedRpc);
         registerRpc(mapMovedRpc);
         registerRpc(mapClickedRpc);
         registerRpc(markerDraggedRpc);
         registerRpc(infoWindowClosedRpc);
-    }
-
-    /**
-     * Creates a new GoogleMap object with the given center. Other settings will
-     * be {@link GoogleMapState defaults of the state object}.
-     *
-     * @param center
-     *            Coordinates of the center.
-     * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the Business
-     *            API. All client IDs begin with a gme- prefix. Not required
-     *            when developing in localhost.
-     */
-    public GoogleMap(LatLon center, String apiKeyOrClientId) {
-        this(apiKeyOrClientId);
-        getState().center = center;
-    }
-
-    /**
-     * Creates a new GoogleMap object with the given center and zoom. Other
-     * settings will be {@link GoogleMapState defaults of the state object}.
-     *
-     * @param center
-     *            Coordinates of the center.
-     * @param zoom
-     *            Amount of zoom.
-     * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the Business
-     *            API. All client IDs begin with a gme- prefix. Not required
-     *            when developing in localhost.
-     */
-    public GoogleMap(LatLon center, int zoom, String apiKeyOrClientId) {
-        this(apiKeyOrClientId);
-        getState().zoom = zoom;
-        getState().center = center;
-    }
-
-    /**
-     * Creates a new GoogleMap object with the given center, zoom and language.
-     * Other settings will be {@link GoogleMapState defaults of the state
-     * object}.
-     *
-     * @param center
-     *            Coordinates of the center.
-     * @param zoom
-     *            Amount of zoom.
-     * @param apiKeyOrClientId
-     *            The Maps API key from Google or the client ID for the Business
-     *            API. All client IDs begin with a gme- prefix. Not required
-     *            when developing in localhost.
-     * @param language
-     *            The language to use with maps. See
-     *            https://developers.google.com/maps/faq#languagesupport for the
-     *            list of the supported languages.
-     */
-    public GoogleMap(LatLon center, int zoom, String apiKeyOrClientId,
-        String language) {
-        this(apiKeyOrClientId);
-        getState().zoom = zoom;
-        getState().center = center;
-        getState().language = language;
     }
 
     /*
@@ -757,9 +710,5 @@ public class GoogleMap extends AbstractComponent {
     public void fitToBounds(LatLon boundsNE, LatLon boundsSW) {
         getState().fitToBoundsNE = boundsNE;
         getState().fitToBoundsSW = boundsSW;
-    }
-
-    private boolean isClientId(String apiKeyOrClientId) {
-        return apiKeyOrClientId != null && apiKeyOrClientId.startsWith("gme-");
     }
 }

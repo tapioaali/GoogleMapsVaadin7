@@ -14,7 +14,7 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 
 /**
- * The shared state of the Google Maps. Contains also the default
+ * The shared state of the Google Maps. Contains also the default values.
  * 
  * @author Tapio Aali <tapio@vaadin.com>
  */
@@ -62,9 +62,4 @@ public class GoogleMapState extends AbstractComponentState {
     public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
 
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
-
-    public boolean isBusiness() {
-        return clientId != null;
-    }
-
 }

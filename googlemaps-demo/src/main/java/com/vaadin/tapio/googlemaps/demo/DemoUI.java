@@ -56,7 +56,9 @@ public class DemoUI extends UI {
         content.setSizeFull();
         setContent(content);
 
-        googleMap = new GoogleMap(new LatLon(60.440963, 22.25122), 10, apiKey);
+        googleMap = new GoogleMap(null, null, null);
+        googleMap.setCenter(new LatLon(60.440963, 22.25122));
+        googleMap.setZoom(10);
         googleMap.setSizeFull();
         kakolaMarker.setAnimationEnabled(false);
         googleMap.addMarker(kakolaMarker);
