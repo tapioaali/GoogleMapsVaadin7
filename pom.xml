@@ -5,12 +5,11 @@
 	<groupId>com.vaadin.tapio</groupId>
 	<artifactId>googlemaps-root</artifactId>
 	<packaging>pom</packaging>
-	<version>0.9.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>Google Maps Add-on Root Project</name>
 
 	<modules>
 		<module>googlemaps</module>
-        <module>googlemaps-geometry-extension</module>
 		<module>googlemaps-demo</module>
 	</modules>
 
