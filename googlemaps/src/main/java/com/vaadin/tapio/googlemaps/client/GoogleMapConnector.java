@@ -1,15 +1,13 @@
 package com.vaadin.tapio.googlemaps.client;
 
-import com.google.gwt.ajaxloader.client.AjaxLoader;
-import com.google.gwt.ajaxloader.client.AjaxLoader.AjaxLoaderOptions;
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.maps.client.LoadApi;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
-import com.vaadin.client.ui.VLabel;
 import com.vaadin.client.ui.layout.ElementResizeEvent;
 import com.vaadin.client.ui.layout.ElementResizeListener;
 import com.vaadin.shared.ui.Connect;
@@ -21,14 +19,11 @@ import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
-import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The connector for the Google Maps JavaScript API v3.
@@ -146,6 +141,9 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             getWidget().setMarkers(getState().markers.values());
         }
 
+        if (stateChangeEvent.hasPropertyChanged("circles") || initial) {
+        	getWidget().setCircleOverlays(getState().circles);
+        }
         if (stateChangeEvent.hasPropertyChanged("polygons") || initial) {
             getWidget().setPolygonOverlays(getState().polygons);
         }
@@ -234,6 +232,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
 
     private void loadDeferred() {
         getWidget().setMarkers(getState().markers.values());
+        getWidget().setCircleOverlays(getState().circles);
         getWidget().setPolygonOverlays(getState().polygons);
         getWidget().setPolylineOverlays(getState().polylines);
         getWidget().setKmlLayers(getState().kmlLayers);
