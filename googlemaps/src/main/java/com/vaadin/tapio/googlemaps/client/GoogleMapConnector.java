@@ -149,6 +149,9 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         if (stateChangeEvent.hasPropertyChanged("polygons") || initial) {
             getWidget().setPolygonOverlays(getState().polygons);
         }
+        if (stateChangeEvent.hasPropertyChanged("circles") || initial) {
+            getWidget().setCircleOverlays(getState().circles);
+        }
         if (stateChangeEvent.hasPropertyChanged("polylines") || initial) {
             getWidget().setPolylineOverlays(getState().polylines);
         }
@@ -236,6 +239,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setMarkers(getState().markers.values());
         getWidget().setPolygonOverlays(getState().polygons);
         getWidget().setPolylineOverlays(getState().polylines);
+        getWidget().setCircleOverlays(getState().circles);
         getWidget().setKmlLayers(getState().kmlLayers);
         getWidget().setInfoWindows(getState().infoWindows.values());
         getWidget().setMapType(getState().mapTypeId);
