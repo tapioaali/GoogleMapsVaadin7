@@ -254,6 +254,28 @@ public class GoogleMap extends AbstractComponent {
     public boolean hasMarker(GoogleMapMarker marker) {
         return getState().markers.containsKey(marker.getId());
     }
+    
+    /**
+     * Checks if a circle has been added to the map.
+     *
+     * @param circle
+     *            The circle to check.
+     * @return true, if the circle has been added to the map.
+     */
+    public boolean hasCircle(GoogleMapCircle circle) {
+        return getState().circles.contains(circle);
+    }
+    
+    /**
+     * Checks if a polygon has been added to the map.
+     *
+     * @param polygon
+     *            The polygon to check.
+     * @return true, if the polygon has been added to the map.
+     */
+    public boolean hasPolygon(GoogleMapPolygon polygon) {
+        return getState().polygons.contains(polygon);
+    }
 
     /**
      * Returns the markers that have been added to he map.
@@ -420,8 +442,8 @@ public class GoogleMap extends AbstractComponent {
     /**
      * Adds a circle overlay to the map.
      *
-     * @param circle
-     *            The GoogleMapCircle to add.
+     * @param polygon
+     *            The GoogleMapPolygon to add.
      */
     public void addCircleOverlay(GoogleMapCircle circle) {
         getState().circles.add(circle);
@@ -430,8 +452,8 @@ public class GoogleMap extends AbstractComponent {
     /**
      * Removes a circle overlay from the map.
      *
-     * @param circle
-     *            The GoogleMapCircle to remove.
+     * @param polygon
+     *            The GoogleMapPolygon to remove.
      */
     public void removeCircleOverlay(GoogleMapCircle circle) {
         getState().circles.remove(circle);
