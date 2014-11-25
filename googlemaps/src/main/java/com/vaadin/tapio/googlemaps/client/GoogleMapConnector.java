@@ -86,6 +86,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setMarkerDragListener(this);
         getWidget().setInfoWindowClosedListener(this);
         getWidget().setPolygonClickListener(this);
+        getWidget().setPolylineClickListener(this);
+        getWidget().setCircleClickListener(this);
         if (deferred) {
             loadDeferred();
             deferred = false;
