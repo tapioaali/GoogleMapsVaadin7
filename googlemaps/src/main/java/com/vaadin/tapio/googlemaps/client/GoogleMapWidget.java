@@ -313,6 +313,14 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     public void setPolygonClickListener(PolygonClickListener listener) {
     	polygonClickListener = listener;
     }
+    
+    public void setPolylineClickListener(PolylineClickListener listener) {
+    	polylineClickListener = listener;
+    }
+    
+    public void setCircleClickListener(CircleClickListener listener) {
+    	circleClickListener = listener;
+    }
 
     public void setMapMoveListener(MapMoveListener listener) {
         mapMoveListener = listener;
