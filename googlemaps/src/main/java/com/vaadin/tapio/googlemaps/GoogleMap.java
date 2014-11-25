@@ -358,6 +358,46 @@ public class GoogleMap extends AbstractComponent {
     }
     
     /**
+     * Adds a PolylineClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addPolylineClickListener(PolylineClickListener listener) {
+    	polylineClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a PolylineClickListener from the map.
+     *
+     * @param listener
+     *            The listener to remove.
+     */
+    public void removePolylineClickListener(PolylineClickListener listener) {
+        polylineClickListeners.remove(listener);
+    }
+    
+    /**
+     * Adds a CircleClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addCircleClickListener(CircleClickListener listener) {
+    	circleClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a CircleClickListener from the map.
+     *
+     * @param listener
+     *            The listener to remove.
+     */
+    public void removeCircleClickListener(CircleClickListener listener) {
+        circleClickListeners.remove(listener);
+    }
+    
+    /**
      * Adds a MarkerClickListener to the map.
      *
      * @param listener
