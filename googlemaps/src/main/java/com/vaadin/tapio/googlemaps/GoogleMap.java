@@ -5,25 +5,32 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.maps.client.overlays.Polygon;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
 import com.vaadin.tapio.googlemaps.client.GoogleMapState;
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.events.CircleClickListener;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.events.PolygonClickListener;
+import com.vaadin.tapio.googlemaps.client.events.PolylineClickListener;
 import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapCircle;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
+import com.vaadin.tapio.googlemaps.client.rpcs.CircleClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.PolygonClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.PolylineClickedRpc;
 import com.vaadin.ui.AbstractComponent;
 
 /**
@@ -99,9 +106,50 @@ public class GoogleMap extends AbstractComponent {
             getState().infoWindows.remove(windowId);
         }
     };
+       
+    private PolygonClickedRpc polygonrClickedRpc = new PolygonClickedRpc() {
+        @Override
+        public void polygonClicked(long polygonId,LatLon position) {
 
+            GoogleMapPolygon polygon = getState().polygons.get(polygonId);
+            for (PolygonClickListener listener : polygonClickListeners) {
+                listener.polygonClicked(polygon, position);
+            }
+        }
+    };
+
+    private PolylineClickedRpc polylinerClickedRpc = new PolylineClickedRpc() {
+		
+		@Override
+		public void polylineClicked(long polylineId, LatLon position) {
+			
+			GoogleMapPolyline polyline = getState().polylines.get(polylineId);
+            for (PolylineClickListener listener : polylineClickListeners) {
+                listener.polylineClicked(polyline, position);
+            }
+		}
+	};
+    
+	private CircleClickedRpc circlerClickedRpc = new CircleClickedRpc() {
+		
+		@Override
+		public void circleClicked(long circleId, LatLon position) {
+			
+			GoogleMapCircle circle = getState().circles.get(circleId);
+            for (CircleClickListener listener : circleClickListeners) {
+                listener.circleClicked(circle, position);
+            }
+		}
+	};
+    
     private List<MarkerClickListener> markerClickListeners = new ArrayList<MarkerClickListener>();
+    
+    private List<PolygonClickListener> polygonClickListeners = new ArrayList<PolygonClickListener>();
 
+    private List<PolylineClickListener> polylineClickListeners = new ArrayList<PolylineClickListener>();
+    
+    private List<CircleClickListener> circleClickListeners = new ArrayList<CircleClickListener>();
+    
     private List<MapMoveListener> mapMoveListeners = new ArrayList<MapMoveListener>();
 
     private List<MapClickListener> mapClickListeners = new ArrayList<MapClickListener>();
@@ -139,7 +187,10 @@ public class GoogleMap extends AbstractComponent {
             getState().language = language;
         }
 
-        registerRpc(markerClickedRpc);
+        registerRpc(markerClickedRpc); 
+        registerRpc(polygonrClickedRpc);
+        registerRpc(polylinerClickedRpc);
+        registerRpc(circlerClickedRpc);
         registerRpc(mapMovedRpc);
         registerRpc(mapClickedRpc);
         registerRpc(markerDraggedRpc);
@@ -263,7 +314,7 @@ public class GoogleMap extends AbstractComponent {
      * @return true, if the circle has been added to the map.
      */
     public boolean hasCircle(GoogleMapCircle circle) {
-        return getState().circles.contains(circle);
+        return getState().circles.containsKey(circle.getId());
     }
     
     /**
@@ -274,7 +325,7 @@ public class GoogleMap extends AbstractComponent {
      * @return true, if the polygon has been added to the map.
      */
     public boolean hasPolygon(GoogleMapPolygon polygon) {
-        return getState().polygons.contains(polygon);
+        return getState().polygons.containsKey(polygon.getId());
     }
 
     /**
@@ -285,7 +336,27 @@ public class GoogleMap extends AbstractComponent {
     public Collection<GoogleMapMarker> getMarkers() {
         return getState().markers.values();
     }
+    
+    /**
+     * Adds a PolygonClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addPolygonClickListener(PolygonClickListener listener) {
+    	polygonClickListeners.add(listener);
+    }
 
+    /**
+     * Removes a PolygonClickListener from the map.
+     *
+     * @param listener
+     *            The listener to remove.
+     */
+    public void removePolygonClickListener(PolygonClickListener listener) {
+    	polygonClickListeners.remove(listener);
+    }
+    
     /**
      * Adds a MarkerClickListener to the map.
      *
@@ -426,7 +497,7 @@ public class GoogleMap extends AbstractComponent {
      *            The GoogleMapPolygon to add.
      */
     public void addPolygonOverlay(GoogleMapPolygon polygon) {
-        getState().polygons.add(polygon);
+        getState().polygons.put(polygon.getId(), polygon);
     }
 
     /**
@@ -446,7 +517,7 @@ public class GoogleMap extends AbstractComponent {
      *            The GoogleMapPolygon to add.
      */
     public void addCircleOverlay(GoogleMapCircle circle) {
-        getState().circles.add(circle);
+        getState().circles.put(circle.getId(), circle);
     }
 
     /**
@@ -466,7 +537,7 @@ public class GoogleMap extends AbstractComponent {
      *            The GoogleMapPolyline to add.
      */
     public void addPolyline(GoogleMapPolyline polyline) {
-        getState().polylines.add(polyline);
+        getState().polylines.put(polyline.getId(), polyline);
     }
 
     /**

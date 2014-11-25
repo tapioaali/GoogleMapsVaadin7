@@ -56,12 +56,14 @@ public class GoogleMapState extends AbstractComponentState {
     public LatLon fitToBoundsNE = null;
     public LatLon fitToBoundsSW = null;
 
-    public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
-    public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
-    public Set<GoogleMapCircle> circles = new HashSet<GoogleMapCircle>();
+   // public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
+   // public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
+   // public Set<GoogleMapCircle> circles = new HashSet<GoogleMapCircle>();
     public Set<GoogleMapKmlLayer> kmlLayers = new HashSet<GoogleMapKmlLayer>();
 
     public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
-
+    public Map<Long, GoogleMapPolygon> polygons = new HashMap<Long, GoogleMapPolygon>();
+    public Map<Long, GoogleMapPolyline> polylines = new HashMap<Long, GoogleMapPolyline>();
+    public Map<Long, GoogleMapCircle> circles = new HashMap<Long, GoogleMapCircle>();
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
 }
