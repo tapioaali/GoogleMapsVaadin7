@@ -5,14 +5,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.maps.client.overlays.Polygon;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
 import com.vaadin.tapio.googlemaps.client.GoogleMapState;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.events.CircleClickListener;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
+import com.vaadin.tapio.googlemaps.client.events.MapDbClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
+import com.vaadin.tapio.googlemaps.client.events.MapRightClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.events.PolygonClickListener;
@@ -26,6 +27,8 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 import com.vaadin.tapio.googlemaps.client.rpcs.CircleClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapDbClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapRightClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
@@ -94,6 +97,26 @@ public class GoogleMap extends AbstractComponent {
             }
         }
     };
+    
+    private MapDbClickedRpc mapDbClickedRpc = new MapDbClickedRpc() {
+        @Override
+        public void mapDbClicked(LatLon position) {
+            for (MapDbClickListener listener : mapDbClickListeners) {
+                listener.mapDbClicked(position);
+            }
+        }
+    };
+    
+    private MapRightClickedRpc mapRightClickedRpc = new MapRightClickedRpc() {
+
+		@Override
+		public void mapRightClicked(LatLon position) {
+			for (MapRightClickListener listener : mapRightClickListeners) {
+                listener.mapRightClicked(position);
+            }
+		}
+       
+    };
 
     private InfoWindowClosedRpc infoWindowClosedRpc = new InfoWindowClosedRpc() {
 
@@ -153,7 +176,11 @@ public class GoogleMap extends AbstractComponent {
     private List<MapMoveListener> mapMoveListeners = new ArrayList<MapMoveListener>();
 
     private List<MapClickListener> mapClickListeners = new ArrayList<MapClickListener>();
+    
+    private List<MapDbClickListener> mapDbClickListeners = new ArrayList<MapDbClickListener>();
 
+    private List<MapRightClickListener> mapRightClickListeners = new ArrayList<MapRightClickListener>();
+    
     private List<MarkerDragListener> markerDragListeners = new ArrayList<MarkerDragListener>();
 
     private List<InfoWindowClosedListener> infoWindowClosedListeners = new ArrayList<InfoWindowClosedListener>();
@@ -193,6 +220,8 @@ public class GoogleMap extends AbstractComponent {
         registerRpc(circlerClickedRpc);
         registerRpc(mapMovedRpc);
         registerRpc(mapClickedRpc);
+        registerRpc(mapRightClickedRpc);
+        registerRpc(mapDbClickedRpc);
         registerRpc(markerDraggedRpc);
         registerRpc(infoWindowClosedRpc);
     }
@@ -293,6 +322,27 @@ public class GoogleMap extends AbstractComponent {
      */
     public void clearMarkers() {
         getState().markers.clear();
+    }
+    
+    /**
+     * Removes all the circles from the map.
+     */
+    public void clearCircles() {
+        getState().circles.clear();
+    }
+    
+    /**
+     * Removes all the polygons from the map.
+     */
+    public void clearPolygons() {
+        getState().polygons.clear();
+    }
+    
+    /**
+     * Removes all the polylines from the map.
+     */
+    public void clearPolylines() {
+        getState().polylines.clear();
     }
 
     /**
@@ -456,7 +506,7 @@ public class GoogleMap extends AbstractComponent {
     public void removeMapMoveListener(MapMoveListener listener) {
         mapMoveListeners.remove(listener);
     }
-
+    
     /**
      * Adds a MapClickListener to the map.
      *
@@ -475,6 +525,46 @@ public class GoogleMap extends AbstractComponent {
      */
     public void removeMapClickListener(MapClickListener listener) {
         mapClickListeners.remove(listener);
+    }
+    
+    /**
+     * Adds a MapRightClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addMapRightClickListener(MapRightClickListener listener) {
+        mapRightClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a MapRightClickListener from the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void removeMapRightClickListener(MapRightClickListener listener) {
+    	mapRightClickListeners.remove(listener);
+    }
+    
+    /**
+     * Adds a MapDbClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addMapDbClickListener(MapDbClickListener listener) {
+    	mapDbClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a MapDbClickListener from the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void removeMapDbClickListener(MapDbClickListener listener) {
+    	mapDbClickListeners.remove(listener);
     }
 
     /**

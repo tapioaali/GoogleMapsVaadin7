@@ -17,7 +17,9 @@ import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.events.CircleClickListener;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
+import com.vaadin.tapio.googlemaps.client.events.MapDbClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
+import com.vaadin.tapio.googlemaps.client.events.MapRightClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.events.PolygonClickListener;
@@ -30,6 +32,8 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 import com.vaadin.tapio.googlemaps.client.rpcs.CircleClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapDbClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapRightClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
@@ -46,8 +50,8 @@ import java.util.List;
  */
 @Connect(GoogleMap.class)
 public class GoogleMapConnector extends AbstractComponentConnector implements
-    MarkerClickListener, MapMoveListener, MapClickListener,
-    MarkerDragListener, InfoWindowClosedListener, PolygonClickListener,
+    MarkerClickListener, MapMoveListener, MapClickListener, MapRightClickListener,
+    MapDbClickListener, MarkerDragListener, InfoWindowClosedListener, PolygonClickListener,
     PolylineClickListener, CircleClickListener {
 
     private static final long serialVersionUID = 646346521643L;
@@ -62,6 +66,10 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         MapMovedRpc.class, this);
     private MapClickedRpc mapClickRpc = RpcProxy.create(
         MapClickedRpc.class, this);
+    private MapRightClickedRpc mapRightClickRpc = RpcProxy.create(
+    		MapRightClickedRpc.class, this);
+    private MapDbClickedRpc mapDbClickRpc = RpcProxy.create(
+    		MapDbClickedRpc.class, this);
     private MarkerDraggedRpc markerDraggedRpc = RpcProxy.create(
         MarkerDraggedRpc.class, this);
     private InfoWindowClosedRpc infoWindowClosedRpc = RpcProxy.create(
@@ -83,6 +91,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setMarkerClickListener(this);
         getWidget().setMapMoveListener(this);
         getWidget().setMapClickListener(this);
+        getWidget().setMapRightClickListener(this);
+        getWidget().setMapDbClickListener(this);
         getWidget().setMarkerDragListener(this);
         getWidget().setInfoWindowClosedListener(this);
         getWidget().setPolygonClickListener(this);
@@ -303,6 +313,16 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     public void mapClicked(LatLon position) {
         mapClickRpc.mapClicked(position);
     }
+    
+    @Override
+	public void mapRightClicked(LatLon position) {
+    	mapRightClickRpc.mapRightClicked(position);
+	}
+    
+    @Override
+	public void mapDbClicked(LatLon position) {
+		mapDbClickRpc.mapDbClicked(position);		
+	}
 
 	@Override
 	public void polygonClicked(GoogleMapPolygon clickedPolygon, LatLon position) {

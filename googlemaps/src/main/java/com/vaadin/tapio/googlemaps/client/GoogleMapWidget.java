@@ -18,10 +18,14 @@ import com.google.gwt.maps.client.events.click.ClickMapEvent;
 import com.google.gwt.maps.client.events.click.ClickMapHandler;
 import com.google.gwt.maps.client.events.closeclick.CloseClickMapEvent;
 import com.google.gwt.maps.client.events.closeclick.CloseClickMapHandler;
+import com.google.gwt.maps.client.events.dblclick.DblClickMapEvent;
+import com.google.gwt.maps.client.events.dblclick.DblClickMapHandler;
 import com.google.gwt.maps.client.events.dragend.DragEndMapEvent;
 import com.google.gwt.maps.client.events.dragend.DragEndMapHandler;
 import com.google.gwt.maps.client.events.idle.IdleMapEvent;
 import com.google.gwt.maps.client.events.idle.IdleMapHandler;
+import com.google.gwt.maps.client.events.rightclick.RightClickMapEvent;
+import com.google.gwt.maps.client.events.rightclick.RightClickMapHandler;
 import com.google.gwt.maps.client.layers.KmlLayer;
 import com.google.gwt.maps.client.layers.KmlLayerOptions;
 import com.google.gwt.maps.client.mvc.MVCArray;
@@ -43,7 +47,9 @@ import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.events.CircleClickListener;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
+import com.vaadin.tapio.googlemaps.client.events.MapDbClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
+import com.vaadin.tapio.googlemaps.client.events.MapRightClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.events.PolygonClickListener;
@@ -79,7 +85,9 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     private LatLngBounds allowedBoundsVisibleArea = null;
 
     private MapClickListener mapClickListener = null;
-    
+    private MapRightClickListener mapRightClickListener = null;
+    private MapDbClickListener mapDbClickListener = null;
+
     private PolygonClickListener polygonClickListener = null;
     private PolylineClickListener polylineClickListener = null;
     private CircleClickListener circleClickListener = null;
@@ -133,6 +141,31 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                 }
             }
         });
+        
+        mapImpl.addRightClickHandler(new RightClickMapHandler() {
+			
+			@Override
+			public void onEvent(RightClickMapEvent event) {
+				if (mapRightClickListener != null) {
+                    LatLon position = new LatLon(event.getMouseEvent().getLatLng().getLatitude(), event
+                        .getMouseEvent().getLatLng().getLongitude());
+                    mapRightClickListener.mapRightClicked(position);
+				}
+			}
+		});
+          
+        mapImpl.addDblClickHandler(new DblClickMapHandler() {
+			
+			@Override
+			public void onEvent(DblClickMapEvent event) {
+				if (mapDbClickListener != null) {
+                    LatLon position = new LatLon(event.getMouseEvent().getLatLng().getLatitude(), event
+                        .getMouseEvent().getLatLng().getLongitude());
+                    mapDbClickListener.mapDbClicked(position);
+				}
+			}
+		});
+        
     }
 
     private boolean checkVisibleAreaBoundLimits() {
@@ -329,7 +362,15 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     public void setMapClickListener(MapClickListener listener) {
         mapClickListener = listener;
     }
-
+    
+    public void setMapRightClickListener(MapRightClickListener listener) {
+        mapRightClickListener = listener;
+    }
+    
+    public void setMapDbClickListener(MapDbClickListener listener) {
+        mapDbClickListener = listener;
+    }
+    
     public void setMarkerDragListener(MarkerDragListener listener) {
         markerDragListener = listener;
     }
