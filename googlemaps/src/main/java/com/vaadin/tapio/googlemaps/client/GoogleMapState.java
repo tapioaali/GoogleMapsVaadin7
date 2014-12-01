@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.vaadin.shared.AbstractComponentState;
 import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapCircle;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
@@ -55,11 +56,14 @@ public class GoogleMapState extends AbstractComponentState {
     public LatLon fitToBoundsNE = null;
     public LatLon fitToBoundsSW = null;
 
-    public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
-    public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
+   // public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
+   // public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
+   // public Set<GoogleMapCircle> circles = new HashSet<GoogleMapCircle>();
     public Set<GoogleMapKmlLayer> kmlLayers = new HashSet<GoogleMapKmlLayer>();
 
     public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
-
+    public Map<Long, GoogleMapPolygon> polygons = new HashMap<Long, GoogleMapPolygon>();
+    public Map<Long, GoogleMapPolyline> polylines = new HashMap<Long, GoogleMapPolyline>();
+    public Map<Long, GoogleMapCircle> circles = new HashMap<Long, GoogleMapCircle>();
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
 }

@@ -19,13 +19,16 @@ import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.events.PolygonClickListener;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.PolygonClickedRpc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +41,7 @@ import java.util.List;
 @Connect(GoogleMap.class)
 public class GoogleMapConnector extends AbstractComponentConnector implements
     MarkerClickListener, MapMoveListener, MapClickListener,
-    MarkerDragListener, InfoWindowClosedListener {
+    MarkerDragListener, InfoWindowClosedListener, PolygonClickListener {
 
     private static final long serialVersionUID = 646346521643L;
 
@@ -56,6 +59,8 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         MarkerDraggedRpc.class, this);
     private InfoWindowClosedRpc infoWindowClosedRpc = RpcProxy.create(
         InfoWindowClosedRpc.class, this);
+    private PolygonClickedRpc polygonClickedRpc = RpcProxy.create(
+    		PolygonClickedRpc.class, this);
 
     public GoogleMapConnector() {
     }
@@ -69,6 +74,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         getWidget().setMapClickListener(this);
         getWidget().setMarkerDragListener(this);
         getWidget().setInfoWindowClosedListener(this);
+        getWidget().setPolygonClickListener(this);
         if (deferred) {
             loadDeferred();
             deferred = false;
@@ -147,10 +153,13 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
         }
 
         if (stateChangeEvent.hasPropertyChanged("polygons") || initial) {
-            getWidget().setPolygonOverlays(getState().polygons);
+            getWidget().setPolygonOverlays(getState().polygons.values());
+        }
+        if (stateChangeEvent.hasPropertyChanged("circles") || initial) {
+            getWidget().setCircleOverlays(getState().circles.values());
         }
         if (stateChangeEvent.hasPropertyChanged("polylines") || initial) {
-            getWidget().setPolylineOverlays(getState().polylines);
+            getWidget().setPolylineOverlays(getState().polylines.values());
         }
         if (stateChangeEvent.hasPropertyChanged("kmlLayers") || initial) {
             getWidget().setKmlLayers(getState().kmlLayers);
@@ -234,8 +243,9 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
 
     private void loadDeferred() {
         getWidget().setMarkers(getState().markers.values());
-        getWidget().setPolygonOverlays(getState().polygons);
-        getWidget().setPolylineOverlays(getState().polylines);
+        getWidget().setPolygonOverlays(getState().polygons.values());
+        getWidget().setPolylineOverlays(getState().polylines.values());
+        getWidget().setCircleOverlays(getState().circles.values());
         getWidget().setKmlLayers(getState().kmlLayers);
         getWidget().setInfoWindows(getState().infoWindows.values());
         getWidget().setMapType(getState().mapTypeId);
@@ -280,4 +290,9 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
     public void mapClicked(LatLon position) {
         mapClickRpc.mapClicked(position);
     }
+
+	@Override
+	public void polygonClicked(GoogleMapPolygon clickedPolygon, LatLon position) {
+		polygonClickedRpc.polygonClicked(clickedPolygon.getId(), position);		
+	}
 }

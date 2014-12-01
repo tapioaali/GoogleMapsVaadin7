@@ -8,21 +8,32 @@ import java.util.Set;
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
 import com.vaadin.tapio.googlemaps.client.GoogleMapState;
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.events.CircleClickListener;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
+import com.vaadin.tapio.googlemaps.client.events.MapDbClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
+import com.vaadin.tapio.googlemaps.client.events.MapRightClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
+import com.vaadin.tapio.googlemaps.client.events.PolygonClickListener;
+import com.vaadin.tapio.googlemaps.client.events.PolylineClickListener;
 import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapCircle;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
+import com.vaadin.tapio.googlemaps.client.rpcs.CircleClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapDbClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapRightClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.PolygonClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.PolylineClickedRpc;
 import com.vaadin.ui.AbstractComponent;
 
 /**
@@ -86,6 +97,26 @@ public class GoogleMap extends AbstractComponent {
             }
         }
     };
+    
+    private MapDbClickedRpc mapDbClickedRpc = new MapDbClickedRpc() {
+        @Override
+        public void mapDbClicked(LatLon position) {
+            for (MapDbClickListener listener : mapDbClickListeners) {
+                listener.mapDbClicked(position);
+            }
+        }
+    };
+    
+    private MapRightClickedRpc mapRightClickedRpc = new MapRightClickedRpc() {
+
+		@Override
+		public void mapRightClicked(LatLon position) {
+			for (MapRightClickListener listener : mapRightClickListeners) {
+                listener.mapRightClicked(position);
+            }
+		}
+       
+    };
 
     private InfoWindowClosedRpc infoWindowClosedRpc = new InfoWindowClosedRpc() {
 
@@ -98,13 +129,58 @@ public class GoogleMap extends AbstractComponent {
             getState().infoWindows.remove(windowId);
         }
     };
+       
+    private PolygonClickedRpc polygonrClickedRpc = new PolygonClickedRpc() {
+        @Override
+        public void polygonClicked(long polygonId,LatLon position) {
 
+            GoogleMapPolygon polygon = getState().polygons.get(polygonId);
+            for (PolygonClickListener listener : polygonClickListeners) {
+                listener.polygonClicked(polygon, position);
+            }
+        }
+    };
+
+    private PolylineClickedRpc polylinerClickedRpc = new PolylineClickedRpc() {
+		
+		@Override
+		public void polylineClicked(long polylineId, LatLon position) {
+			
+			GoogleMapPolyline polyline = getState().polylines.get(polylineId);
+            for (PolylineClickListener listener : polylineClickListeners) {
+                listener.polylineClicked(polyline, position);
+            }
+		}
+	};
+    
+	private CircleClickedRpc circlerClickedRpc = new CircleClickedRpc() {
+		
+		@Override
+		public void circleClicked(long circleId, LatLon position) {
+			
+			GoogleMapCircle circle = getState().circles.get(circleId);
+            for (CircleClickListener listener : circleClickListeners) {
+                listener.circleClicked(circle, position);
+            }
+		}
+	};
+    
     private List<MarkerClickListener> markerClickListeners = new ArrayList<MarkerClickListener>();
+    
+    private List<PolygonClickListener> polygonClickListeners = new ArrayList<PolygonClickListener>();
 
+    private List<PolylineClickListener> polylineClickListeners = new ArrayList<PolylineClickListener>();
+    
+    private List<CircleClickListener> circleClickListeners = new ArrayList<CircleClickListener>();
+    
     private List<MapMoveListener> mapMoveListeners = new ArrayList<MapMoveListener>();
 
     private List<MapClickListener> mapClickListeners = new ArrayList<MapClickListener>();
+    
+    private List<MapDbClickListener> mapDbClickListeners = new ArrayList<MapDbClickListener>();
 
+    private List<MapRightClickListener> mapRightClickListeners = new ArrayList<MapRightClickListener>();
+    
     private List<MarkerDragListener> markerDragListeners = new ArrayList<MarkerDragListener>();
 
     private List<InfoWindowClosedListener> infoWindowClosedListeners = new ArrayList<InfoWindowClosedListener>();
@@ -138,9 +214,14 @@ public class GoogleMap extends AbstractComponent {
             getState().language = language;
         }
 
-        registerRpc(markerClickedRpc);
+        registerRpc(markerClickedRpc); 
+        registerRpc(polygonrClickedRpc);
+        registerRpc(polylinerClickedRpc);
+        registerRpc(circlerClickedRpc);
         registerRpc(mapMovedRpc);
         registerRpc(mapClickedRpc);
+        registerRpc(mapRightClickedRpc);
+        registerRpc(mapDbClickedRpc);
         registerRpc(markerDraggedRpc);
         registerRpc(infoWindowClosedRpc);
     }
@@ -242,6 +323,27 @@ public class GoogleMap extends AbstractComponent {
     public void clearMarkers() {
         getState().markers.clear();
     }
+    
+    /**
+     * Removes all the circles from the map.
+     */
+    public void clearCircles() {
+        getState().circles.clear();
+    }
+    
+    /**
+     * Removes all the polygons from the map.
+     */
+    public void clearPolygons() {
+        getState().polygons.clear();
+    }
+    
+    /**
+     * Removes all the polylines from the map.
+     */
+    public void clearPolylines() {
+        getState().polylines.clear();
+    }
 
     /**
      * Checks if a marker has been added to the map.
@@ -253,6 +355,28 @@ public class GoogleMap extends AbstractComponent {
     public boolean hasMarker(GoogleMapMarker marker) {
         return getState().markers.containsKey(marker.getId());
     }
+    
+    /**
+     * Checks if a circle has been added to the map.
+     *
+     * @param circle
+     *            The circle to check.
+     * @return true, if the circle has been added to the map.
+     */
+    public boolean hasCircle(GoogleMapCircle circle) {
+        return getState().circles.containsKey(circle.getId());
+    }
+    
+    /**
+     * Checks if a polygon has been added to the map.
+     *
+     * @param polygon
+     *            The polygon to check.
+     * @return true, if the polygon has been added to the map.
+     */
+    public boolean hasPolygon(GoogleMapPolygon polygon) {
+        return getState().polygons.containsKey(polygon.getId());
+    }
 
     /**
      * Returns the markers that have been added to he map.
@@ -262,7 +386,67 @@ public class GoogleMap extends AbstractComponent {
     public Collection<GoogleMapMarker> getMarkers() {
         return getState().markers.values();
     }
+    
+    /**
+     * Adds a PolygonClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addPolygonClickListener(PolygonClickListener listener) {
+    	polygonClickListeners.add(listener);
+    }
 
+    /**
+     * Removes a PolygonClickListener from the map.
+     *
+     * @param listener
+     *            The listener to remove.
+     */
+    public void removePolygonClickListener(PolygonClickListener listener) {
+    	polygonClickListeners.remove(listener);
+    }
+    
+    /**
+     * Adds a PolylineClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addPolylineClickListener(PolylineClickListener listener) {
+    	polylineClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a PolylineClickListener from the map.
+     *
+     * @param listener
+     *            The listener to remove.
+     */
+    public void removePolylineClickListener(PolylineClickListener listener) {
+        polylineClickListeners.remove(listener);
+    }
+    
+    /**
+     * Adds a CircleClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addCircleClickListener(CircleClickListener listener) {
+    	circleClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a CircleClickListener from the map.
+     *
+     * @param listener
+     *            The listener to remove.
+     */
+    public void removeCircleClickListener(CircleClickListener listener) {
+        circleClickListeners.remove(listener);
+    }
+    
     /**
      * Adds a MarkerClickListener to the map.
      *
@@ -322,7 +506,7 @@ public class GoogleMap extends AbstractComponent {
     public void removeMapMoveListener(MapMoveListener listener) {
         mapMoveListeners.remove(listener);
     }
-
+    
     /**
      * Adds a MapClickListener to the map.
      *
@@ -341,6 +525,46 @@ public class GoogleMap extends AbstractComponent {
      */
     public void removeMapClickListener(MapClickListener listener) {
         mapClickListeners.remove(listener);
+    }
+    
+    /**
+     * Adds a MapRightClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addMapRightClickListener(MapRightClickListener listener) {
+        mapRightClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a MapRightClickListener from the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void removeMapRightClickListener(MapRightClickListener listener) {
+    	mapRightClickListeners.remove(listener);
+    }
+    
+    /**
+     * Adds a MapDbClickListener to the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void addMapDbClickListener(MapDbClickListener listener) {
+    	mapDbClickListeners.add(listener);
+    }
+
+    /**
+     * Removes a MapDbClickListener from the map.
+     *
+     * @param listener
+     *            The listener to add.
+     */
+    public void removeMapDbClickListener(MapDbClickListener listener) {
+    	mapDbClickListeners.remove(listener);
     }
 
     /**
@@ -403,7 +627,7 @@ public class GoogleMap extends AbstractComponent {
      *            The GoogleMapPolygon to add.
      */
     public void addPolygonOverlay(GoogleMapPolygon polygon) {
-        getState().polygons.add(polygon);
+        getState().polygons.put(polygon.getId(), polygon);
     }
 
     /**
@@ -415,6 +639,26 @@ public class GoogleMap extends AbstractComponent {
     public void removePolygonOverlay(GoogleMapPolygon polygon) {
         getState().polygons.remove(polygon);
     }
+    
+    /**
+     * Adds a circle overlay to the map.
+     *
+     * @param polygon
+     *            The GoogleMapPolygon to add.
+     */
+    public void addCircleOverlay(GoogleMapCircle circle) {
+        getState().circles.put(circle.getId(), circle);
+    }
+
+    /**
+     * Removes a circle overlay from the map.
+     *
+     * @param polygon
+     *            The GoogleMapPolygon to remove.
+     */
+    public void removeCircleOverlay(GoogleMapCircle circle) {
+        getState().circles.remove(circle);
+    }
 
     /**
      * Adds a polyline to the map.
@@ -423,7 +667,7 @@ public class GoogleMap extends AbstractComponent {
      *            The GoogleMapPolyline to add.
      */
     public void addPolyline(GoogleMapPolyline polyline) {
-        getState().polylines.add(polyline);
+        getState().polylines.put(polyline.getId(), polyline);
     }
 
     /**
