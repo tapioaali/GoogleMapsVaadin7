@@ -6,20 +6,7 @@ If you use Google Maps API for Business, check out [https://developers.google.co
 
 Grab it from [Vaadin Directory](https://vaadin.com/directory#addon/googlemaps-add-on:vaadin). Sources of the demo can be from project [googlemaps-demo](https://github.com/tjkaal/GoogleMapsVaadin7/tree/master/googlemaps-demo).
 
-Check out demo @ [http://tapio.app.com/googlemaps/](http://tapio.app.com/googlemaps/). 
-
-As always, remember to compile your widget set and add either 
-
-    widgetset = "org.example.mapsapp.yourwidgetset"
-
-to your `VaadinServletConfiguration` or
-
-	<init-param>
-		<param-name>widgetset</param-name>
-		<param-value>org.example.mapsapp.yourwidgetset</param-value>
-	</init-param>
-
-to web.xml.
+Check out demo @ [http://tapio.app.fi/googlemaps/](http://tapio.app.fi/googlemaps/). 
 
 ## Supported features ##
 
@@ -43,17 +30,6 @@ to web.xml.
 - Marker drag
 - Map click
 - Info window close
-
-## Currently not supported, planned features ##
-- Server-side controls for Street View.
-- Support for circles.
-- Click events for every map overlay (polylines, polygons, circles).
-- API for creating extensions for the map, providing an easy way to add support for new features like:
-	- Libraries including Drawing, Geometry, Visualization and Weather
-	- Services like Geocoder. Directions and Distance Matrix
-	
-	
-Notice that these are not in any order and there's high possibility that some of them will never be implemented.
 
 ## Development notice ##
 
