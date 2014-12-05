@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.vaadin.tapio</groupId>
 	<artifactId>googlemaps</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.1</version>
 	<name>GoogleMaps Add-on</name>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<vaadin.version>7.3.6</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<Implementation-Version>${project.version}</Implementation-Version>
 		<Implementation-Title>${project.name}</Implementation-Title>
-		<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+		<Implementation-Vendor>${project.organization.name}
+		</Implementation-Vendor>
 		<Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
-		<Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
+		<Vaadin-Addon>${project.artifactId}-${project.version}.jar
+		</Vaadin-Addon>
 	</properties>
-
 	<licenses>
 		<license>
 			<name>Apache 2</name>
@@ -26,7 +27,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 	<repositories>
 		<repository>
 			<id>vaadin-addons</id>
@@ -34,7 +34,9 @@
 		</repository>
 		<repository>
 			<id>vaadin-snapshots</id>
-			<url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+			<url>
+                http://oss.sonatype.org/content/repositories/vaadin-snapshots/
+			</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -43,11 +45,12 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>vaadin-snapshots</id>
-			<url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+			<url>
+                http://oss.sonatype.org/content/repositories/vaadin-snapshots/
+			</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -56,7 +59,6 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.vaadin</groupId>
@@ -89,12 +91,9 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 	</dependencies>
-
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -104,7 +103,6 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -114,18 +112,19 @@
 						<index>true</index>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultImplementationEntries>true
+							</addDefaultImplementationEntries>
 						</manifest>
 						<manifestEntries>
-							<!-- Package format version - do not change -->
 							<Vaadin-Package-Version>1</Vaadin-Package-Version>
 							<Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-							<Vaadin-Widgetsets>com.vaadin.tapio.googlemaps.Widgetset</Vaadin-Widgetsets>
+							<Vaadin-Widgetsets>
+                                com.vaadin.tapio.googlemaps.Widgetset
+							</Vaadin-Widgetsets>
 						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -139,7 +138,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -153,7 +151,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -185,7 +182,5 @@
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
-
 	</build>
-
 </project>
