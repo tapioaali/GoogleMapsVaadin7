@@ -6,10 +6,8 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * A class representing a pop-up window with HTML contents. They are often
- * anchored to {@link com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker markers}.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
- * 
+ * anchored to
+ * {@link com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker markers}.
  */
 public class GoogleMapInfoWindow implements Serializable {
 

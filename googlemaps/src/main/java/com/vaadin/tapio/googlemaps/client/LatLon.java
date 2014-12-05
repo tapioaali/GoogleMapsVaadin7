@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 /**
  * Class representing coordinates of a point.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
- * 
  */
 public class LatLon implements Serializable {
     private static final long serialVersionUID = 646346543243L;

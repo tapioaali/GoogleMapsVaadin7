@@ -6,7 +6,6 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 /**
  * Interface for listening marker click events.
- * 
  */
 public interface MarkerClickListener extends Serializable {
     /**

@@ -6,8 +6,6 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 
 /**
  * Interface for listening info window close events initiated by the user.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
  */
 public interface InfoWindowClosedListener extends Serializable {
 

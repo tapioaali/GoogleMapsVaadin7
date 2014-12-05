@@ -6,8 +6,6 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * The class representing a marker of the Google Map.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
  */
 public class GoogleMapMarker implements Serializable {
     private static final long serialVersionUID = 612346543243L;

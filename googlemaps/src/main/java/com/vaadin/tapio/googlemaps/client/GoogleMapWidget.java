@@ -37,7 +37,6 @@ import com.google.gwt.maps.client.overlays.PolylineOptions;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
@@ -115,8 +114,9 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             @Override
             public void onEvent(ClickMapEvent event) {
                 if (mapClickListener != null) {
-                    LatLon position = new LatLon(event.getMouseEvent().getLatLng().getLatitude(), event
-                        .getMouseEvent().getLatLng().getLongitude());
+                    LatLon position = new LatLon(event.getMouseEvent()
+                            .getLatLng().getLatitude(), event.getMouseEvent()
+                            .getLatLng().getLongitude());
                     mapClickListener.mapClicked(position);
                 }
             }
@@ -178,11 +178,12 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
             if (mapMoveListener != null) {
                 mapMoveListener.mapMoved(map.getZoom(), new LatLon(map
-                        .getCenter().getLatitude(), map.getCenter().getLongitude()), new LatLon(
-                        map.getBounds().getNorthEast().getLatitude(), map.getBounds()
-                                .getNorthEast().getLongitude()), new LatLon(map
-                        .getBounds().getSouthWest().getLatitude(), map.getBounds()
-                        .getSouthWest().getLongitude()));
+                        .getCenter().getLatitude(), map.getCenter()
+                        .getLongitude()), new LatLon(map.getBounds()
+                        .getNorthEast().getLatitude(), map.getBounds()
+                        .getNorthEast().getLongitude()), new LatLon(map
+                        .getBounds().getSouthWest().getLatitude(), map
+                        .getBounds().getSouthWest().getLongitude()));
             }
         }
     }
@@ -256,7 +257,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                     public void onEvent(ClickMapEvent event) {
                         if (markerClickListener != null) {
                             markerClickListener.markerClicked(markerMap
-                                .get(marker));
+                                    .get(marker));
                         }
                     }
                 });
@@ -267,11 +268,12 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                         GoogleMapMarker gMarker = markerMap.get(marker);
                         LatLon oldPosition = gMarker.getPosition();
                         gMarker.setPosition(new LatLon(marker.getPosition()
-                            .getLatitude(), marker.getPosition().getLongitude()));
+                                .getLatitude(), marker.getPosition()
+                                .getLongitude()));
 
                         if (markerDragListener != null) {
                             markerDragListener.markerDragged(gMarker,
-                                oldPosition);
+                                    oldPosition);
                         }
                     }
                 });
@@ -324,9 +326,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     private MarkerOptions createMarkerOptions(GoogleMapMarker googleMapMarker) {
-        LatLng center = LatLng.newInstance(
-            googleMapMarker.getPosition().getLat(),
-            googleMapMarker.getPosition().getLon());
+        LatLng center = LatLng.newInstance(googleMapMarker.getPosition()
+                .getLat(), googleMapMarker.getPosition().getLon());
         MarkerOptions options = MarkerOptions.newInstance();
         options.setPosition(center);
         options.setTitle(googleMapMarker.getCaption());
@@ -367,8 +368,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public void setVisibleAreaBoundLimits(LatLon limitNE, LatLon limitSW) {
         allowedBoundsVisibleArea = LatLngBounds.newInstance(
-            LatLng.newInstance(limitSW.getLat(), limitSW.getLon()),
-            LatLng.newInstance(limitNE.getLat(), limitNE.getLon()));
+                LatLng.newInstance(limitSW.getLat(), limitSW.getLon()),
+                LatLng.newInstance(limitNE.getLat(), limitNE.getLon()));
     }
 
     public void clearVisibleAreaBoundLimits() {
@@ -385,7 +386,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             MVCArray<LatLng> points = MVCArray.newInstance();
             for (LatLon latLon : overlay.getCoordinates()) {
                 LatLng latLng = LatLng.newInstance(latLon.getLat(),
-                    latLon.getLon());
+                        latLon.getLon());
                 points.push(latLng);
             }
 
@@ -416,7 +417,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             MVCArray<LatLng> points = MVCArray.newInstance();
             for (LatLon latLon : overlay.getCoordinates()) {
                 LatLng latLng = LatLng.newInstance(latLon.getLat(),
-                    latLon.getLon());
+                        latLon.getLon());
                 points.push(latLng);
             }
 
@@ -554,8 +555,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             if (gmWindow.getPixelOffsetHeight() != null
                     && gmWindow.getPixelOffsetWidth() != null) {
                 options.setPixelOffet(Size.newInstance(
-                    gmWindow.getPixelOffsetWidth(),
-                    gmWindow.getPixelOffsetHeight()));
+                        gmWindow.getPixelOffsetWidth(),
+                        gmWindow.getPixelOffsetHeight()));
             }
             if (gmWindow.getPosition() != null) {
                 options.setPosition(LatLng.newInstance(gmWindow.getPosition()
@@ -577,7 +578,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                 public void onEvent(CloseClickMapEvent event) {
                     if (infoWindowClosedListener != null) {
                         infoWindowClosedListener.infoWindowClosed(infoWindowMap
-                            .get(window));
+                                .get(window));
                     }
                 }
             });

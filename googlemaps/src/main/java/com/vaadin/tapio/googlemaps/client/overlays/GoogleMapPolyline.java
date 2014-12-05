@@ -7,10 +7,8 @@ import java.util.List;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
- * A class representing a poly line (a line consisting of multiple points)
+ * A class representing a polyline (a line consisting of multiple points)
  * overlay of Google Maps.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
  */
 public class GoogleMapPolyline implements Serializable {
 

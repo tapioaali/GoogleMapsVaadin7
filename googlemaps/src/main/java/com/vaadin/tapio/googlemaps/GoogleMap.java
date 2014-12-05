@@ -18,17 +18,15 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
-import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.InfoWindowClosedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapClickedRpc;
+import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerClickedRpc;
 import com.vaadin.tapio.googlemaps.client.rpcs.MarkerDraggedRpc;
-import com.vaadin.tapio.googlemaps.client.rpcs.MapMovedRpc;
 import com.vaadin.ui.AbstractComponent;
 
 /**
  * The class representing Google Maps.
- *
- * @author Tapio Aali <tapio@vaadin.com>
  */
 public class GoogleMap extends AbstractComponent {
 
@@ -65,7 +63,7 @@ public class GoogleMap extends AbstractComponent {
     private MapMovedRpc mapMovedRpc = new MapMovedRpc() {
         @Override
         public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
-            LatLon boundsSW) {
+                LatLon boundsSW) {
             getState().locationFromClient = true;
             getState().zoom = zoomLevel;
             getState().center = center;
@@ -112,14 +110,14 @@ public class GoogleMap extends AbstractComponent {
     /**
      * Initiates a new GoogleMap object with default settings from the
      * {@link GoogleMapState state object}.
-     *
+     * 
      * @param apiKey
      *            The Maps API key from Google. Not required when developing in
      *            localhost or when using a client id. Use null or empty string
      *            to disable.
      * @param clientId
-     *            Google Maps API for Work client ID. Use this instead of API key
-     *            if available. Use null or empty string to disable.
+     *            Google Maps API for Work client ID. Use this instead of API
+     *            key if available. Use null or empty string to disable.
      * @param language
      *            The language to use with maps. See
      *            https://developers.google.com/maps/faq#languagesupport for the
@@ -127,14 +125,14 @@ public class GoogleMap extends AbstractComponent {
      *            disable.
      */
     public GoogleMap(String apiKey, String clientId, String language) {
-        if(apiKey != null && !apiKey.isEmpty())      {
+        if (apiKey != null && !apiKey.isEmpty()) {
             getState().apiKey = apiKey;
         }
-        if(clientId != null && !clientId.isEmpty()) {
+        if (clientId != null && !clientId.isEmpty()) {
             getState().clientId = clientId;
         }
 
-        if(language != null && !language.isEmpty()) {
+        if (language != null && !language.isEmpty()) {
             getState().language = language;
         }
 
@@ -157,7 +155,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Sets the center of the map to the given coordinates.
-     *
+     * 
      * @param center
      *            The new coordinates of the center.
      */
@@ -168,7 +166,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Returns the current position of the center of the map.
-     *
+     * 
      * @return Coordinates of the center.
      */
     public LatLon getCenter() {
@@ -177,7 +175,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Zooms the map to the given value.
-     *
+     * 
      * @param zoom
      *            New amount of the zoom.
      */
@@ -188,7 +186,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Returns the current zoom of the map.
-     *
+     * 
      * @return Current value of the zoom.
      */
     public int getZoom() {
@@ -197,7 +195,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a new marker to the map.
-     *
+     * 
      * @param caption
      *            Caption of the marker shown when the marker is hovered.
      * @param position
@@ -209,16 +207,16 @@ public class GoogleMap extends AbstractComponent {
      * @return GoogleMapMarker object created with the given settings.
      */
     public GoogleMapMarker addMarker(String caption, LatLon position,
-        boolean draggable, String iconUrl) {
+            boolean draggable, String iconUrl) {
         GoogleMapMarker marker = new GoogleMapMarker(caption, position,
-            draggable, iconUrl);
+                draggable, iconUrl);
         getState().markers.put(marker.getId(), marker);
         return marker;
     }
 
     /**
      * Adds a marker to the map.
-     *
+     * 
      * @param marker
      *            The marker to add.
      */
@@ -228,7 +226,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a marker from the map.
-     *
+     * 
      * @param marker
      *            The marker to remove.
      */
@@ -245,7 +243,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if a marker has been added to the map.
-     *
+     * 
      * @param marker
      *            The marker to check.
      * @return true, if the marker has been added to the map.
@@ -256,7 +254,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Returns the markers that have been added to he map.
-     *
+     * 
      * @return Set of the markers.
      */
     public Collection<GoogleMapMarker> getMarkers() {
@@ -265,7 +263,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a MarkerClickListener to the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -275,7 +273,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a MarkerClickListener from the map.
-     *
+     * 
      * @param listener
      *            The listener to remove.
      */
@@ -285,7 +283,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a MarkerDragListener to the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -295,7 +293,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a MarkerDragListenr from the map.
-     *
+     * 
      * @param listener
      *            The listener to remove.
      */
@@ -305,7 +303,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a MapMoveListener to the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -315,7 +313,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a MapMoveListener from the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -325,7 +323,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a MapClickListener to the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -335,7 +333,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a MapClickListener from the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -345,7 +343,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds an InfoWindowClosedListener to the map.
-     *
+     * 
      * @param listener
      *            The listener to add.
      */
@@ -355,7 +353,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes an InfoWindowClosedListener from the map.
-     *
+     * 
      * @param listener
      *            The listener to remove.
      */
@@ -365,7 +363,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if limiting of the center bounds is enabled.
-     *
+     * 
      * @return true, if enabled
      */
     public boolean isCenterBoundLimitsEnabled() {
@@ -374,7 +372,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Enables/disables limiting of the center bounds.
-     *
+     * 
      * @param enable
      *            Set true to enable the limiting.
      */
@@ -384,7 +382,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Sets the limits of the bounds of the center to given values.
-     *
+     * 
      * @param limitNE
      *            The coordinates of the northeast limit.
      * @param limitSW
@@ -398,7 +396,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a polygon overlay to the map.
-     *
+     * 
      * @param polygon
      *            The GoogleMapPolygon to add.
      */
@@ -408,7 +406,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a polygon overlay from the map.
-     *
+     * 
      * @param polygon
      *            The GoogleMapPolygon to remove.
      */
@@ -418,7 +416,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a polyline to the map.
-     *
+     * 
      * @param polyline
      *            The GoogleMapPolyline to add.
      */
@@ -428,7 +426,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a polyline from the map.
-     *
+     * 
      * @param polyline
      *            The GoogleMapPolyline to add.
      */
@@ -438,7 +436,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Adds a KML layer to the map.
-     *
+     * 
      * @param kmlLayer
      *            The KML layer to add.
      */
@@ -448,7 +446,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Removes a KML layer from the map.
-     *
+     * 
      * @param kmlLayer
      *            The KML layer to remove.
      */
@@ -458,7 +456,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Sets the type of the base map.
-     *
+     * 
      * @param type
      *            The new MapType to use.
      */
@@ -468,7 +466,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Returns the current type of the base map.
-     *
+     * 
      * @return The current MapType.
      */
     public MapType getMapType() {
@@ -477,7 +475,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if the map is currently draggable.
-     *
+     * 
      * @return true, if the map draggable.
      */
     public boolean isDraggable() {
@@ -486,7 +484,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Enables/disables dragging of the map.
-     *
+     * 
      * @param draggable
      *            Set to true to enable dragging.
      */
@@ -496,7 +494,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if the keyboard shortcuts are enabled.
-     *
+     * 
      * @return true, if the shortcuts are enabled.
      */
     public boolean areKeyboardShortcutsEnabled() {
@@ -505,7 +503,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Enables/disables the keyboard shortcuts.
-     *
+     * 
      * @param enabled
      *            Set true to enable keyboard shortcuts.
      */
@@ -515,7 +513,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if the scroll wheel is enabled.
-     *
+     * 
      * @return true, if the scroll wheel is enabled
      */
     public boolean isScrollWheelEnabled() {
@@ -524,7 +522,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Enables/disables the scroll wheel.
-     *
+     * 
      * @param enabled
      *            Set true to enable scroll wheel.
      */
@@ -534,7 +532,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Returns the currently enabled map controls.
-     *
+     * 
      * @return Currently enabled map controls.
      */
     public Set<GoogleMapControl> getControls() {
@@ -543,7 +541,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Sets the controls of the map.
-     *
+     * 
      * @param controls
      *            The new controls to use.
      */
@@ -554,7 +552,7 @@ public class GoogleMap extends AbstractComponent {
     /**
      * Enables the given control on the map. Does nothing if the control is
      * already enabled.
-     *
+     * 
      * @param control
      *            The control to enable.
      */
@@ -565,7 +563,7 @@ public class GoogleMap extends AbstractComponent {
     /**
      * Removes the control from the map. Does nothing if the control isn't
      * enabled.
-     *
+     * 
      * @param control
      *            The control to remove.
      */
@@ -575,7 +573,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Enables/disables limiting of the bounds of the visible area.
-     *
+     * 
      * @param enabled
      *            Set true to enable the limiting.
      */
@@ -586,7 +584,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if limiting of the bounds of the visible area is enabled.
-     *
+     * 
      * @return true if enabled
      */
     public boolean isVisibleAreaBoundLimitsEnabled() {
@@ -597,7 +595,7 @@ public class GoogleMap extends AbstractComponent {
      * Sets the limits of the bounds of the visible area to the given values.
      * NOTE: Using the feature does not affect zooming, consider using
      * {@link #setMinZoom(int)} too.
-     *
+     * 
      * @param limitNE
      *            The coordinates of the northeast limit.
      * @param limitSW
@@ -611,7 +609,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Sets the maximum allowed amount of zoom (default 21.0).
-     *
+     * 
      * @param maxZoom
      *            The maximum amount for zoom.
      */
@@ -621,7 +619,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Returns the current maximum amount of zoom.
-     *
+     * 
      * @return maximum amount of zoom
      */
     public int getMaxZoom() {
@@ -630,7 +628,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Sets the minimum allowed amount of zoom (default 0.0).
-     *
+     * 
      * @param minZoom
      *            The minimum amount for zoom.
      */
@@ -640,7 +638,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Returns the current minimum amount of zoom.
-     *
+     * 
      * @return minimum amount of zoom
      */
     public int getMinZoom() {
@@ -649,7 +647,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Opens an info window.
-     *
+     * 
      * @param infoWindow
      *            The window to open.
      */
@@ -659,7 +657,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Closes an info window.
-     *
+     * 
      * @param infoWindow
      *            The window to close.
      */
@@ -669,7 +667,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if an info window is open.
-     *
+     * 
      * @param infoWindow
      *            The window to check.
      * @return true, if the window is open.
@@ -681,7 +679,7 @@ public class GoogleMap extends AbstractComponent {
     /**
      * Enables/disables new visual style of the map. NOTICE: this must be set
      * before rendering the map.
-     *
+     * 
      * @param enabled
      *            Set true to enable (defaul false).
      */
@@ -691,7 +689,7 @@ public class GoogleMap extends AbstractComponent {
 
     /**
      * Checks if the new visual style is enabled.
-     *
+     * 
      * @return true, if visual refresh is enabled
      */
     public boolean isVisualRefreshEnabled() {
@@ -701,7 +699,7 @@ public class GoogleMap extends AbstractComponent {
     /**
      * Tries to fit the visible area of the map inside given boundaries by
      * modifying zoom and/or center.
-     *
+     * 
      * @param boundsNE
      *            The northeast boundaries.
      * @param boundsSW

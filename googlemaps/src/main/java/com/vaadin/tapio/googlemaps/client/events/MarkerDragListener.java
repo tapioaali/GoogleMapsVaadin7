@@ -7,8 +7,6 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 /**
  * Interface for listening marker drag events.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
  */
 public interface MarkerDragListener extends Serializable {
     /**

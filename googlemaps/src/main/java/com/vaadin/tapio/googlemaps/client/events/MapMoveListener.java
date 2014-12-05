@@ -6,8 +6,6 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * Interface for listening map move and zoom events.
- * 
- * @author Henri Muurimaa
  */
 public interface MapMoveListener extends Serializable {
     /**
@@ -23,5 +21,5 @@ public interface MapMoveListener extends Serializable {
      *            The position of the south-west corner of the map.
      */
     public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
-        LatLon boundsSW);
+            LatLon boundsSW);
 }

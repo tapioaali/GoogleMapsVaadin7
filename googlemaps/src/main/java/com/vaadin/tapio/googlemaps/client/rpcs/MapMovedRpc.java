@@ -5,11 +5,8 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * An RPC from client to server that is called when the user has moved the map.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
- * 
  */
 public interface MapMovedRpc extends ServerRpc {
     public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
-        LatLon boundsSW);
+            LatLon boundsSW);
 }

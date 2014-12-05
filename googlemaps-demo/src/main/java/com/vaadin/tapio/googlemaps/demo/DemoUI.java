@@ -1,5 +1,9 @@
 package com.vaadin.tapio.googlemaps.demo;
 
+import java.util.ArrayList;
+
+import javax.servlet.annotation.WebServlet;
+
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -26,13 +30,8 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-import javax.servlet.annotation.WebServlet;
-import java.util.ArrayList;
-
 /**
  * Google Maps UI for testing and demoing.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
  */
 @SuppressWarnings("serial")
 public class DemoUI extends UI {
@@ -106,8 +105,8 @@ public class DemoUI extends UI {
 
         googleMap.addMapMoveListener(new MapMoveListener() {
             @Override
-            public void mapMoved(int zoomLevel, LatLon center,
-                    LatLon boundsNE, LatLon boundsSW) {
+            public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
+                    LatLon boundsSW) {
                 Label consoleEntry = new Label("Map moved to ("
                         + center.getLat() + ", " + center.getLon() + "), zoom "
                         + zoomLevel + ", boundsNE: (" + boundsNE.getLat()

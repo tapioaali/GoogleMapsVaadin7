@@ -15,8 +15,6 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 
 /**
  * The shared state of the Google Maps. Contains also the default values.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
  */
 public class GoogleMapState extends AbstractComponentState {
     private static final long serialVersionUID = 646346522643L;

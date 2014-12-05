@@ -8,9 +8,6 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
 
 /**
  * A class representing a polygon overlay of Google Maps.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
- * 
  */
 public class GoogleMapPolygon implements Serializable {
 

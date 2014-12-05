@@ -7,9 +7,6 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 /**
  * Listener that opens info window when a marker is clicked.
- * 
- * @author Tapio Aali <tapio@vaadin.com>
- * 
  */
 public class OpenInfoWindowOnMarkerClickListener implements MarkerClickListener {
 
