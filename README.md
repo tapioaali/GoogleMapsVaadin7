@@ -4,9 +4,9 @@
 
 If you use Google Maps API for Business, check out [https://developers.google.com/maps/documentation/business/clientside/auth](https://developers.google.com/maps/documentation/business/clientside/auth).
 
-Grab it from [Vaadin Directory](https://vaadin.com/directory#addon/googlemaps-add-on:vaadin). Sources of the demo can be from project [googlemaps-demo](https://github.com/tjkaal/GoogleMapsVaadin7/tree/master/googlemaps-demo).
+Grab it from [Vaadin Directory](https://vaadin.com/directory#addon/googlemaps-add-on:vaadin). The sources of the demo can be found from project [googlemaps-demo](https://github.com/tjkaal/GoogleMapsVaadin7/tree/master/googlemaps-demo).
 
-Check out demo @ [http://tapio.app.fi/googlemaps/](http://tapio.app.fi/googlemaps/). 
+Check out the demo @ [http://tapio.app.fi/googlemaps/](http://tapio.app.fi/googlemaps/). 
 
 ## Supported features ##
 
@@ -21,7 +21,7 @@ Check out demo @ [http://tapio.app.fi/googlemaps/](http://tapio.app.fi/googlemap
 - Limiting of the center bounds
 - Limiting of the visible area bounds
 - Enabling/disabling map dragging, keyboard shortcuts and scroll wheel zoom
-- Setting language of the map
+- Setting the language of the map
 - Enabling/disabling the new visual style of Google Maps
 
 ## Supported events ##
