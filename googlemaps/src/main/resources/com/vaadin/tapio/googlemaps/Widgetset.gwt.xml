@@ -1,5 +1,5 @@
 <module>
-	<inherits name="com.vaadin.DefaultWidgetSet" />
-    <inherits name='com.google.gwt.maps.Maps' />
-	<stylesheet src="googlemaps/styles.css"/>
+    <inherits name="com.vaadin.DefaultWidgetSet"/>
+    <inherits name='com.google.gwt.maps.Maps'/>
+    <stylesheet src="googlemaps/styles.css"/>
 </module>

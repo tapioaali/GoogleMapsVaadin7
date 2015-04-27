@@ -1,10 +1,5 @@
 package com.vaadin.tapio.googlemaps.client;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapTypeId;
@@ -47,6 +42,13 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
@@ -227,23 +229,34 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         map.panTo(this.center);
     }
 
-    public void setZoom(int zoom) {
-        this.zoom = zoom;
-        mapOptions.setZoom(this.zoom);
-        map.setZoom(this.zoom);
+    private List<GoogleMapMarker> getRemovedMarkers(Collection<GoogleMapMarker> newMarkers) {
+        List<GoogleMapMarker> result = new ArrayList<GoogleMapMarker>();
+
+        for (GoogleMapMarker oldMarker : gmMarkerMap.keySet()) {
+            if (!newMarkers.contains(oldMarker)) {
+                result.add(oldMarker);
+            }
+        }
+        return result;
+    }
+
+    private void removeMarkers(List<GoogleMapMarker> markers) {
+
+        for (GoogleMapMarker gmarker : markers) {
+
+            Marker marker = gmMarkerMap.get(gmarker);
+            marker.close();
+            marker.setMap((MapWidget) null);
+
+            markerMap.remove(marker);
+            gmMarkerMap.remove(gmarker);
+        }
     }
 
     public void setMarkers(Collection<GoogleMapMarker> markers) {
 
-        // clear removed markers
-        for (Marker marker : markerMap.keySet()) {
-            GoogleMapMarker gMapMarker = markerMap.get(marker);
-            if (!markers.contains(gMapMarker)) {
-                marker.close();
-                gmMarkerMap.remove(gMapMarker);
-                markerMap.remove(marker);
-            }
-        }
+        List<GoogleMapMarker> removedMarkers = getRemovedMarkers(markers);
+        removeMarkers(removedMarkers);
 
         for (GoogleMapMarker googleMapMarker : markers) {
             if (!gmMarkerMap.containsKey(googleMapMarker)) {
@@ -346,6 +359,12 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public double getZoom() {
         return map.getZoom();
+    }
+
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
+        mapOptions.setZoom(this.zoom);
+        map.setZoom(this.zoom);
     }
 
     public double getLatitude() {

@@ -106,7 +106,7 @@ public class DemoUI extends UI {
         googleMap.addMapMoveListener(new MapMoveListener() {
             @Override
             public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
-                    LatLon boundsSW) {
+                                 LatLon boundsSW) {
                 Label consoleEntry = new Label("Map moved to ("
                         + center.getLat() + ", " + center.getLon() + "), zoom "
                         + zoomLevel + ", boundsNE: (" + boundsNE.getLat()
@@ -128,7 +128,7 @@ public class DemoUI extends UI {
         googleMap.addMarkerDragListener(new MarkerDragListener() {
             @Override
             public void markerDragged(GoogleMapMarker draggedMarker,
-                    LatLon oldPosition) {
+                                      LatLon oldPosition) {
                 Label consoleEntry = new Label("Marker \""
                         + draggedMarker.getCaption() + "\" dragged from ("
                         + oldPosition.getLat() + ", " + oldPosition.getLon()
@@ -235,17 +235,17 @@ public class DemoUI extends UI {
         buttonLayoutRow2.addComponent(addPolyLineButton);
         Button addPolyLineButton2 = new Button(
                 "Draw line from Turku to Raisio2", new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(ClickEvent event) {
-                        ArrayList<LatLon> points2 = new ArrayList<LatLon>();
-                        points2.add(new LatLon(60.448118, 22.253738));
-                        points2.add(new LatLon(60.486025, 22.169195));
-                        GoogleMapPolyline overlay2 = new GoogleMapPolyline(
-                                points2, "#d31717", 0.8, 10);
-                        googleMap.addPolyline(overlay2);
-                        event.getButton().setEnabled(false);
-                    }
-                });
+            @Override
+            public void buttonClick(ClickEvent event) {
+                ArrayList<LatLon> points2 = new ArrayList<LatLon>();
+                points2.add(new LatLon(60.448118, 22.253738));
+                points2.add(new LatLon(60.486025, 22.169195));
+                GoogleMapPolyline overlay2 = new GoogleMapPolyline(
+                        points2, "#d31717", 0.8, 10);
+                googleMap.addPolyline(overlay2);
+                event.getButton().setEnabled(false);
+            }
+        });
         buttonLayoutRow2.addComponent(addPolyLineButton2);
         Button changeToTerrainButton = new Button("Change to terrain map",
                 new Button.ClickListener() {
@@ -269,11 +269,11 @@ public class DemoUI extends UI {
 
         Button addInfoWindowButton = new Button(
                 "Add InfoWindow to Kakola marker", new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(ClickEvent event) {
-                        googleMap.openInfoWindow(kakolaInfoWindow);
-                    }
-                });
+            @Override
+            public void buttonClick(ClickEvent event) {
+                googleMap.openInfoWindow(kakolaInfoWindow);
+            }
+        });
         buttonLayoutRow2.addComponent(addInfoWindowButton);
 
         Button moveMarkerButton = new Button("Move kakola marker",
@@ -300,5 +300,13 @@ public class DemoUI extends UI {
                     }
                 });
         buttonLayoutRow2.addComponent(addKmlLayerButton);
+
+        Button clearMarkersButton = new Button("Remove all markers", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent clickEvent) {
+                googleMap.clearMarkers();
+            }
+        });
+        buttonLayoutRow2.addComponent(clearMarkersButton);
     }
 }
