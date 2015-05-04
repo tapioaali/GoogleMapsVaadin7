@@ -55,7 +55,7 @@ public class DemoUI extends UI {
         content.setSizeFull();
         setContent(content);
 
-        googleMap = new GoogleMap(null, null, null);
+        googleMap = new GoogleMap(apiKey, null, null);
         googleMap.setCenter(new LatLon(60.440963, 22.25122));
         googleMap.setZoom(10);
         googleMap.setSizeFull();
