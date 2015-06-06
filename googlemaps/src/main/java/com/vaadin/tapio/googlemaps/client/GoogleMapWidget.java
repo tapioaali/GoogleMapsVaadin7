@@ -4,9 +4,7 @@ import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapTypeId;
 import com.google.gwt.maps.client.MapWidget;
-import com.google.gwt.maps.client.base.LatLng;
-import com.google.gwt.maps.client.base.LatLngBounds;
-import com.google.gwt.maps.client.base.Size;
+import com.google.gwt.maps.client.base.*;
 import com.google.gwt.maps.client.events.center.CenterChangeMapEvent;
 import com.google.gwt.maps.client.events.center.CenterChangeMapHandler;
 import com.google.gwt.maps.client.events.click.ClickMapEvent;
@@ -20,15 +18,7 @@ import com.google.gwt.maps.client.events.idle.IdleMapHandler;
 import com.google.gwt.maps.client.layers.KmlLayer;
 import com.google.gwt.maps.client.layers.KmlLayerOptions;
 import com.google.gwt.maps.client.mvc.MVCArray;
-import com.google.gwt.maps.client.overlays.Animation;
-import com.google.gwt.maps.client.overlays.InfoWindow;
-import com.google.gwt.maps.client.overlays.InfoWindowOptions;
-import com.google.gwt.maps.client.overlays.Marker;
-import com.google.gwt.maps.client.overlays.MarkerOptions;
-import com.google.gwt.maps.client.overlays.Polygon;
-import com.google.gwt.maps.client.overlays.PolygonOptions;
-import com.google.gwt.maps.client.overlays.Polyline;
-import com.google.gwt.maps.client.overlays.PolylineOptions;
+import com.google.gwt.maps.client.overlays.*;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
@@ -347,13 +337,23 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         options.setDraggable(googleMapMarker.isDraggable());
         options.setOptimized(googleMapMarker.isOptimized());
 
+
         if (googleMapMarker.isAnimationEnabled()) {
             options.setAnimation(Animation.DROP);
         }
 
         if (googleMapMarker.getIconUrl() != null) {
-            options.setIcon(googleMapMarker.getIconUrl());
+            MarkerImage markerImage = MarkerImage.newInstance(googleMapMarker.getIconUrl());
+            if (googleMapMarker.getAnchor() != null) {
+                markerImage.setAnchor(com.google.gwt.maps.client.base.Point.newInstance(googleMapMarker.getAnchor().getX(), googleMapMarker.getAnchor().getY()));
+            }
+            options.setIcon(markerImage);
         }
+
+        if (googleMapMarker.getZIndex() != null) {
+            options.setZindex(googleMapMarker.getZIndex());
+        }
+
         return options;
     }
 
