@@ -3,7 +3,6 @@ package com.vaadin.tapio.googlemaps.client.overlays;
 import java.io.Serializable;
 
 import com.vaadin.tapio.googlemaps.client.LatLon;
-import com.vaadin.tapio.googlemaps.client.Point;
 
 /**
  * The class representing a marker of the Google Map.
@@ -29,7 +28,7 @@ public class GoogleMapMarker implements Serializable {
 
     private Integer zIndex = 0;
 
-    private Point anchor = null;
+    private GoogleMapIcon icon = null;
     /**
      * Instantiates a new GoogleMapMarker.
      */
@@ -217,22 +216,12 @@ public class GoogleMapMarker implements Serializable {
     }
 
 
-    /**
-     * Sets the position at which to anchor an image in correspondence to the location of the marker on the map. By default,
-     * the anchor is located along the center point of the bottom of the image.
-     * @return the anchor point of the custom marker image, in pixels
-     */
-    public Point getAnchor() {
-        return anchor;
+    public GoogleMapIcon getIcon() {
+        return icon;
     }
 
-    /**
-     * Sets the position at which to anchor an image in correspondence to the location of the marker on the map. By default,
-     * the anchor is located along the center point of the bottom of the image.
-     * @param anchor the point to anchor on the custom marker image, in pixels.
-     */
-    public void setAnchor(Point anchor) {
-        this.anchor = anchor;
+    public void setIcon(GoogleMapIcon icon) {
+        this.icon = icon;
     }
 
     @Override
@@ -267,12 +256,14 @@ public class GoogleMapMarker implements Serializable {
         if (caption != null ? !caption.equals(other.caption) : other.caption != null) return false;
         if (iconUrl != null ? !iconUrl.equals(other.iconUrl) : other.iconUrl != null) return false;
         if (zIndex != null ? !zIndex.equals(other.zIndex) : other.zIndex != null) return false;
-        if (anchor != null ? !anchor.equals(other.anchor) : other.anchor != null) return false;
+        if (icon != null ? !icon.equals(other.icon) : other.icon != null) return false;
         if (draggable != other.draggable) return false;
         if (animationEnabled != other.animationEnabled) return false;
         if (optimized != other.optimized) return false;
 
         return true;
     }
+
+
 
 }
