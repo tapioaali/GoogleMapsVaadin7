@@ -4,8 +4,8 @@ import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapTypeId;
 import com.google.gwt.maps.client.MapWidget;
-import com.google.gwt.maps.client.base.LatLng;
-import com.google.gwt.maps.client.base.LatLngBounds;
+import com.google.gwt.maps.client.base.*;
+import com.google.gwt.maps.client.base.Point;
 import com.google.gwt.maps.client.base.Size;
 import com.google.gwt.maps.client.events.center.CenterChangeMapEvent;
 import com.google.gwt.maps.client.events.center.CenterChangeMapHandler;
@@ -20,15 +20,7 @@ import com.google.gwt.maps.client.events.idle.IdleMapHandler;
 import com.google.gwt.maps.client.layers.KmlLayer;
 import com.google.gwt.maps.client.layers.KmlLayerOptions;
 import com.google.gwt.maps.client.mvc.MVCArray;
-import com.google.gwt.maps.client.overlays.Animation;
-import com.google.gwt.maps.client.overlays.InfoWindow;
-import com.google.gwt.maps.client.overlays.InfoWindowOptions;
-import com.google.gwt.maps.client.overlays.Marker;
-import com.google.gwt.maps.client.overlays.MarkerOptions;
-import com.google.gwt.maps.client.overlays.Polygon;
-import com.google.gwt.maps.client.overlays.PolygonOptions;
-import com.google.gwt.maps.client.overlays.Polyline;
-import com.google.gwt.maps.client.overlays.PolylineOptions;
+import com.google.gwt.maps.client.overlays.*;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
@@ -38,10 +30,7 @@ import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
-import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
-import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
-import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
-import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
+import com.vaadin.tapio.googlemaps.client.overlays.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -347,6 +336,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         options.setDraggable(googleMapMarker.isDraggable());
         options.setOptimized(googleMapMarker.isOptimized());
 
+
         if (googleMapMarker.isAnimationEnabled()) {
             options.setAnimation(Animation.DROP);
         }
@@ -354,6 +344,21 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         if (googleMapMarker.getIconUrl() != null) {
             options.setIcon(googleMapMarker.getIconUrl());
         }
+
+        if (googleMapMarker.getIcon() != null) {
+            GoogleMapIcon mapIcon = googleMapMarker.getIcon();
+            MarkerImage markerImage = MarkerImage.newInstance(mapIcon.getUrl());
+            if (mapIcon.getAnchor() != null) markerImage.setAnchor(Point.newInstance(mapIcon.getAnchor().getX(), mapIcon.getAnchor().getY()));
+            if (mapIcon.getOrigin() != null) markerImage.setOrigin(Point.newInstance(mapIcon.getOrigin().getX(), mapIcon.getOrigin().getY()));
+            if (mapIcon.getSize() != null) markerImage.setSize(Size.newInstance(mapIcon.getSize().getWidth(), mapIcon.getSize().getHeight()));
+            if (mapIcon.getScaledSize() != null) markerImage.setScaledSize(Size.newInstance(mapIcon.getScaledSize().getWidth(), mapIcon.getScaledSize().getHeight()));
+            options.setIcon(markerImage);
+        }
+
+        if (googleMapMarker.getZIndex() != null) {
+            options.setZindex(googleMapMarker.getZIndex());
+        }
+
         return options;
     }
 

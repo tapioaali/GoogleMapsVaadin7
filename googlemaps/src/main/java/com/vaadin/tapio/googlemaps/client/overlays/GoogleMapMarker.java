@@ -26,6 +26,9 @@ public class GoogleMapMarker implements Serializable {
 
     private boolean optimized = true;
 
+    private Integer zIndex = 0;
+
+    private GoogleMapIcon icon = null;
     /**
      * Instantiates a new GoogleMapMarker.
      */
@@ -191,6 +194,36 @@ public class GoogleMapMarker implements Serializable {
         this.id = id;
     }
 
+
+    /**
+     * All markers are displayed on the map in order of their zIndex, with higher values displaying in front of markers
+     * with lower values. By default, markers are displayed according to their vertical position on screen, with lower
+     * markers appearing in front of markers further up the screen.
+     * @return Z Index of the marker
+     */
+    public Integer getZIndex() {
+        return zIndex;
+    }
+
+    /**
+     * All markers are displayed on the map in order of their zIndex, with higher values displaying in front of markers
+     * with lower values. By default, markers are displayed according to their vertical position on screen, with lower
+     * markers appearing in front of markers further up the screen.
+     * @param zIndex Z index of the marker
+     */
+    public void setZIndex(Integer zIndex) {
+        this.zIndex = zIndex;
+    }
+
+
+    public GoogleMapIcon getIcon() {
+        return icon;
+    }
+
+    public void setIcon(GoogleMapIcon icon) {
+        this.icon = icon;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -218,27 +251,19 @@ public class GoogleMapMarker implements Serializable {
     }
 
     public boolean hasSameFieldValues(GoogleMapMarker other) {
-        if ((other.getCaption() != null || getCaption() != null)
-                && !other.getCaption().equals(getCaption())) {
-            return false;
-        }
-        if ((other.getIconUrl() != null || getIconUrl() != null)
-                && !other.getIconUrl().equals(getIconUrl())) {
-            return false;
-        }
-        if (!other.getPosition().equals(getPosition())) {
-            return false;
-        }
-        if (other.isAnimationEnabled() != isAnimationEnabled()) {
-            return false;
-        }
-        if (other.isDraggable() != isDraggable()) {
-            return false;
-        }
-        if (other.isOptimized() != isOptimized()) {
-            return false;
-        }
+
+        if (position != null ? !position.equals(other.position) : other.position != null) return false;
+        if (caption != null ? !caption.equals(other.caption) : other.caption != null) return false;
+        if (iconUrl != null ? !iconUrl.equals(other.iconUrl) : other.iconUrl != null) return false;
+        if (zIndex != null ? !zIndex.equals(other.zIndex) : other.zIndex != null) return false;
+        if (icon != null ? !icon.equals(other.icon) : other.icon != null) return false;
+        if (draggable != other.draggable) return false;
+        if (animationEnabled != other.animationEnabled) return false;
+        if (optimized != other.optimized) return false;
+
         return true;
     }
+
+
 
 }
