@@ -1,9 +1,11 @@
 package com.vaadin.tapio.googlemaps.client;
 
+import java.io.Serializable;
+
 /**
  * Created by andyphillips404 on 6/8/15.
  */
-public class Size {
+public class Size implements Serializable {
     private static final long serialVersionUID = 1464592723963L;
 
     private double width = 0;

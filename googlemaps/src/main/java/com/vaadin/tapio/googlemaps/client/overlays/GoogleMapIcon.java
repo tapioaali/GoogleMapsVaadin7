@@ -18,6 +18,10 @@ public class GoogleMapIcon implements Serializable {
     private String url;
     private Point anchor;
 
+    public GoogleMapIcon() {
+
+    }
+
     public GoogleMapIcon(Point origin, Size size, Size scaledSize, String url, Point anchor) {
         this.origin = origin;
         this.size = size;
