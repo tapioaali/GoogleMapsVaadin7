@@ -21,6 +21,8 @@ import com.google.gwt.maps.client.layers.KmlLayer;
 import com.google.gwt.maps.client.layers.KmlLayerOptions;
 import com.google.gwt.maps.client.mvc.MVCArray;
 import com.google.gwt.maps.client.overlays.Animation;
+import com.google.gwt.maps.client.overlays.Circle;
+import com.google.gwt.maps.client.overlays.CircleOptions;
 import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
@@ -38,6 +40,7 @@ import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapCircle;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
@@ -59,6 +62,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     private MapOptions mapOptions;
     private Map<Marker, GoogleMapMarker> markerMap = new HashMap<Marker, GoogleMapMarker>();
     private Map<GoogleMapMarker, Marker> gmMarkerMap = new HashMap<GoogleMapMarker, Marker>();
+    private Map<Circle, GoogleMapCircle> circleMap = new HashMap<Circle, GoogleMapCircle>();
     private Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<Polygon, GoogleMapPolygon>();
     private Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<Polyline, GoogleMapPolyline>();
     private Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<InfoWindow, GoogleMapInfoWindow>();
@@ -393,6 +397,31 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public void clearVisibleAreaBoundLimits() {
         allowedBoundsVisibleArea = null;
+    }
+    
+    public void setCircleOverlays(Set<GoogleMapCircle> overlays) {
+    	for (Circle circle : circleMap.keySet()) {
+    		circle.setMap(null);
+    	}
+    	
+    	circleMap.clear();
+    	
+    	for (GoogleMapCircle overlay : overlays) {
+    		CircleOptions options = CircleOptions.newInstance();
+    		options.setFillColor(overlay.getFillColor());
+    		options.setFillOpacity(overlay.getFillOpacity());
+    		options.setStrokeColor(overlay.getStrokeColor());
+    		options.setStrokeOpacity(overlay.getStrokeOpacity());
+    		options.setStrokeWeight(overlay.getStrokeWeight());
+    		options.setZindex(overlay.getzIndex());
+    		
+    		Circle circle = Circle.newInstance(options);
+    		circle.setCenter(LatLng.newInstance(overlay.getCenter().getLat(), overlay.getCenter().getLon()));
+    		circle.setRadius(overlay.getRadius());
+    		circle.setMap(map);
+    		
+    		circleMap.put(circle, overlay);
+    	}
     }
 
     public void setPolygonOverlays(Set<GoogleMapPolygon> polyOverlays) {
