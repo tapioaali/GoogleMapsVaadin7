@@ -53,29 +53,29 @@ import java.util.Set;
 public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public static final String CLASSNAME = "googlemap";
-    private MapWidget map;
-    private MapImpl mapImpl;
+    protected MapWidget map;
+    protected MapImpl mapImpl;
 
-    private MapOptions mapOptions;
-    private Map<Marker, GoogleMapMarker> markerMap = new HashMap<Marker, GoogleMapMarker>();
-    private Map<GoogleMapMarker, Marker> gmMarkerMap = new HashMap<GoogleMapMarker, Marker>();
-    private Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<Polygon, GoogleMapPolygon>();
-    private Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<Polyline, GoogleMapPolyline>();
-    private Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<InfoWindow, GoogleMapInfoWindow>();
-    private Map<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = new HashMap<KmlLayer, GoogleMapKmlLayer>();
-    private MarkerClickListener markerClickListener = null;
-    private MarkerDragListener markerDragListener = null;
-    private InfoWindowClosedListener infoWindowClosedListener = null;
+    protected MapOptions mapOptions;
+    protected Map<Marker, GoogleMapMarker> markerMap = new HashMap<Marker, GoogleMapMarker>();
+    protected Map<GoogleMapMarker, Marker> gmMarkerMap = new HashMap<GoogleMapMarker, Marker>();
+    protected Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<Polygon, GoogleMapPolygon>();
+    protected Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<Polyline, GoogleMapPolyline>();
+    protected Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<InfoWindow, GoogleMapInfoWindow>();
+    protected Map<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = new HashMap<KmlLayer, GoogleMapKmlLayer>();
+    protected MarkerClickListener markerClickListener = null;
+    protected MarkerDragListener markerDragListener = null;
+    protected InfoWindowClosedListener infoWindowClosedListener = null;
 
-    private MapMoveListener mapMoveListener = null;
-    private LatLngBounds allowedBoundsCenter = null;
-    private LatLngBounds allowedBoundsVisibleArea = null;
+    protected MapMoveListener mapMoveListener = null;
+    protected LatLngBounds allowedBoundsCenter = null;
+    protected LatLngBounds allowedBoundsVisibleArea = null;
 
-    private MapClickListener mapClickListener = null;
+    protected MapClickListener mapClickListener = null;
 
-    private LatLng center = null;
-    private int zoom = 0;
-    private boolean forceBoundUpdate = false;
+    protected LatLng center = null;
+    protected int zoom = 0;
+    protected boolean forceBoundUpdate = false;
 
     public GoogleMapWidget() {
         setStyleName(CLASSNAME);
@@ -340,7 +340,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     private MarkerOptions createMarkerOptions(GoogleMapMarker googleMapMarker) {
         LatLng center = LatLng.newInstance(googleMapMarker.getPosition()
-                .getLat(), googleMapMarker.getPosition().getLon());
+            .getLat(), googleMapMarker.getPosition().getLon());
         MarkerOptions options = MarkerOptions.newInstance();
         options.setPosition(center);
         options.setTitle(googleMapMarker.getCaption());

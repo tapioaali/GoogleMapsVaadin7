@@ -641,6 +641,7 @@ public class GoogleMap extends AbstractComponent {
      */
     public void setVisualRefreshEnabled(boolean enabled) {
         getState().visualRefreshEnabled = enabled;
+
     }
 
     /**
