@@ -2,17 +2,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>com.vaadin.tapio</groupId>
-        <artifactId>googlemaps-root</artifactId>
-        <version>1.1.0</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.vaadin.tapio</groupId>
     <artifactId>googlemaps-demo</artifactId>
     <packaging>war</packaging>
-    <version>${parent.version}</version>
+    <version>1.1.1</version>
     <name>Google Maps Add-on Demo</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <vaadin.version>7.4.8</vaadin.version>
+        <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+        <javax-servlet-api.version>3.1.0</javax-servlet-api.version>
+
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <jetty-maven-plugin.version>9.3.0.M2</jetty-maven-plugin.version>
+        <m2e-lifecycle-mapping.version>1.0.0</m2e-lifecycle-mapping.version>
+
+        <project.source.version>1.6</project.source.version>
+        <project.target.version>1.6</project.target.version>
+    </properties>
+
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -20,6 +32,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <repositories>
         <repository>
             <id>vaadin-addons</id>
@@ -38,6 +51,7 @@
             </snapshots>
         </repository>
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>vaadin-snapshots</id>
@@ -52,14 +66,24 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>com.vaadin.tapio</groupId>
             <artifactId>googlemaps</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-server</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -72,6 +96,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
+            <version>${javax-servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -80,6 +105,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${project.source.version}</source>
                     <target>${project.target.version}</target>
@@ -107,6 +133,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
                 <configuration>
                     <packagingExcludes>
                         **/VAADIN/gwt-unitCache/**,
@@ -125,23 +152,20 @@
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.plugin.version}</version>
                 <configuration>
                     <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-                    <webappDirectory>
-                        ${basedir}/src/main/webapp/VAADIN/widgetsets
-                    </webappDirectory>
-                    <hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets
-                    </hostedWebapp>
+                    <webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
+                    <hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
                     <noServer>true</noServer>
-                    <persistentunitcachedir>
-                        ${basedir}/target/tmp/gwt-unitCache
-                    </persistentunitcachedir>
+                    <persistentunitcachedir>${basedir}/target/tmp/gwt-unitCache</persistentunitcachedir>
                     <compileReport>true</compileReport>
                     <strict>true</strict>
                     <runTarget>http://localhost:8080/</runTarget>
                 </configuration>
                 <executions>
                     <execution>
+                        <configuration></configuration>
                         <goals>
                             <goal>resources</goal>
                             <goal>update-widgetset</goal>
@@ -153,13 +177,23 @@
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty-maven-plugin.version}</version>
+                <configuration>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                    <stopPort>9999</stopPort>
+                    <stopKey>MAPS-STOP</stopKey>
+                </configuration>
             </plugin>
         </plugins>
+
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
+                    <version>${m2e-lifecycle-mapping.version}</version>
                     <configuration>
                         <lifecycleMappingMetadata>
                             <pluginExecutions>
