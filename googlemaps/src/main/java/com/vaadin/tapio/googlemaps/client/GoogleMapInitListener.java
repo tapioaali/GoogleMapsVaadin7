@@ -7,5 +7,7 @@ import com.google.gwt.maps.client.MapWidget;
  * loaded and the map object is ready to be used.
  */
 public interface GoogleMapInitListener {
-    public void googleMapInitiated(MapWidget map);
+    public void mapWidgetInitiated(MapWidget map);
+
+    public void mapsApiLoaded();
 }

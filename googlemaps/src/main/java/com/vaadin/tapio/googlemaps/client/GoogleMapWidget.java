@@ -1,5 +1,13 @@
 package com.vaadin.tapio.googlemaps.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapTypeId;
@@ -43,13 +51,6 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     public static final String CLASSNAME = "googlemap";
@@ -73,22 +74,21 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     protected MapClickListener mapClickListener = null;
 
-    protected LatLng center = null;
-    protected int zoom = 0;
     protected boolean forceBoundUpdate = false;
+    protected boolean mapOptionsChanged = false;
+    protected boolean panningNeeded = false;
 
     public GoogleMapWidget() {
         setStyleName(CLASSNAME);
     }
 
     public void initMap(LatLon center, int zoom, String mapTypeId) {
-        this.center = LatLng.newInstance(center.getLat(), center.getLon());
-        this.zoom = zoom;
 
         mapOptions = MapOptions.newInstance();
         mapOptions.setMapTypeId(MapTypeId.fromValue(mapTypeId.toLowerCase()));
-        mapOptions.setCenter(this.center);
-        mapOptions.setZoom(this.zoom);
+        mapOptions.setCenter(LatLng.newInstance(center.getLat(),
+                center.getLon()));
+        mapOptions.setZoom(zoom);
 
         mapImpl = MapImpl.newInstance(getElement(), mapOptions);
 
@@ -160,23 +160,32 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             newCenterLat += (limitSW.getLatitude() - mapSW.getLatitude());
         }
 
-        if (newCenterLat != map.getCenter().getLatitude()
-                || newCenterLng != map.getCenter().getLongitude()) {
-            setCenter(new LatLon(newCenterLat, newCenterLng));
+        LatLng newCenter = LatLng.newInstance(newCenterLat, newCenterLng);
+        if (!newCenter.equals(map.getCenter())) {
+            moveCenterTo(newCenter);
             return true;
         }
 
         return false;
     }
 
+    protected void moveCenterTo(LatLng position) {
+        if (!map.getCenter().equals(position)) {
+            map.setCenter(position);
+        }
+    }
+
     private void updateBounds(boolean forceUpdate) {
+        int zoom = mapOptions.getZoom();
+        LatLng center = mapOptions.getCenter();
+
         if (forceUpdate || zoom != map.getZoom() || center == null
-                || center.getLatitude() != map.getCenter().getLatitude()
-                || center.getLongitude() != map.getCenter().getLongitude()) {
+                || !center.equals(map.getCenter())) {
             zoom = map.getZoom();
             center = map.getCenter();
             mapOptions.setZoom(zoom);
             mapOptions.setCenter(center);
+            mapOptionsChanged = true;
 
             if (mapMoveListener != null) {
                 mapMoveListener.mapMoved(map.getZoom(), new LatLon(map
@@ -187,6 +196,19 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                         .getBounds().getSouthWest().getLatitude(), map
                         .getBounds().getSouthWest().getLongitude()));
             }
+        }
+        updateOptionsAndPanning();
+    }
+
+    public void updateOptionsAndPanning() {
+        if (panningNeeded) {
+            map.panTo(mapOptions.getCenter());
+            map.setZoom(mapOptions.getZoom());
+            panningNeeded = false;
+        }
+        if (mapOptionsChanged) {
+            map.setOptions(mapOptions);
+            mapOptionsChanged = false;
         }
     }
 
@@ -199,13 +221,13 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         double lat = center.getLatitude();
         double lng = center.getLongitude();
 
-        LatLng nortEast = allowedBoundsCenter.getNorthEast();
+        LatLng northEast = allowedBoundsCenter.getNorthEast();
         LatLng southWest = allowedBoundsCenter.getSouthWest();
-        if (lat > nortEast.getLatitude()) {
-            lat = nortEast.getLatitude();
+        if (lat > northEast.getLatitude()) {
+            lat = northEast.getLatitude();
         }
-        if (lng > nortEast.getLongitude()) {
-            lng = nortEast.getLongitude();
+        if (lng > northEast.getLongitude()) {
+            lng = northEast.getLongitude();
         }
         if (lat < southWest.getLatitude()) {
             lat = southWest.getLatitude();
@@ -214,22 +236,23 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             lng = southWest.getLongitude();
         }
 
-        setCenter(new LatLon(lat, lng));
+        LatLng newCenter = LatLng.newInstance(lat, lng);
+        moveCenterTo(newCenter);
         return true;
     }
 
-    public boolean isMapInitiated() {
-        return !(map == null);
+    public void setCenter(LatLng center) {
+        if (map.getCenter().equals(center)) {
+            return;
+        }
+
+        mapOptions.setCenter(center);
+        mapOptionsChanged = true;
+        panningNeeded = true;
     }
 
-    public void setCenter(LatLon center) {
-        this.center = LatLng.newInstance(center.getLat(), center.getLon());
-        mapOptions.setZoom(map.getZoom());
-        mapOptions.setCenter(this.center);
-        map.panTo(this.center);
-    }
-
-    private List<GoogleMapMarker> getRemovedMarkers(Collection<GoogleMapMarker> newMarkers) {
+    private List<GoogleMapMarker> getRemovedMarkers(
+            Collection<GoogleMapMarker> newMarkers) {
         List<GoogleMapMarker> result = new ArrayList<GoogleMapMarker>();
 
         for (GoogleMapMarker oldMarker : gmMarkerMap.keySet()) {
@@ -241,7 +264,6 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     private void removeMarkers(List<GoogleMapMarker> markers) {
-
         for (GoogleMapMarker gmarker : markers) {
 
             Marker marker = gmMarkerMap.get(gmarker);
@@ -254,6 +276,10 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void setMarkers(Collection<GoogleMapMarker> markers) {
+        if (markers.size() == markerMap.size()
+                && markerMap.values().containsAll(markers)) {
+            return;
+        }
 
         List<GoogleMapMarker> removedMarkers = getRemovedMarkers(markers);
         removeMarkers(removedMarkers);
@@ -340,7 +366,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     private MarkerOptions createMarkerOptions(GoogleMapMarker googleMapMarker) {
         LatLng center = LatLng.newInstance(googleMapMarker.getPosition()
-            .getLat(), googleMapMarker.getPosition().getLon());
+                .getLat(), googleMapMarker.getPosition().getLon());
         MarkerOptions options = MarkerOptions.newInstance();
         options.setPosition(center);
         options.setTitle(googleMapMarker.getCaption());
@@ -362,9 +388,16 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void setZoom(int zoom) {
-        this.zoom = zoom;
-        mapOptions.setZoom(this.zoom);
-        map.setZoom(this.zoom);
+        if (mapOptions.getZoom() == zoom) {
+            return;
+        }
+        mapOptions.setZoom(zoom);
+        mapOptionsChanged = true;
+        panningNeeded = true;
+    }
+
+    public LatLng getCenter() {
+        return map.getCenter();
     }
 
     public double getLatitude() {
@@ -396,6 +429,11 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void setPolygonOverlays(Set<GoogleMapPolygon> polyOverlays) {
+        if (polygonMap.size() == polyOverlays.size()
+                && polygonMap.values().containsAll(polyOverlays)) {
+            return;
+        }
+
         for (Polygon polygon : polygonMap.keySet()) {
             polygon.setMap(null);
         }
@@ -427,6 +465,11 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void setPolylineOverlays(Set<GoogleMapPolyline> polylineOverlays) {
+        if (polylineOverlays.size() == polylineMap.size()
+                && polylineMap.values().containsAll(polylineOverlays)) {
+            return;
+        }
+
         for (Polyline polyline : polylineMap.keySet()) {
             polyline.setMap(null);
         }
@@ -456,6 +499,13 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void setKmlLayers(Collection<GoogleMapKmlLayer> layers) {
+
+        // no update needed if old layers match
+        if (kmlLayerMap.size() == layers.size()
+                && kmlLayerMap.values().containsAll(layers)) {
+            return;
+        }
+
         for (KmlLayer kmlLayer : kmlLayerMap.keySet()) {
             kmlLayer.setMap(null);
         }
@@ -476,11 +526,45 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void setMapType(String mapTypeId) {
+        MapTypeId id = MapTypeId.fromValue(mapTypeId.toLowerCase());
+        if (id == mapOptions.getMapTypeId()) {
+            return;
+        }
         mapOptions.setMapTypeId(MapTypeId.fromValue(mapTypeId.toLowerCase()));
-        map.setOptions(mapOptions);
+        mapOptionsChanged = true;
     }
 
     public void setControls(Set<GoogleMapControl> controls) {
+
+        // check if there's been a real change in selected controls
+        Set<GoogleMapControl> currentControls = new HashSet<GoogleMapControl>();
+        if (mapOptions.getMapTypeControl()) {
+            currentControls.add(GoogleMapControl.MapType);
+        }
+        if (mapOptions.getOverviewMapControl()) {
+            currentControls.add(GoogleMapControl.OverView);
+        }
+        if (mapOptions.getPanControl()) {
+            currentControls.add(GoogleMapControl.Pan);
+        }
+        if (mapOptions.getRotateControl()) {
+            currentControls.add(GoogleMapControl.Rotate);
+        }
+        if (mapOptions.getScaleControl()) {
+            currentControls.add(GoogleMapControl.Scale);
+        }
+        if (mapOptions.getStreetViewControl()) {
+            currentControls.add(GoogleMapControl.StreetView);
+        }
+        if (mapOptions.getZoomControl()) {
+            currentControls.add(GoogleMapControl.Zoom);
+        }
+
+        if (controls.size() == currentControls.size()
+                && currentControls.containsAll(controls)) {
+            return;
+        }
+
         mapOptions.setMapTypeControl(controls
                 .contains(GoogleMapControl.MapType));
         mapOptions.setOverviewMapControl(controls
@@ -491,33 +575,49 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         mapOptions.setStreetViewControl(controls
                 .contains(GoogleMapControl.StreetView));
         mapOptions.setZoomControl(controls.contains(GoogleMapControl.Zoom));
+        mapOptionsChanged = true;
 
-        map.setOptions(mapOptions);
     }
 
     public void setDraggable(boolean draggable) {
+        if (mapOptions.getDraggable() == draggable) {
+            return;
+        }
+
         mapOptions.setDraggable(draggable);
-        map.setOptions(mapOptions);
+        mapOptionsChanged = true;
     }
 
     public void setKeyboardShortcutsEnabled(boolean keyboardShortcutsEnabled) {
+        if (mapOptions.getKeyboardShortcuts() == keyboardShortcutsEnabled) {
+            return;
+        }
         mapOptions.setKeyboardShortcuts(keyboardShortcutsEnabled);
-        map.setOptions(mapOptions);
+        mapOptionsChanged = true;
     }
 
     public void setScrollWheelEnabled(boolean scrollWheelEnabled) {
+        if (mapOptions.getScrollWheel() == scrollWheelEnabled) {
+            return;
+        }
         mapOptions.setScrollWheel(scrollWheelEnabled);
-        map.setOptions(mapOptions);
+        mapOptionsChanged = true;
     }
 
     public void setMinZoom(int minZoom) {
+        if (mapOptions.getMinZoom() == minZoom) {
+            return;
+        }
         mapOptions.setMinZoom(minZoom);
-        map.setOptions(mapOptions);
+        mapOptionsChanged = true;
     }
 
     public void setMaxZoom(int maxZoom) {
+        if (mapOptions.getMaxZoom() == maxZoom) {
+            return;
+        }
         mapOptions.setMaxZoom(maxZoom);
-        map.setOptions(mapOptions);
+        mapOptionsChanged = true;
     }
 
     public MapWidget getMap() {
@@ -529,14 +629,20 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             @Override
             public void run() {
                 map.triggerResize();
-                map.setZoom(zoom);
-                map.setCenter(center);
+                map.setZoom(mapOptions.getZoom());
+                map.setCenter(mapOptions.getCenter());
             }
         };
         timer.schedule(20);
     }
 
     public void setInfoWindows(Collection<GoogleMapInfoWindow> infoWindows) {
+        // update only if info windows have really changed
+        if (infoWindowMap.size() == infoWindows.size()
+                && infoWindowMap.values().containsAll(infoWindows)) {
+            return;
+        }
+
         for (InfoWindow window : infoWindowMap.keySet()) {
             window.close();
         }
@@ -609,14 +715,12 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         LatLng sw = LatLng.newInstance(boundsSW.getLat(), boundsSW.getLon());
 
         LatLngBounds bounds = LatLngBounds.newInstance(sw, ne);
+        if (map.getBounds().equals(bounds)) {
+            return;
+        }
         map.fitBounds(bounds);
         updateBounds(false);
     }
-
-    public native void setVisualRefreshEnabled(boolean enabled)
-    /*-{
-        $wnd.google.maps.visualRefresh = enabled;
-    }-*/;
 
     @Override
     public void onResize() {

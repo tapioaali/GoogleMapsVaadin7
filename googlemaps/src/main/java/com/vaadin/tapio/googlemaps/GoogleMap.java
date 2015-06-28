@@ -3,9 +3,7 @@ package com.vaadin.tapio.googlemaps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.vaadin.tapio.googlemaps.client.GoogleMapControl;
@@ -40,7 +38,7 @@ public class GoogleMap extends AbstractComponent {
         Hybrid, Roadmap, Satellite, Terrain
     }
 
-    private MarkerClickedRpc markerClickedRpc = new MarkerClickedRpc() {
+    private final MarkerClickedRpc markerClickedRpc = new MarkerClickedRpc() {
         @Override
         public void markerClicked(long markerId) {
 
@@ -51,7 +49,7 @@ public class GoogleMap extends AbstractComponent {
         }
     };
 
-    private MarkerDraggedRpc markerDraggedRpc = new MarkerDraggedRpc() {
+    private final MarkerDraggedRpc markerDraggedRpc = new MarkerDraggedRpc() {
         @Override
         public void markerDragged(long markerId, LatLon newPosition) {
             GoogleMapMarker marker = getState().markers.get(markerId);
@@ -63,11 +61,10 @@ public class GoogleMap extends AbstractComponent {
         }
     };
 
-    private MapMovedRpc mapMovedRpc = new MapMovedRpc() {
+    private final MapMovedRpc mapMovedRpc = new MapMovedRpc() {
         @Override
         public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
                              LatLon boundsSW) {
-            getState().locationFromClient = true;
             getState().zoom = zoomLevel;
             getState().center = center;
             fitToBounds(null, null);
@@ -79,7 +76,7 @@ public class GoogleMap extends AbstractComponent {
         }
     };
 
-    private MapClickedRpc mapClickedRpc = new MapClickedRpc() {
+    private final MapClickedRpc mapClickedRpc = new MapClickedRpc() {
         @Override
         public void mapClicked(LatLon position) {
             for (MapClickListener listener : mapClickListeners) {
@@ -88,7 +85,7 @@ public class GoogleMap extends AbstractComponent {
         }
     };
 
-    private InfoWindowClosedRpc infoWindowClosedRpc = new InfoWindowClosedRpc() {
+    private final InfoWindowClosedRpc infoWindowClosedRpc = new InfoWindowClosedRpc() {
 
         @Override
         public void infoWindowClosed(long windowId) {
@@ -100,15 +97,15 @@ public class GoogleMap extends AbstractComponent {
         }
     };
 
-    private List<MarkerClickListener> markerClickListeners = new ArrayList<MarkerClickListener>();
+    private final List<MarkerClickListener> markerClickListeners = new ArrayList<MarkerClickListener>();
 
-    private List<MapMoveListener> mapMoveListeners = new ArrayList<MapMoveListener>();
+    private final List<MapMoveListener> mapMoveListeners = new ArrayList<MapMoveListener>();
 
-    private List<MapClickListener> mapClickListeners = new ArrayList<MapClickListener>();
+    private final List<MapClickListener> mapClickListeners = new ArrayList<MapClickListener>();
 
-    private List<MarkerDragListener> markerDragListeners = new ArrayList<MarkerDragListener>();
+    private final List<MarkerDragListener> markerDragListeners = new ArrayList<MarkerDragListener>();
 
-    private List<InfoWindowClosedListener> infoWindowClosedListeners = new ArrayList<InfoWindowClosedListener>();
+    private final List<InfoWindowClosedListener> infoWindowClosedListeners = new ArrayList<InfoWindowClosedListener>();
 
     /**
      * Initiates a new GoogleMap object with default settings from the
@@ -159,7 +156,6 @@ public class GoogleMap extends AbstractComponent {
      * @param center The new coordinates of the center.
      */
     public void setCenter(LatLon center) {
-        getState().locationFromClient = false;
         getState().center = center;
     }
 
@@ -178,7 +174,6 @@ public class GoogleMap extends AbstractComponent {
      * @param zoom New amount of the zoom.
      */
     public void setZoom(int zoom) {
-        getState().locationFromClient = false;
         getState().zoom = zoom;
     }
 
@@ -631,26 +626,6 @@ public class GoogleMap extends AbstractComponent {
      */
     public boolean isInfoWindowOpen(GoogleMapInfoWindow infoWindow) {
         return getState().infoWindows.containsKey(infoWindow.getId());
-    }
-
-    /**
-     * Enables/disables new visual style of the map. NOTICE: this must be set
-     * before rendering the map.
-     *
-     * @param enabled Set true to enable (defaul false).
-     */
-    public void setVisualRefreshEnabled(boolean enabled) {
-        getState().visualRefreshEnabled = enabled;
-
-    }
-
-    /**
-     * Checks if the new visual style is enabled.
-     *
-     * @return true, if visual refresh is enabled
-     */
-    public boolean isVisualRefreshEnabled() {
-        return getState().visualRefreshEnabled;
     }
 
     /**
