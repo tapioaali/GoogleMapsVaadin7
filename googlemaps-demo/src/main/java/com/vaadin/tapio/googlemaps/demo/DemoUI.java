@@ -27,7 +27,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -52,19 +51,9 @@ public class DemoUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        CssLayout rootLayout = new CssLayout();
-        rootLayout.setSizeFull();
-        setContent(rootLayout);
-
-        TabSheet tabs = new TabSheet();
-        tabs.setSizeFull();
-        rootLayout.addComponent(tabs);
-
-
-        VerticalLayout mapContent = new VerticalLayout();
-        mapContent.setSizeFull();
-        tabs.addTab(mapContent, "The map map");
-        tabs.addTab(new Label("An another tab"), "The other tab");
+        VerticalLayout content = new VerticalLayout();
+        content.setSizeFull();
+        setContent(content);
 
         googleMap = new GoogleMap(null, null, null);
         googleMap.setCenter(new LatLon(60.440963, 22.25122));
@@ -82,22 +71,22 @@ public class DemoUI extends UI {
         kakolaInfoWindow.setWidth("400px");
         kakolaInfoWindow.setHeight("500px");
 
-        mapContent.addComponent(googleMap);
-        mapContent.setExpandRatio(googleMap, 1.0f);
+        content.addComponent(googleMap);
+        content.setExpandRatio(googleMap, 1.0f);
 
         Panel console = new Panel();
         console.setHeight("100px");
         final CssLayout consoleLayout = new CssLayout();
         console.setContent(consoleLayout);
-        mapContent.addComponent(console);
+        content.addComponent(console);
 
         HorizontalLayout buttonLayoutRow1 = new HorizontalLayout();
         buttonLayoutRow1.setHeight("26px");
-        mapContent.addComponent(buttonLayoutRow1);
+        content.addComponent(buttonLayoutRow1);
 
         HorizontalLayout buttonLayoutRow2 = new HorizontalLayout();
         buttonLayoutRow2.setHeight("26px");
-        mapContent.addComponent(buttonLayoutRow2);
+        content.addComponent(buttonLayoutRow2);
 
         OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
                 googleMap, kakolaMarker, kakolaInfoWindow);

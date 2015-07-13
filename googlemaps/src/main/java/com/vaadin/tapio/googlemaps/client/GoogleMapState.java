@@ -34,10 +34,13 @@ public class GoogleMapState extends AbstractComponentState {
     public boolean keyboardShortcutsEnabled = true;
     public boolean scrollWheelEnabled = true;
 
+    public boolean visualRefreshEnabled = false;
+
     public Set<GoogleMapControl> controls = new HashSet<GoogleMapControl>(
             Arrays.asList(GoogleMapControl.MapType, GoogleMapControl.Pan,
                     GoogleMapControl.Rotate, GoogleMapControl.Scale,
                     GoogleMapControl.StreetView, GoogleMapControl.Zoom));
+    public boolean locationFromClient = false;
 
     public boolean limitCenterBounds = false;
     public LatLon centerSWLimit = new LatLon(0.0, 0.0);
