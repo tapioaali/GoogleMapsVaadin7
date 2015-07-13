@@ -6,12 +6,24 @@
     <groupId>com.vaadin.tapio</groupId>
     <artifactId>googlemaps</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2</version>
+    <version>1.1.2</version>
     <name>GoogleMaps Add-on</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.4.4</vaadin.version>
+        <vaadin.version>7.5.0</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+
+        <gwt-maps-api.version>3.10.0-alpha-7</gwt-maps-api.version>
+
+        <project.source.version>1.6</project.source.version>
+        <project.target.version>1.6</project.target.version>
+
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>2.4</maven-source-plugin.version>
+        <maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
+
         <Implementation-Version>${project.version}</Implementation-Version>
         <Implementation-Title>${project.name}</Implementation-Title>
         <Implementation-Vendor>${project.organization.name}
@@ -20,6 +32,7 @@
         <Vaadin-Addon>${project.artifactId}-${project.version}.jar
         </Vaadin-Addon>
     </properties>
+
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -27,6 +40,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <repositories>
         <repository>
             <id>vaadin-addons</id>
@@ -75,7 +89,7 @@
         <dependency>
             <groupId>com.github.branflake2267</groupId>
             <artifactId>gwt-maps-api</artifactId>
-            <version>3.10.0-alpha-7</version>
+            <version>${gwt-maps-api.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.gwt</groupId>
@@ -97,16 +111,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${project.source.version}</source>
+                    <target>${project.target.version}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <archive>
                         <index>true</index>
@@ -117,7 +131,8 @@
                         </manifest>
                         <manifestEntries>
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
-                            <Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
+                            <Vaadin-License-Title>${Vaadin-License-Title}
+                            </Vaadin-License-Title>
                             <Vaadin-Widgetsets>
                                 com.vaadin.tapio.googlemaps.Widgetset
                             </Vaadin-Widgetsets>
@@ -128,7 +143,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
+                <version>${maven-javadoc-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
@@ -141,7 +156,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -154,7 +169,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>${maven-assembly-plugin.version}</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
