@@ -715,7 +715,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         LatLng sw = LatLng.newInstance(boundsSW.getLat(), boundsSW.getLon());
 
         LatLngBounds bounds = LatLngBounds.newInstance(sw, ne);
-        if (map.getBounds().equals(bounds)) {
+        final LatLngBounds mapBounds = map.getBounds();
+        if (mapBounds != null && mapBounds.equals(bounds)) {
             return;
         }
         map.fitBounds(bounds);
