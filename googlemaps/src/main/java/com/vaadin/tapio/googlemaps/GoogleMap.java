@@ -639,4 +639,20 @@ public class GoogleMap extends AbstractComponent {
         getState().fitToBoundsNE = boundsNE;
         getState().fitToBoundsSW = boundsSW;
     }
+    
+    /**
+     * Check if a traffic layer is visible 
+     * @return true, if traffic layer is visible
+     */
+    public boolean isTrafficLayerVisible() {
+    	return getState().trafficLayerVisible;
+    }
+
+    /**
+     * Set a traffic layer visibility 
+     * @param visible
+     */
+    public void setTrafficLayerVisible(boolean visible) {
+    	getState().trafficLayerVisible = visible;
+    }
 }

@@ -129,6 +129,7 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
                 getState().center.getLon());
         getWidget().setCenter(center);
         getWidget().setZoom(getState().zoom);
+        getWidget().setTrafficLayerVisible(getState().trafficLayerVisible);
         getWidget().setMarkers(getState().markers.values());
         getWidget().setPolygonOverlays(getState().polygons);
         getWidget().setPolylineOverlays(getState().polylines);
