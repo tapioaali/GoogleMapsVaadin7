@@ -6,17 +6,17 @@
     <groupId>com.vaadin.tapio</groupId>
     <artifactId>googlemaps</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.2</version>
+    <version>1.2.0</version>
     <name>GoogleMaps Add-on</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.5.0</vaadin.version>
+        <vaadin.version>7.6.2</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
         <gwt-maps-api.version>3.10.0-alpha-7</gwt-maps-api.version>
 
-        <project.source.version>1.6</project.source.version>
-        <project.target.version>1.6</project.target.version>
+        <project.source.version>1.7</project.source.version>
+        <project.target.version>1.7</project.target.version>
 
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-jar-plugin.version>2.6</maven-jar-plugin.version>

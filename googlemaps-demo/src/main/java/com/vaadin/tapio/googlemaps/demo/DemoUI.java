@@ -318,6 +318,13 @@ public class DemoUI extends UI {
                 googleMap.clearMarkers();
             }
         });
-        buttonLayoutRow2.addComponent(clearMarkersButton);
+
+        Button trafficLayerButton = new Button("Toggle Traffic Layer", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent clickEvent) {
+                googleMap.setTrafficLayerVisible(!googleMap.isTrafficLayerVisible());
+            }
+        });
+        buttonLayoutRow2.addComponent(trafficLayerButton);
     }
 }

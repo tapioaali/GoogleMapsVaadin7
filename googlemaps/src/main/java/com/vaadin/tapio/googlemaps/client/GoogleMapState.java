@@ -57,4 +57,5 @@ public class GoogleMapState extends AbstractComponentState {
     public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
 
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
+    public boolean trafficLayerVisible = false;
 }

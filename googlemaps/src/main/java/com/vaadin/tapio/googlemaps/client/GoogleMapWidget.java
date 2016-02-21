@@ -27,6 +27,7 @@ import com.google.gwt.maps.client.events.idle.IdleMapEvent;
 import com.google.gwt.maps.client.events.idle.IdleMapHandler;
 import com.google.gwt.maps.client.layers.KmlLayer;
 import com.google.gwt.maps.client.layers.KmlLayerOptions;
+import com.google.gwt.maps.client.layers.TrafficLayer;
 import com.google.gwt.maps.client.mvc.MVCArray;
 import com.google.gwt.maps.client.overlays.Animation;
 import com.google.gwt.maps.client.overlays.InfoWindow;
@@ -77,7 +78,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     protected boolean forceBoundUpdate = false;
     protected boolean mapOptionsChanged = false;
     protected boolean panningNeeded = false;
-
+    protected TrafficLayer trafficLayer = null;
+    
     public GoogleMapWidget() {
         setStyleName(CLASSNAME);
     }
@@ -727,5 +729,17 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     public void onResize() {
         triggerResize();
     }
+
+	public void setTrafficLayerVisible(boolean trafficLayerVisible) {
+		if( trafficLayerVisible ) {
+			if( trafficLayer == null )
+				trafficLayer = TrafficLayer.newInstance();
+			trafficLayer.setMap(map);
+		} else {
+			if( trafficLayer != null )
+				trafficLayer.setMap(null);
+			trafficLayer = null;
+		}
+	}
 
 }
