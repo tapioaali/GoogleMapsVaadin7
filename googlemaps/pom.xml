@@ -3,27 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.vaadin.tapio</groupId>
     <artifactId>googlemaps</artifactId>
     <packaging>jar</packaging>
-    <version>1.2.0</version>
     <name>GoogleMaps Add-on</name>
+    
+    <parent>
+        <groupId>com.vaadin.tapio</groupId>
+        <artifactId>googlemaps-root</artifactId>
+        <version>1.2.1</version>
+    </parent>
+    
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.6.2</vaadin.version>
-        <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-
-        <gwt-maps-api.version>3.10.0-alpha-7</gwt-maps-api.version>
-
-        <project.source.version>1.7</project.source.version>
-        <project.target.version>1.7</project.target.version>
-
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
-        <maven-source-plugin.version>2.4</maven-source-plugin.version>
-        <maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
-
         <Implementation-Version>${project.version}</Implementation-Version>
         <Implementation-Title>${project.name}</Implementation-Title>
         <Implementation-Vendor>${project.organization.name}
@@ -32,78 +22,21 @@
         <Vaadin-Addon>${project.artifactId}-${project.version}.jar
         </Vaadin-Addon>
     </properties>
-
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <repositories>
-        <repository>
-            <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-        <repository>
-            <id>vaadin-snapshots</id>
-            <url>
-                http://oss.sonatype.org/content/repositories/vaadin-snapshots/
-            </url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>vaadin-snapshots</id>
-            <url>
-                http://oss.sonatype.org/content/repositories/vaadin-snapshots/
-            </url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+    
     <dependencies>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-server</artifactId>
-            <version>${vaadin.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-client</artifactId>
-            <version>${vaadin.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.branflake2267</groupId>
             <artifactId>gwt-maps-api</artifactId>
-            <version>${gwt-maps-api.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.gwt</groupId>
-                    <artifactId>gwt-user</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.gwt</groupId>
-                    <artifactId>gwt-servlet</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.gwt</groupId>
-                    <artifactId>gwt-dev</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
     <build>

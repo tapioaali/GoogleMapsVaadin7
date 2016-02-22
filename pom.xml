@@ -6,11 +6,113 @@
     <groupId>com.vaadin.tapio</groupId>
     <artifactId>googlemaps-root</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <name>Google Maps Add-on Root Project</name>
 
     <modules>
         <module>googlemaps</module>
         <module>googlemaps-demo</module>
     </modules>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <vaadin.version>7.6.3</vaadin.version>
+        <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+        
+        <project.source.version>1.7</project.source.version>
+        <project.target.version>1.7</project.target.version>
+
+        <maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
+        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>3.5</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>2.4</maven-source-plugin.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>        
+        
+        <jetty-maven-plugin.version>9.3.7.v20160115</jetty-maven-plugin.version>
+        <javax-servlet-api.version>3.1.0</javax-servlet-api.version>
+
+        <gwt-maps-api.version>3.10.0-alpha-7</gwt-maps-api.version>
+        
+    </properties>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
+        </repository>
+        <repository>
+            <id>vaadin-snapshots</id>
+            <url>
+                http://oss.sonatype.org/content/repositories/vaadin-snapshots/
+            </url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>vaadin-snapshots</id>
+            <url>
+                http://oss.sonatype.org/content/repositories/vaadin-snapshots/
+            </url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax-servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.branflake2267</groupId>
+                <artifactId>gwt-maps-api</artifactId>
+                <version>${gwt-maps-api.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-servlet</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>        
+    
 </project>

@@ -25,6 +25,8 @@ import com.google.gwt.maps.client.events.dragend.DragEndMapEvent;
 import com.google.gwt.maps.client.events.dragend.DragEndMapHandler;
 import com.google.gwt.maps.client.events.idle.IdleMapEvent;
 import com.google.gwt.maps.client.events.idle.IdleMapHandler;
+import com.google.gwt.maps.client.events.maptypeid.MapTypeIdChangeMapEvent;
+import com.google.gwt.maps.client.events.maptypeid.MapTypeIdChangeMapHandler;
 import com.google.gwt.maps.client.layers.KmlLayer;
 import com.google.gwt.maps.client.layers.KmlLayerOptions;
 import com.google.gwt.maps.client.layers.TrafficLayer;
@@ -44,6 +46,7 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
+import com.vaadin.tapio.googlemaps.client.events.MapTypeIdChangedListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MarkerDragListener;
 import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
@@ -68,6 +71,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     protected MarkerClickListener markerClickListener = null;
     protected MarkerDragListener markerDragListener = null;
     protected InfoWindowClosedListener infoWindowClosedListener = null;
+    private MapTypeIdChangedListener mapTypeIdChangedListener = null;
 
     protected MapMoveListener mapMoveListener = null;
     protected LatLngBounds allowedBoundsCenter = null;
@@ -79,17 +83,18 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     protected boolean mapOptionsChanged = false;
     protected boolean panningNeeded = false;
     protected TrafficLayer trafficLayer = null;
-    
+
     public GoogleMapWidget() {
         setStyleName(CLASSNAME);
     }
 
-    public void initMap(LatLon center, int zoom, String mapTypeId) {
+    public void initMap(LatLon center, int zoom, GoogleMapTypeId mapTypeId) {
 
         mapOptions = MapOptions.newInstance();
-        mapOptions.setMapTypeId(MapTypeId.fromValue(mapTypeId.toLowerCase()));
-        mapOptions.setCenter(LatLng.newInstance(center.getLat(),
-                center.getLon()));
+        mapOptions.setMapTypeId(
+                MapTypeId.fromValue(mapTypeId.getLowercaseName()));
+        mapOptions.setCenter(
+                LatLng.newInstance(center.getLat(), center.getLon()));
         mapOptions.setZoom(zoom);
 
         mapImpl = MapImpl.newInstance(getElement(), mapOptions);
@@ -118,10 +123,22 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             @Override
             public void onEvent(ClickMapEvent event) {
                 if (mapClickListener != null) {
-                    LatLon position = new LatLon(event.getMouseEvent()
-                            .getLatLng().getLatitude(), event.getMouseEvent()
-                            .getLatLng().getLongitude());
+                    LatLon position = new LatLon(
+                            event.getMouseEvent().getLatLng().getLatitude(),
+                            event.getMouseEvent().getLatLng().getLongitude());
                     mapClickListener.mapClicked(position);
+                }
+            }
+        });
+
+        mapImpl.addMapTypeIdChangeHandler(new MapTypeIdChangeMapHandler() {
+
+            @Override
+            public void onEvent(MapTypeIdChangeMapEvent event) {
+                if (mapTypeIdChangedListener != null) {
+                    String value = mapImpl.getMapTypeId().name();
+                    GoogleMapTypeId newTypeId = GoogleMapTypeId.valueOf(value);
+                    mapTypeIdChangedListener.mapTypeIdChanged(newTypeId);
                 }
             }
         });
@@ -190,13 +207,13 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             mapOptionsChanged = true;
 
             if (mapMoveListener != null) {
-                mapMoveListener.mapMoved(map.getZoom(), new LatLon(map
-                        .getCenter().getLatitude(), map.getCenter()
-                        .getLongitude()), new LatLon(map.getBounds()
-                        .getNorthEast().getLatitude(), map.getBounds()
-                        .getNorthEast().getLongitude()), new LatLon(map
-                        .getBounds().getSouthWest().getLatitude(), map
-                        .getBounds().getSouthWest().getLongitude()));
+                mapMoveListener.mapMoved(map.getZoom(),
+                        new LatLon(map.getCenter().getLatitude(),
+                                map.getCenter().getLongitude()),
+                        new LatLon(map.getBounds().getNorthEast().getLatitude(),
+                                map.getBounds().getNorthEast().getLongitude()),
+                        new LatLon(map.getBounds().getSouthWest().getLatitude(),
+                                map.getBounds().getSouthWest().getLongitude()));
             }
         }
         updateOptionsAndPanning();
@@ -208,6 +225,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             map.setZoom(mapOptions.getZoom());
             panningNeeded = false;
         }
+
         if (mapOptionsChanged) {
             map.setOptions(mapOptions);
             mapOptionsChanged = false;
@@ -216,7 +234,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     private boolean checkCenterBoundLimits() {
         LatLng center = map.getCenter();
-        if (allowedBoundsCenter == null || allowedBoundsCenter.contains(center)) {
+        if (allowedBoundsCenter == null
+                || allowedBoundsCenter.contains(center)) {
             return false;
         }
 
@@ -297,8 +316,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                     @Override
                     public void onEvent(ClickMapEvent event) {
                         if (markerClickListener != null) {
-                            markerClickListener.markerClicked(markerMap
-                                    .get(marker));
+                            markerClickListener
+                                    .markerClicked(markerMap.get(marker));
                         }
                     }
                 });
@@ -308,9 +327,9 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                     public void onEvent(DragEndMapEvent event) {
                         GoogleMapMarker gMarker = markerMap.get(marker);
                         LatLon oldPosition = gMarker.getPosition();
-                        gMarker.setPosition(new LatLon(marker.getPosition()
-                                .getLatitude(), marker.getPosition()
-                                .getLongitude()));
+                        gMarker.setPosition(
+                                new LatLon(marker.getPosition().getLatitude(),
+                                        marker.getPosition().getLongitude()));
 
                         if (markerDragListener != null) {
                             markerDragListener.markerDragged(gMarker,
@@ -357,6 +376,10 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         infoWindowClosedListener = listener;
     }
 
+    public void setMapTypeIdChangeListener(MapTypeIdChangedListener listener) {
+        mapTypeIdChangedListener = listener;
+    }
+
     private Marker addMarker(GoogleMapMarker googleMapMarker) {
         MarkerOptions options = createMarkerOptions(googleMapMarker);
 
@@ -367,8 +390,9 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     private MarkerOptions createMarkerOptions(GoogleMapMarker googleMapMarker) {
-        LatLng center = LatLng.newInstance(googleMapMarker.getPosition()
-                .getLat(), googleMapMarker.getPosition().getLon());
+        LatLng center = LatLng.newInstance(
+                googleMapMarker.getPosition().getLat(),
+                googleMapMarker.getPosition().getLon());
         MarkerOptions options = MarkerOptions.newInstance();
         options.setPosition(center);
         options.setTitle(googleMapMarker.getCaption());
@@ -517,8 +541,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             KmlLayerOptions options = KmlLayerOptions.newInstance();
             options.setClickable(gmLayer.isClickable());
             options.setPreserveViewport(gmLayer.isViewportPreserved());
-            options.setSuppressInfoWindows(gmLayer
-                    .isInfoWindowRenderingDisabled());
+            options.setSuppressInfoWindows(
+                    gmLayer.isInfoWindowRenderingDisabled());
 
             KmlLayer kmlLayer = KmlLayer.newInstance(gmLayer.getUrl(), options);
             kmlLayer.setMap(map);
@@ -527,13 +551,14 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         }
     }
 
-    public void setMapType(String mapTypeId) {
-        MapTypeId id = MapTypeId.fromValue(mapTypeId.toLowerCase());
-        if (id == mapOptions.getMapTypeId()) {
-            return;
+    public void setMapType(GoogleMapTypeId mapTypeId) {
+        MapTypeId newMapType = MapTypeId
+                .fromValue(mapTypeId.getLowercaseName());
+        if (newMapType != mapOptions.getMapTypeId()) {
+            mapOptions.setMapTypeId(newMapType);
+            mapOptionsChanged = true;
         }
-        mapOptions.setMapTypeId(MapTypeId.fromValue(mapTypeId.toLowerCase()));
-        mapOptionsChanged = true;
+
     }
 
     public void setControls(Set<GoogleMapControl> controls) {
@@ -567,15 +592,15 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             return;
         }
 
-        mapOptions.setMapTypeControl(controls
-                .contains(GoogleMapControl.MapType));
-        mapOptions.setOverviewMapControl(controls
-                .contains(GoogleMapControl.OverView));
+        mapOptions
+                .setMapTypeControl(controls.contains(GoogleMapControl.MapType));
+        mapOptions.setOverviewMapControl(
+                controls.contains(GoogleMapControl.OverView));
         mapOptions.setPanControl(controls.contains(GoogleMapControl.Pan));
         mapOptions.setRotateControl(controls.contains(GoogleMapControl.Rotate));
         mapOptions.setScaleControl(controls.contains(GoogleMapControl.Scale));
-        mapOptions.setStreetViewControl(controls
-                .contains(GoogleMapControl.StreetView));
+        mapOptions.setStreetViewControl(
+                controls.contains(GoogleMapControl.StreetView));
         mapOptions.setZoomControl(controls.contains(GoogleMapControl.Zoom));
         mapOptionsChanged = true;
 
@@ -681,13 +706,14 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             }
             if (gmWindow.getPixelOffsetHeight() != null
                     && gmWindow.getPixelOffsetWidth() != null) {
-                options.setPixelOffet(Size.newInstance(
-                        gmWindow.getPixelOffsetWidth(),
-                        gmWindow.getPixelOffsetHeight()));
+                options.setPixelOffet(
+                        Size.newInstance(gmWindow.getPixelOffsetWidth(),
+                                gmWindow.getPixelOffsetHeight()));
             }
             if (gmWindow.getPosition() != null) {
-                options.setPosition(LatLng.newInstance(gmWindow.getPosition()
-                        .getLat(), gmWindow.getPosition().getLon()));
+                options.setPosition(
+                        LatLng.newInstance(gmWindow.getPosition().getLat(),
+                                gmWindow.getPosition().getLon()));
             }
             if (gmWindow.getzIndex() != null) {
                 options.setZindex(gmWindow.getzIndex());
@@ -704,8 +730,8 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                 @Override
                 public void onEvent(CloseClickMapEvent event) {
                     if (infoWindowClosedListener != null) {
-                        infoWindowClosedListener.infoWindowClosed(infoWindowMap
-                                .get(window));
+                        infoWindowClosedListener
+                                .infoWindowClosed(infoWindowMap.get(window));
                     }
                 }
             });
@@ -730,16 +756,18 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         triggerResize();
     }
 
-	public void setTrafficLayerVisible(boolean trafficLayerVisible) {
-		if( trafficLayerVisible ) {
-			if( trafficLayer == null )
-				trafficLayer = TrafficLayer.newInstance();
-			trafficLayer.setMap(map);
-		} else {
-			if( trafficLayer != null )
-				trafficLayer.setMap(null);
-			trafficLayer = null;
-		}
-	}
+    public void setTrafficLayerVisible(boolean trafficLayerVisible) {
+        if (trafficLayerVisible) {
+            if (trafficLayer == null) {
+                trafficLayer = TrafficLayer.newInstance();
+            }
+            trafficLayer.setMap(map);
+        } else {
+            if (trafficLayer != null) {
+                trafficLayer.setMap(null);
+            }
+            trafficLayer = null;
+        }
+    }
 
 }

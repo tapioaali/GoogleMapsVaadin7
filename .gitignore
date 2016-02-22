@@ -6,3 +6,4 @@ googlemaps/target
 googlemaps-demo/target
 googlemaps-demo/src/main/webapp/VAADIN/widgetsets
 *.iml
+*.launch
