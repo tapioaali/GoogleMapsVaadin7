@@ -58,4 +58,6 @@ public class GoogleMapState extends AbstractComponentState {
 
     public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
     public boolean trafficLayerVisible = false;
+
+    public String apiUrl = null;
 }

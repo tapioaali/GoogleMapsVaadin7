@@ -64,7 +64,7 @@ public class GoogleMap extends AbstractComponent {
     private final MapMovedRpc mapMovedRpc = new MapMovedRpc() {
         @Override
         public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
-                             LatLon boundsSW) {
+            LatLon boundsSW) {
             getState().zoom = zoomLevel;
             getState().center = center;
             fitToBounds(null, null);
@@ -196,9 +196,9 @@ public class GoogleMap extends AbstractComponent {
      * @return GoogleMapMarker object created with the given settings.
      */
     public GoogleMapMarker addMarker(String caption, LatLon position,
-                                     boolean draggable, String iconUrl) {
+        boolean draggable, String iconUrl) {
         GoogleMapMarker marker = new GoogleMapMarker(caption, position,
-                draggable, iconUrl);
+            draggable, iconUrl);
         getState().markers.put(marker.getId(), marker);
         return marker;
     }
@@ -333,7 +333,8 @@ public class GoogleMap extends AbstractComponent {
      *
      * @param listener The listener to remove.
      */
-    public void removeInfoWindowClosedListener(InfoWindowClosedListener listener) {
+    public void removeInfoWindowClosedListener(
+        InfoWindowClosedListener listener) {
         infoWindowClosedListeners.remove(listener);
     }
 
@@ -639,20 +640,31 @@ public class GoogleMap extends AbstractComponent {
         getState().fitToBoundsNE = boundsNE;
         getState().fitToBoundsSW = boundsSW;
     }
-    
+
     /**
-     * Check if a traffic layer is visible 
+     * Check if a traffic layer is visible
+     *
      * @return true, if traffic layer is visible
      */
     public boolean isTrafficLayerVisible() {
-    	return getState().trafficLayerVisible;
+        return getState().trafficLayerVisible;
     }
 
     /**
-     * Set a traffic layer visibility 
+     * Set a traffic layer visibility
+     *
      * @param visible
      */
     public void setTrafficLayerVisible(boolean visible) {
-    	getState().trafficLayerVisible = visible;
+        getState().trafficLayerVisible = visible;
+    }
+
+    /**
+     * Set a custom url for API. For example Chinese API would be "maps.google.cn".
+     *
+     * @param url the url to use WITHOUT protocol (http/https)
+     */
+    public void setApiUrl(String url) {
+        getState().apiUrl = url;
     }
 }

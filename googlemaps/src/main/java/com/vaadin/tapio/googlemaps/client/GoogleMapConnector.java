@@ -3,6 +3,7 @@ package com.vaadin.tapio.googlemaps.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.maps.client.LoadApi;
 import com.google.gwt.maps.client.MapWidget;
@@ -83,6 +84,10 @@ public class GoogleMapConnector extends AbstractComponentConnector implements
             params = "client=" + getState().clientId;
         } else if (getState().apiKey != null) {
             params = "APIKEY=" + getState().apiKey;
+        }
+
+        if(getState().apiUrl != null) {
+            AjaxLoader.init(getState().apiKey, getState().apiUrl);
         }
 
         LoadApi.go(onLoad, loadLibraries, false, language, params);
