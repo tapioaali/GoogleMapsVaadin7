@@ -14,5 +14,5 @@ public interface MarkerClickListener extends Serializable {
      * @param clickedMarker
      *            The marker that was clicked.
      */
-    public void markerClicked(GoogleMapMarker clickedMarker);
+    void markerClicked(GoogleMapMarker clickedMarker);
 }

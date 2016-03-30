@@ -15,5 +15,5 @@ public interface InfoWindowClosedListener extends Serializable {
      * @param window
      *            the info window that was closed.
      */
-    public void infoWindowClosed(GoogleMapInfoWindow window);
+    void infoWindowClosed(GoogleMapInfoWindow window);
 }

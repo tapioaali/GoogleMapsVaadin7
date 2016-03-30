@@ -8,5 +8,5 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
  * Google Maps.
  */
 public interface MapClickedRpc extends ServerRpc {
-    public void mapClicked(LatLon position);
+    void mapClicked(LatLon position);
 }

@@ -20,6 +20,6 @@ public interface MapMoveListener extends Serializable {
      * @param boundsSW
      *            The position of the south-west corner of the map.
      */
-    public void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
+    void mapMoved(int zoomLevel, LatLon center, LatLon boundsNE,
             LatLon boundsSW);
 }

@@ -14,5 +14,5 @@ public interface MapClickListener extends Serializable {
      * @param position
      *            The position that was clicked.
      */
-    public void mapClicked(LatLon position);
+    void mapClicked(LatLon position);
 }

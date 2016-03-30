@@ -17,5 +17,5 @@ public interface MarkerDragListener extends Serializable {
      * @param oldPosition
      *            The old position of the marker.
      */
-    public void markerDragged(GoogleMapMarker draggedMarker, LatLon oldPosition);
+    void markerDragged(GoogleMapMarker draggedMarker, LatLon oldPosition);
 }

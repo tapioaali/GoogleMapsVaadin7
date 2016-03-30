@@ -7,5 +7,5 @@ import com.vaadin.shared.communication.ServerRpc;
  * closed by the user on the map.
  */
 public interface InfoWindowClosedRpc extends ServerRpc {
-    public void infoWindowClosed(long windowId);
+    void infoWindowClosed(long windowId);
 }
