@@ -42,6 +42,12 @@ public class DemoUI extends UI {
         true, null);
     private GoogleMapInfoWindow kakolaInfoWindow = new GoogleMapInfoWindow(
         "Kakola used to be a provincial prison.", kakolaMarker);
+    private GoogleMapMarker maariaMarker = new GoogleMapMarker("Maaria",
+        new LatLon(60.536403, 22.344648), false);
+    private GoogleMapInfoWindow maariaWindow = new GoogleMapInfoWindow(
+        "Maaria is a district of Turku", maariaMarker);
+    ;
+    private Button componentToMaariaInfoWindowButton;
     private final String apiKey = "";
 
     @WebServlet(value = "/*", asyncSupported = true)
@@ -76,6 +82,7 @@ public class DemoUI extends UI {
             60.442423, 22.26044), true, "VAADIN/1377279006_stadium.png");
         googleMap.addMarker("NOT DRAGGABLE: Iso-Heikkilä", new LatLon(
             60.450403, 22.230399), false, null);
+        googleMap.addMarker(maariaMarker);
         googleMap.setMinZoom(4);
         googleMap.setMaxZoom(16);
 
@@ -101,6 +108,7 @@ public class DemoUI extends UI {
 
         OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
             googleMap, kakolaMarker, kakolaInfoWindow);
+
         googleMap.addMarkerClickListener(infoWindowOpener);
 
         googleMap.addMarkerClickListener(new MarkerClickListener() {
@@ -207,6 +215,27 @@ public class DemoUI extends UI {
                 }
             });
         buttonLayoutRow1.addComponent(zoomToBoundsButton);
+
+        Button addMarkerToMaariaButton = new Button("Open Maaria Window",
+            new Button.ClickListener() {
+                @Override
+                public void buttonClick(ClickEvent clickEvent) {
+                    googleMap.openInfoWindow(maariaWindow);
+                }
+            });
+        buttonLayoutRow1.addComponent(addMarkerToMaariaButton);
+
+        componentToMaariaInfoWindowButton = new Button(
+            "Add component to Maaria window",
+            new Button.ClickListener() {
+                @Override
+                public void buttonClick(ClickEvent clickEvent) {
+                    googleMap.setInfoWindowContents(maariaWindow,
+                        new Button("Maaria button does nothing :/"));
+                }
+            });
+        buttonLayoutRow1.addComponent(componentToMaariaInfoWindowButton);
+
         Button addPolyOverlayButton = new Button("Add overlay over Luonnonmaa",
             new Button.ClickListener() {
                 @Override

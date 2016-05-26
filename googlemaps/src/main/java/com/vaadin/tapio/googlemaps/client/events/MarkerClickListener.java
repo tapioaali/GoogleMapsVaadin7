@@ -10,9 +10,8 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 public interface MarkerClickListener extends Serializable {
     /**
      * Handle a MarkerClickEvent.
-     * 
-     * @param clickedMarker
-     *            The marker that was clicked.
+     *
+     * @param clickedMarker The marker that was clicked.
      */
     void markerClicked(GoogleMapMarker clickedMarker);
 }

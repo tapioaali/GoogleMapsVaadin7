@@ -9,7 +9,7 @@ import com.google.gwt.maps.client.MapWidget;
  * loaded and the map object is ready to be used.
  */
 public interface GoogleMapInitListener extends Serializable {
-    public void mapWidgetInitiated(MapWidget map);
+    void mapWidgetInitiated(MapWidget map);
 
-    public void mapsApiLoaded();
+    void mapsApiLoaded();
 }

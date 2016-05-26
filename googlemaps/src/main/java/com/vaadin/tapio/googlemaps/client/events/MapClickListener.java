@@ -10,9 +10,8 @@ import com.vaadin.tapio.googlemaps.client.LatLon;
 public interface MapClickListener extends Serializable {
     /**
      * Handle a MapClickListener.
-     * 
-     * @param position
-     *            The position that was clicked.
+     *
+     * @param position The position that was clicked.
      */
     void mapClicked(LatLon position);
 }

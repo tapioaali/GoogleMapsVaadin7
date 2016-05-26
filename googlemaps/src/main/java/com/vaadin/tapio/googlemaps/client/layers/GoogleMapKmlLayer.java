@@ -27,9 +27,8 @@ public class GoogleMapKmlLayer implements Serializable {
 
     /**
      * Instantiates a new GoogleMapKmlLayer with given url.
-     * 
-     * @param url
-     *            The URL of the KML file being displayed.
+     *
+     * @param url The URL of the KML file being displayed.
      */
     public GoogleMapKmlLayer(String url) {
         this();
@@ -38,20 +37,16 @@ public class GoogleMapKmlLayer implements Serializable {
 
     /**
      * Instantiates a new GoogleMapKmlLayer with given URL and other settings.
-     * 
-     * @param url
-     *            The URL of the KML file being displayed.
-     * @param clickable
-     *            Defines if the KML Layer is clickable (default true).
-     * @param viewportPreserved
-     *            Specifies if the map should be adjusted to the bounds of the
-     *            KML layer when the layer is added to the map (default false).
-     * @param infoWindowRenderingDisabled
-     *            Enables/disables rendering of info windows when layer features
-     *            are clicked.
+     *
+     * @param url                         The URL of the KML file being displayed.
+     * @param clickable                   Defines if the KML Layer is clickable (default true).
+     * @param viewportPreserved           Specifies if the map should be adjusted to the bounds of the
+     *                                    KML layer when the layer is added to the map (default false).
+     * @param infoWindowRenderingDisabled Enables/disables rendering of info windows when layer features
+     *                                    are clicked.
      */
     public GoogleMapKmlLayer(String url, boolean clickable,
-            boolean viewportPreserved, boolean infoWindowRenderingDisabled) {
+        boolean viewportPreserved, boolean infoWindowRenderingDisabled) {
         this(url);
         this.clickable = clickable;
         this.viewportPreserved = viewportPreserved;
@@ -67,9 +62,8 @@ public class GoogleMapKmlLayer implements Serializable {
 
     /**
      * Sets the URL of the KML file being displayed.
-     * 
-     * @param url
-     *            The URL to display.
+     *
+     * @param url The URL to display.
      */
     public void setUrl(String url) {
         this.url = url;
@@ -77,7 +71,7 @@ public class GoogleMapKmlLayer implements Serializable {
 
     /**
      * Returns whether the layer is clickable or not.
-     * 
+     *
      * @return true, if clickable
      */
     public boolean isClickable() {
@@ -86,9 +80,8 @@ public class GoogleMapKmlLayer implements Serializable {
 
     /**
      * Sets whether the layer should be clickable or not.
-     * 
-     * @param clickable
-     *            Set to false to disable clickability (default true).
+     *
+     * @param clickable Set to false to disable clickability (default true).
      */
     public void setClickable(boolean clickable) {
         this.clickable = clickable;
@@ -97,7 +90,7 @@ public class GoogleMapKmlLayer implements Serializable {
     /**
      * Checks if the viewport is adjusted to the bounds of the layer when added
      * to the map.
-     * 
+     *
      * @return true, if the viewport is not adjusted
      */
     public boolean isViewportPreserved() {
@@ -107,10 +100,9 @@ public class GoogleMapKmlLayer implements Serializable {
     /**
      * Enables/disables adjusting of the viewport to the bounds of the layer
      * when added to the map.
-     * 
-     * @param viewportPreserved
-     *            Set to true to disable adjusting of the viewport (default
-     *            false).
+     *
+     * @param viewportPreserved Set to true to disable adjusting of the viewport (default
+     *                          false).
      */
     public void setViewportPreserved(boolean viewportPreserved) {
         this.viewportPreserved = viewportPreserved;
@@ -119,7 +111,7 @@ public class GoogleMapKmlLayer implements Serializable {
     /**
      * Checks if rendering of info windows is suppressed when layer features are
      * clicked.
-     * 
+     *
      * @return true, if disabled
      */
     public boolean isInfoWindowRenderingDisabled() {
@@ -129,12 +121,11 @@ public class GoogleMapKmlLayer implements Serializable {
     /**
      * Enables/disables rendering of info windows when layer features are
      * clicked.
-     * 
-     * @param infoWindowRenderingDisabled
-     *            Set to true to disable rendering (default false).
+     *
+     * @param infoWindowRenderingDisabled Set to true to disable rendering (default false).
      */
     public void setInfoWindowRenderingDisabled(
-            boolean infoWindowRenderingDisabled) {
+        boolean infoWindowRenderingDisabled) {
         this.infoWindowRenderingDisabled = infoWindowRenderingDisabled;
     }
 

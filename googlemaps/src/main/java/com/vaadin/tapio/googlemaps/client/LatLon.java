@@ -59,10 +59,12 @@ public class LatLon implements Serializable {
             return false;
         }
         LatLon other = (LatLon) obj;
-        if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat)) {
+        if (Double.doubleToLongBits(lat) != Double
+            .doubleToLongBits(other.lat)) {
             return false;
         }
-        if (Double.doubleToLongBits(lon) != Double.doubleToLongBits(other.lon)) {
+        if (Double.doubleToLongBits(lon) != Double
+            .doubleToLongBits(other.lon)) {
             return false;
         }
         return true;

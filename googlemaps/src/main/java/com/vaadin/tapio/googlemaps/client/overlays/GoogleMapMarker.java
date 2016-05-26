@@ -36,13 +36,10 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Instantiates a new GoogleMapMarker
-     * 
-     * @param caption
-     *            The caption to use.
-     * @param position
-     *            The position of the marker
-     * @param draggable
-     *            Can marker be dragged?
+     *
+     * @param caption   The caption to use.
+     * @param position  The position of the marker
+     * @param draggable Can marker be dragged?
      */
     public GoogleMapMarker(String caption, LatLon position, boolean draggable) {
         this();
@@ -53,23 +50,20 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Instantiates a new GoogleMapMarker
-     * 
-     * @param caption
-     *            The caption to use.
-     * @param position
-     *            The position of the marker
-     * @param draggable
-     *            Can marker be dragged?
+     *
+     * @param caption   The caption to use.
+     * @param position  The position of the marker
+     * @param draggable Can marker be dragged?
      */
     public GoogleMapMarker(String caption, LatLon position, boolean draggable,
-            String iconUrl) {
+        String iconUrl) {
         this(caption, position, draggable);
         this.iconUrl = iconUrl;
     }
 
     /**
      * Returns the position of the marker.
-     * 
+     *
      * @return The position of the marker.
      */
     public LatLon getPosition() {
@@ -78,9 +72,8 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Sets the position of the marker.
-     * 
-     * @param position
-     *            The new position of the marker.
+     *
+     * @param position The new position of the marker.
      */
     public void setPosition(LatLon position) {
         this.position = position;
@@ -88,7 +81,7 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Gets the caption of the marker.
-     * 
+     *
      * @return The caption of the marker.
      */
     public String getCaption() {
@@ -97,9 +90,8 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Sets the caption of the marker.
-     * 
-     * @param caption
-     *            The new caption of the marker.
+     *
+     * @param caption The new caption of the marker.
      */
     public void setCaption(String caption) {
         this.caption = caption;
@@ -107,7 +99,7 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Checks if the marker is draggable.
-     * 
+     *
      * @return true, if it is draggable
      */
     public boolean isDraggable() {
@@ -116,9 +108,8 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Enables/disables dragging of the marker.
-     * 
-     * @param draggable
-     *            Set to true to enable dragging.
+     *
+     * @param draggable Set to true to enable dragging.
      */
     public void setDraggable(boolean draggable) {
         this.draggable = draggable;
@@ -126,7 +117,7 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Returns the url of the icon of the marker.
-     * 
+     *
      * @return the url of the icon, default null.
      */
     public String getIconUrl() {
@@ -135,9 +126,8 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Sets the url of the icon of the marker.
-     * 
-     * @param iconUrl
-     *            The new url of the icon.
+     *
+     * @param iconUrl The new url of the icon.
      */
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
@@ -145,7 +135,7 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Checks if marker animation is enabled.
-     * 
+     *
      * @return true, if enabled
      */
     public boolean isAnimationEnabled() {
@@ -154,9 +144,8 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Enables/disables marker animation.
-     * 
-     * @param animationEnabled
-     *            Set true to enable (default true).
+     *
+     * @param animationEnabled Set true to enable (default true).
      */
     public void setAnimationEnabled(boolean animationEnabled) {
         this.animationEnabled = animationEnabled;
@@ -164,7 +153,7 @@ public class GoogleMapMarker implements Serializable {
 
     /**
      * Checks if optimization is enabled.
-     * 
+     *
      * @return true, if enabled
      */
     public boolean isOptimized() {
@@ -175,9 +164,8 @@ public class GoogleMapMarker implements Serializable {
      * Enables/disables marker optimization. If enabled, many markers are
      * rendered as a single static element. Disable if you want to use animated
      * GIFs or PNGs.
-     * 
-     * @param optimized
-     *            Set true to enable (default true).
+     *
+     * @param optimized Set true to enable (default true).
      */
     public void setOptimized(boolean optimized) {
         this.optimized = optimized;
@@ -219,11 +207,11 @@ public class GoogleMapMarker implements Serializable {
 
     public boolean hasSameFieldValues(GoogleMapMarker other) {
         if ((other.getCaption() != null || getCaption() != null)
-                && !other.getCaption().equals(getCaption())) {
+            && !other.getCaption().equals(getCaption())) {
             return false;
         }
         if ((other.getIconUrl() != null || getIconUrl() != null)
-                && !other.getIconUrl().equals(getIconUrl())) {
+            && !other.getIconUrl().equals(getIconUrl())) {
             return false;
         }
         if (!other.getPosition().equals(getPosition())) {

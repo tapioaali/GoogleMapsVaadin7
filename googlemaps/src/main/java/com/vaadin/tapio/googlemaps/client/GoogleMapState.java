@@ -35,9 +35,9 @@ public class GoogleMapState extends AbstractComponentState {
     public boolean scrollWheelEnabled = true;
 
     public Set<GoogleMapControl> controls = new HashSet<GoogleMapControl>(
-            Arrays.asList(GoogleMapControl.MapType, GoogleMapControl.Pan,
-                    GoogleMapControl.Rotate, GoogleMapControl.Scale,
-                    GoogleMapControl.StreetView, GoogleMapControl.Zoom));
+        Arrays.asList(GoogleMapControl.MapType, GoogleMapControl.Pan,
+            GoogleMapControl.Rotate, GoogleMapControl.Scale,
+            GoogleMapControl.StreetView, GoogleMapControl.Zoom));
 
     public boolean limitCenterBounds = false;
     public LatLon centerSWLimit = new LatLon(0.0, 0.0);
@@ -60,4 +60,6 @@ public class GoogleMapState extends AbstractComponentState {
     public boolean trafficLayerVisible = false;
 
     public String apiUrl = null;
+
+    public Map<Long, String> infoWindowContentIdentifiers = new HashMap<>();
 }
