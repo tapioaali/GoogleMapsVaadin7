@@ -93,7 +93,7 @@ public class GoogleMapConnector extends AbstractComponentContainerConnector
         if (getState().clientId != null) {
             params = "client=" + getState().clientId;
         } else if (getState().apiKey != null) {
-            params = "APIKEY=" + getState().apiKey;
+            params = "key=" + getState().apiKey;
         }
 
         if (getState().apiUrl != null) {
