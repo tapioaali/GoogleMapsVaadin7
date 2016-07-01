@@ -162,6 +162,7 @@
                     <compileReport>true</compileReport>
                     <strict>true</strict>
                     <runTarget>http://localhost:8080/</runTarget>
+                    <style>pretty</style>
                 </configuration>
                 <executions>
                     <execution>

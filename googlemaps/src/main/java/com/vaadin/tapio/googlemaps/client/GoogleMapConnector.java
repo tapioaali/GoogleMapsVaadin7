@@ -258,10 +258,10 @@ public class GoogleMapConnector extends AbstractComponentContainerConnector
                         .replace("content-for-infowindow-", "");
                     Long id = Long.parseLong(identifier);
                     infoWindowContents.put(id, connector.getWidget());
-                    getWidget().setInfoWindowContents(infoWindowContents);
                 }
             }
         }
+        getWidget().setInfoWindowWidgets(infoWindowContents);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class GoogleMapInfoWindow implements Serializable {
      * Instantiates a new info window with the given content.
      *
      * @param content The content in HTML. If you want to use Vaadin components, use
-     *                GoogleMap#setInfoWindowContents.
+     *                GoogleMap#setInfoWindowContentWrappers.
      */
     public GoogleMapInfoWindow(String content) {
         this();
@@ -52,7 +52,7 @@ public class GoogleMapInfoWindow implements Serializable {
      * marker.
      *
      * @param content      The content in HTML. If you want to use Vaadin components, use
-     *                     GoogleMap#setInfoWindowContents.
+     *                     GoogleMap#setInfoWindowContentWrappers.
      * @param anchorMarker The marker in which the window will be anchored.
      */
     public GoogleMapInfoWindow(String content, GoogleMapMarker anchorMarker) {
@@ -73,7 +73,7 @@ public class GoogleMapInfoWindow implements Serializable {
      * Sets the content of the window.
      *
      * @param content The new content in HTML. If you want to use Vaadin components,
-     *                use GoogleMap#setInfoWindowContents.
+     *                use GoogleMap#setInfoWindowContentWrappers.
      */
     public void setContent(String content) {
         this.content = content;
