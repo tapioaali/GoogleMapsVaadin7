@@ -710,11 +710,13 @@ public class GoogleMap extends AbstractComponentContainer {
         }
     }
 
-    @Override public int getComponentCount() {
+    @Override
+    public int getComponentCount() {
         return infoWindowContents.size();
     }
 
-    @Override public Iterator<Component> iterator() {
+    @Override
+    public Iterator<Component> iterator() {
         return infoWindowContents.values().iterator();
     }
 

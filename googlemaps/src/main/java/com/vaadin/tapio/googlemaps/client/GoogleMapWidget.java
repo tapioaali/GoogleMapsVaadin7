@@ -37,7 +37,6 @@ import com.google.gwt.maps.client.layers.KmlLayerOptions;
 import com.google.gwt.maps.client.layers.TrafficLayer;
 import com.google.gwt.maps.client.mvc.MVCArray;
 import com.google.gwt.maps.client.overlays.Animation;
-import com.google.gwt.maps.client.overlays.InfoWindow;
 import com.google.gwt.maps.client.overlays.InfoWindowOptions;
 import com.google.gwt.maps.client.overlays.Marker;
 import com.google.gwt.maps.client.overlays.MarkerOptions;
@@ -73,7 +72,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     protected Map<GoogleMapMarker, Marker> gmMarkerMap = new HashMap<>();
     protected Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<>();
     protected Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<>();
-    protected Map<InfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<>();
+    protected Map<CustomInfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<>();
     protected Map<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = new HashMap<>();
     protected MarkerClickListener markerClickListener = null;
     protected MarkerDragListener markerDragListener = null;
@@ -81,7 +80,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
     protected Map<Marker, Long> markerDragCounter = new HashMap<>();
 
-    protected Map<Long, InfoWindow> infoWindowsWithComponents = new HashMap<>();
+    protected Map<Long, CustomInfoWindow> infoWindowsWithComponents = new HashMap<>();
     protected Map<Long, Widget> infoWindowContents = new HashMap<>();
 
     protected MapMoveListener mapMoveListener = null;
@@ -699,7 +698,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
             return;
         }
 
-        for (InfoWindow window : infoWindowMap.keySet()) {
+        for (CustomInfoWindow window : infoWindowMap.keySet()) {
             window.close();
         }
         infoWindowMap.clear();
@@ -707,6 +706,26 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
 
         for (GoogleMapInfoWindow gmWindow : infoWindows) {
             InfoWindowOptions options = InfoWindowOptions.newInstance();
+            options.setDisableAutoPan(gmWindow.isAutoPanDisabled());
+            if (gmWindow.getMaxWidth() != null) {
+                options.setMaxWidth(gmWindow.getMaxWidth());
+            }
+            if (gmWindow.getPixelOffsetHeight() != null
+                && gmWindow.getPixelOffsetWidth() != null) {
+                options.setPixelOffet(
+                    Size.newInstance(gmWindow.getPixelOffsetWidth(),
+                        gmWindow.getPixelOffsetHeight()));
+            }
+            if (gmWindow.getPosition() != null) {
+                options.setPosition(
+                    LatLng.newInstance(gmWindow.getPosition().getLat(),
+                        gmWindow.getPosition().getLon()));
+            }
+            if (gmWindow.getzIndex() != null) {
+                options.setZindex(gmWindow.getzIndex());
+            }
+            final CustomInfoWindow window = CustomInfoWindow.newInstance(options);
+
             if (!infoWindowContents.containsKey(gmWindow.getId())) {
                 String content = gmWindow.getContent();
 
@@ -731,31 +750,12 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
                     contentWrapper.append("</div>");
                     content = contentWrapper.toString();
                 }
-                options.setContent(content);
+                window.setContent(content);
             } else {
                 Widget content = infoWindowContents.get(gmWindow.getId());
-                options.setContent(content);
+                window.setContent(content);
             }
 
-            options.setDisableAutoPan(gmWindow.isAutoPanDisabled());
-            if (gmWindow.getMaxWidth() != null) {
-                options.setMaxWidth(gmWindow.getMaxWidth());
-            }
-            if (gmWindow.getPixelOffsetHeight() != null
-                && gmWindow.getPixelOffsetWidth() != null) {
-                options.setPixelOffet(
-                    Size.newInstance(gmWindow.getPixelOffsetWidth(),
-                        gmWindow.getPixelOffsetHeight()));
-            }
-            if (gmWindow.getPosition() != null) {
-                options.setPosition(
-                    LatLng.newInstance(gmWindow.getPosition().getLat(),
-                        gmWindow.getPosition().getLon()));
-            }
-            if (gmWindow.getzIndex() != null) {
-                options.setZindex(gmWindow.getzIndex());
-            }
-            final InfoWindow window = InfoWindow.newInstance(options);
             if (gmMarkerMap.containsKey(gmWindow.getAnchorMarker())) {
                 window.open(map, gmMarkerMap.get(gmWindow.getAnchorMarker()));
             } else {
@@ -780,7 +780,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         }
     }
 
-    public InfoWindow getInfoWindowById(Long id) {
+    public CustomInfoWindow getInfoWindowById(Long id) {
         return infoWindowsWithComponents.get(id);
     }
 
@@ -819,7 +819,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     public void setInfoWindowContents(Map<Long, Widget> contents) {
         infoWindowContents = contents;
         for (long id : contents.keySet()) {
-            InfoWindow window = getInfoWindowById(id);
+            CustomInfoWindow window = getInfoWindowById(id);
             if (window != null) {
                 window.setContent(contents.get(id));
             }
