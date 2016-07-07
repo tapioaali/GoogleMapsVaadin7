@@ -20,15 +20,8 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 import com.vaadin.tapio.googlemaps.demo.events.OpenInfoWindowOnMarkerClickListener;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 /**
  * Google Maps UI for testing and demoing.
@@ -231,7 +224,12 @@ public class DemoUI extends UI {
                 @Override
                 public void buttonClick(ClickEvent clickEvent) {
                     googleMap.setInfoWindowContents(maariaWindow,
-                        new Button("Maaria button does nothing :/"));
+                        new Button("Maaria button does something", new Button.ClickListener() {
+                            @Override
+                            public void buttonClick(ClickEvent event) {
+                                Notification.show("hello there!");
+                            }
+                        }));
                 }
             });
         buttonLayoutRow1.addComponent(componentToMaariaInfoWindowButton);

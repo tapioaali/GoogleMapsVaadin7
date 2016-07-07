@@ -158,8 +158,7 @@ public class GoogleMapConnector extends AbstractComponentContainerConnector
         getWidget().setScrollWheelEnabled(getState().scrollWheelEnabled);
         getWidget().setMinZoom(getState().minZoom);
         getWidget().setMaxZoom(getState().maxZoom);
-        getWidget().setInfoWindows(getState().infoWindows.values(),
-            getState().infoWindowContentIdentifiers);
+        getWidget().setInfoWindows(getState().infoWindows.values());
 
         if (getState().fitToBoundsNE != null
             && getState().fitToBoundsSW != null) {

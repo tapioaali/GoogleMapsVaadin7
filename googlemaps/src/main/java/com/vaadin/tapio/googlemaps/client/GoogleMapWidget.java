@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.maps.client.MapImpl;
 import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapTypeId;
@@ -36,19 +38,13 @@ import com.google.gwt.maps.client.layers.KmlLayer;
 import com.google.gwt.maps.client.layers.KmlLayerOptions;
 import com.google.gwt.maps.client.layers.TrafficLayer;
 import com.google.gwt.maps.client.mvc.MVCArray;
-import com.google.gwt.maps.client.overlays.Animation;
-import com.google.gwt.maps.client.overlays.InfoWindowOptions;
-import com.google.gwt.maps.client.overlays.Marker;
-import com.google.gwt.maps.client.overlays.MarkerOptions;
-import com.google.gwt.maps.client.overlays.Polygon;
-import com.google.gwt.maps.client.overlays.PolygonOptions;
-import com.google.gwt.maps.client.overlays.Polyline;
-import com.google.gwt.maps.client.overlays.PolylineOptions;
+import com.google.gwt.maps.client.overlays.*;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.events.InfoWindowClosedListener;
 import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
 import com.vaadin.tapio.googlemaps.client.events.MapMoveListener;
@@ -72,16 +68,18 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     protected Map<GoogleMapMarker, Marker> gmMarkerMap = new HashMap<>();
     protected Map<Polygon, GoogleMapPolygon> polygonMap = new HashMap<>();
     protected Map<Polyline, GoogleMapPolyline> polylineMap = new HashMap<>();
+
+
     protected Map<CustomInfoWindow, GoogleMapInfoWindow> infoWindowMap = new HashMap<>();
+    protected Map<GoogleMapInfoWindow, CustomInfoWindow> gmInfoWindowMap = new HashMap<>();
+    protected Map<Long, CustomInfoWindow> infoWindowIDs = new HashMap<>();
+
     protected Map<KmlLayer, GoogleMapKmlLayer> kmlLayerMap = new HashMap<>();
     protected MarkerClickListener markerClickListener = null;
     protected MarkerDragListener markerDragListener = null;
     protected InfoWindowClosedListener infoWindowClosedListener = null;
 
     protected Map<Marker, Long> markerDragCounter = new HashMap<>();
-
-    protected Map<Long, CustomInfoWindow> infoWindowsWithComponents = new HashMap<>();
-    protected Map<Long, Widget> infoWindowContents = new HashMap<>();
 
     protected MapMoveListener mapMoveListener = null;
     protected LatLngBounds allowedBoundsCenter = null;
@@ -688,100 +686,98 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         timer.schedule(20);
     }
 
-    public void setInfoWindows(Collection<GoogleMapInfoWindow> infoWindows,
-        Map<Long, String> infoWindowWithContentIdentifiers) {
-        // update only if info windows have really changed
-        if (infoWindowMap.size() == infoWindows.size()
-            && infoWindowMap.values().containsAll(infoWindows)
-            && infoWindowWithContentIdentifiers.keySet()
-            .equals(infoWindowsWithComponents.keySet())) {
-            return;
+    InfoWindowOptions createInfoWindowOptions(GoogleMapInfoWindow gmWindow) {
+        InfoWindowOptions options = InfoWindowOptions.newInstance();
+        options.setDisableAutoPan(gmWindow.isAutoPanDisabled());
+        if (gmWindow.getMaxWidth() != null) {
+            options.setMaxWidth(gmWindow.getMaxWidth());
         }
-
-        for (CustomInfoWindow window : infoWindowMap.keySet()) {
-            window.close();
-        }
-        infoWindowMap.clear();
-        infoWindowsWithComponents.clear();
-
-        for (GoogleMapInfoWindow gmWindow : infoWindows) {
-            InfoWindowOptions options = InfoWindowOptions.newInstance();
-            options.setDisableAutoPan(gmWindow.isAutoPanDisabled());
-            if (gmWindow.getMaxWidth() != null) {
-                options.setMaxWidth(gmWindow.getMaxWidth());
-            }
-            if (gmWindow.getPixelOffsetHeight() != null
+        if (gmWindow.getPixelOffsetHeight() != null
                 && gmWindow.getPixelOffsetWidth() != null) {
-                options.setPixelOffet(
+            options.setPixelOffet(
                     Size.newInstance(gmWindow.getPixelOffsetWidth(),
-                        gmWindow.getPixelOffsetHeight()));
-            }
-            if (gmWindow.getPosition() != null) {
-                options.setPosition(
-                    LatLng.newInstance(gmWindow.getPosition().getLat(),
-                        gmWindow.getPosition().getLon()));
-            }
-            if (gmWindow.getzIndex() != null) {
-                options.setZindex(gmWindow.getzIndex());
-            }
-            final CustomInfoWindow window = CustomInfoWindow.newInstance(options);
-
-            if (!infoWindowContents.containsKey(gmWindow.getId())) {
-                String content = gmWindow.getContent();
-
-                // wrap the contents inside a div if there's a defined width or
-                // height
-                if (gmWindow.getHeight() != null
-                    || gmWindow.getWidth() != null) {
-                    StringBuffer contentWrapper = new StringBuffer(
-                        "<div style=\"");
-                    if (gmWindow.getWidth() != null) {
-                        contentWrapper.append("width:");
-                        contentWrapper.append(gmWindow.getWidth());
-                        contentWrapper.append(";");
-                    }
-                    if (gmWindow.getHeight() != null) {
-                        contentWrapper.append("height:");
-                        contentWrapper.append(gmWindow.getHeight());
-                        contentWrapper.append(";");
-                    }
-                    contentWrapper.append("\" >");
-                    contentWrapper.append(content);
-                    contentWrapper.append("</div>");
-                    content = contentWrapper.toString();
-                }
-                window.setContent(content);
-            } else {
-                Widget content = infoWindowContents.get(gmWindow.getId());
-                window.setContent(content);
-            }
-
-            if (gmMarkerMap.containsKey(gmWindow.getAnchorMarker())) {
-                window.open(map, gmMarkerMap.get(gmWindow.getAnchorMarker()));
-            } else {
-                window.open(map);
-            }
-            infoWindowMap.put(window, gmWindow);
-
-            window.addCloseClickHandler(new CloseClickMapHandler() {
-                @Override
-                public void onEvent(CloseClickMapEvent event) {
-                    if (infoWindowClosedListener != null) {
-                        infoWindowClosedListener
-                            .infoWindowClosed(infoWindowMap.get(window));
-                    }
-                }
-            });
-
-            if (infoWindowWithContentIdentifiers
-                .containsKey(gmWindow.getId())) {
-                infoWindowsWithComponents.put(gmWindow.getId(), window);
-            }
+                            gmWindow.getPixelOffsetHeight()));
         }
+        if (gmWindow.getPosition() != null) {
+            options.setPosition(
+                    LatLng.newInstance(gmWindow.getPosition().getLat(),
+                            gmWindow.getPosition().getLon()));
+        }
+        if (gmWindow.getzIndex() != null) {
+            options.setZindex(gmWindow.getzIndex());
+        }
+        return options;
     }
 
-    public CustomInfoWindow getInfoWindowById(Long id) {
-        return infoWindowsWithComponents.get(id);
+    DivElement createContentFromGMWindow(GoogleMapInfoWindow gmWindow) {
+        String content = gmWindow.getContent();
+
+        // wrap the contents inside a div if there's a defined width or
+        // height
+        if (gmWindow.getHeight() != null
+                || gmWindow.getWidth() != null) {
+            StringBuffer contentWrapper = new StringBuffer(
+                    "<div style=\"");
+            if (gmWindow.getWidth() != null) {
+                contentWrapper.append("width:");
+                contentWrapper.append(gmWindow.getWidth());
+                contentWrapper.append(";");
+            }
+            if (gmWindow.getHeight() != null) {
+                contentWrapper.append("height:");
+                contentWrapper.append(gmWindow.getHeight());
+                contentWrapper.append(";");
+            }
+            contentWrapper.append("\" >");
+            contentWrapper.append(content);
+            contentWrapper.append("</div>");
+            content = contentWrapper.toString();
+        }
+
+        DivElement div = Document.get().createDivElement();
+        div.setInnerHTML(content);
+        return div;
+    }
+
+    public void setInfoWindows(Collection<GoogleMapInfoWindow> infoWindows) {
+
+        for(GoogleMapInfoWindow gmWindow : infoWindows) {
+            InfoWindowOptions options = createInfoWindowOptions(gmWindow);
+
+            CustomInfoWindow window;
+
+            if(!gmInfoWindowMap.containsKey(gmWindow)) {
+                // Create new InfoWindow with contents
+                final CustomInfoWindow w = window = new CustomInfoWindow();
+                window.setContent(createContentFromGMWindow(gmWindow));
+                window.addCloseClickListener(new CloseClickMapHandler() {
+                    @Override
+                    public void onEvent(CloseClickMapEvent event) {
+                        if (infoWindowClosedListener != null) {
+                            infoWindowClosedListener
+                                    .infoWindowClosed(infoWindowMap.get(w));
+                        }
+                    }
+                });
+                adopt(window);
+
+                // Register new info window
+                infoWindowMap.put(window,gmWindow);
+                gmInfoWindowMap.put(gmWindow,window);
+                infoWindowIDs.put(gmWindow.getId(),window);
+            } else {
+                // Get reference to old window and close it
+                window = gmInfoWindowMap.get(gmWindow);
+                window.close();
+            }
+
+            // Open the window
+            if (gmMarkerMap.containsKey(gmWindow.getAnchorMarker())) {
+                window.open(options, map, gmMarkerMap.get(gmWindow.getAnchorMarker()));
+            } else {
+                window.open(options, map);
+            }
+        }
     }
 
     public void fitToBounds(LatLon boundsNE, LatLon boundsSW) {
@@ -816,12 +812,13 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         }
     }
 
+
     public void setInfoWindowContents(Map<Long, Widget> contents) {
-        infoWindowContents = contents;
-        for (long id : contents.keySet()) {
-            CustomInfoWindow window = getInfoWindowById(id);
-            if (window != null) {
-                window.setContent(contents.get(id));
+        for(long id : contents.keySet()) {
+            CustomInfoWindow win = infoWindowIDs.get(id);
+            Widget w = contents.get(id);
+            if(win.getContents() != w) {
+                win.setContent(w);
             }
         }
     }
