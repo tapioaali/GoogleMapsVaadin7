@@ -817,7 +817,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         for(long id : contents.keySet()) {
             CustomInfoWindow win = infoWindowIDs.get(id);
             Widget w = contents.get(id);
-            if(win.getContents() != w) {
+            if(win != null && win.getContents() != w) {
                 win.setContent(w);
             }
         }

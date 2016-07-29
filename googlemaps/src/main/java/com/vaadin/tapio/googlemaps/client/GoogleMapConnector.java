@@ -169,6 +169,7 @@ public class GoogleMapConnector extends AbstractComponentContainerConnector
         if (initial) {
             getWidget().triggerResize();
         }
+		onConnectorHierarchyChange(null);
     }
 
     protected void updateVisibleAreaAndCenterBoundLimits() {
