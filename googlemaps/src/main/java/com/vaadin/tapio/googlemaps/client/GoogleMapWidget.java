@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.animation.client.AnimationScheduler;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.maps.client.MapImpl;
@@ -675,15 +677,19 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
     }
 
     public void triggerResize() {
-        Timer timer = new Timer() {
+        AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
             @Override
-            public void run() {
-                map.triggerResize();
-                map.setZoom(mapOptions.getZoom());
-                map.setCenter(mapOptions.getCenter());
+            public void execute(double timestamp) {
+                Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        map.triggerResize();
+                        map.setZoom(mapOptions.getZoom());
+                        map.setCenter(mapOptions.getCenter());
+                    }
+                });
             }
-        };
-        timer.schedule(20);
+        });
     }
 
     InfoWindowOptions createInfoWindowOptions(GoogleMapInfoWindow gmWindow) {
