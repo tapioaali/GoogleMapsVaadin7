@@ -722,7 +722,7 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         // height
         if (gmWindow.getHeight() != null
                 || gmWindow.getWidth() != null) {
-            StringBuffer contentWrapper = new StringBuffer(
+            StringBuilder contentWrapper = new StringBuilder(
                     "<div style=\"");
             if (gmWindow.getWidth() != null) {
                 contentWrapper.append("width:");
@@ -745,37 +745,57 @@ public class GoogleMapWidget extends FlowPanel implements RequiresResize {
         return div;
     }
 
-    public void setInfoWindows(Collection<GoogleMapInfoWindow> infoWindows) {
 
+    /**
+     * Closes windows
+     * @param infoWindows2Close set of windows to be closed
+     */
+    public void closeInfoWindows(Set<GoogleMapInfoWindow> infoWindows2Close) {
+        if (infoWindows2Close == null || infoWindows2Close.isEmpty()){
+            return;
+        }
+        for(GoogleMapInfoWindow gmWindow : infoWindows2Close) {
+            // Get reference to the window and close it
+            CustomInfoWindow window = gmInfoWindowMap.get(gmWindow);
+            if (window != null) {
+                window.close();
+                gmInfoWindowMap.remove(gmWindow);
+            }
+        }
+        //clear the processed windows
+        infoWindows2Close.clear();
+    }
+
+
+
+    public void setInfoWindows(Collection<GoogleMapInfoWindow> infoWindows) {
         for(GoogleMapInfoWindow gmWindow : infoWindows) {
             InfoWindowOptions options = createInfoWindowOptions(gmWindow);
 
             CustomInfoWindow window;
 
-            if(!gmInfoWindowMap.containsKey(gmWindow)) {
-                // Create new InfoWindow with contents
-                final CustomInfoWindow w = window = new CustomInfoWindow();
-                window.setContent(createContentFromGMWindow(gmWindow));
-                window.addCloseClickListener(new CloseClickMapHandler() {
-                    @Override
-                    public void onEvent(CloseClickMapEvent event) {
-                        if (infoWindowClosedListener != null) {
-                            infoWindowClosedListener
-                                    .infoWindowClosed(infoWindowMap.get(w));
-                        }
-                    }
-                });
-                adopt(window);
-
-                // Register new info window
-                infoWindowMap.put(window,gmWindow);
-                gmInfoWindowMap.put(gmWindow,window);
-                infoWindowIDs.put(gmWindow.getId(),window);
-            } else {
-                // Get reference to old window and close it
-                window = gmInfoWindowMap.get(gmWindow);
-                window.close();
+            if (gmInfoWindowMap.containsKey(gmWindow)) {
+                continue;
             }
+
+            // Create new InfoWindow with contents
+            final CustomInfoWindow w = window = new CustomInfoWindow();
+            window.setContent(createContentFromGMWindow(gmWindow));
+            window.addCloseClickListener(new CloseClickMapHandler() {
+                @Override
+                public void onEvent(CloseClickMapEvent event) {
+                    if (infoWindowClosedListener != null) {
+                        infoWindowClosedListener
+                                .infoWindowClosed(infoWindowMap.get(w));
+                    }
+                }
+            });
+            adopt(window);
+
+            // Register new info window
+            infoWindowMap.put(window, gmWindow);
+            gmInfoWindowMap.put(gmWindow, window);
+            infoWindowIDs.put(gmWindow.getId(), window);
 
             // Open the window
             if (gmMarkerMap.containsKey(gmWindow.getAnchorMarker())) {
