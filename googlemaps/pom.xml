@@ -3,26 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.vaadin.tapio</groupId>
+    
+    <parent>
+    	<groupId>com.vaadin.tapio</groupId>
+    	<artifactId>googlemaps-root</artifactId>    
+    	<version>1.5.0-SNAPSHOT</version>
+    </parent>    
+    
     <artifactId>googlemaps</artifactId>
-    <packaging>jar</packaging>
-    <version>1.4.0-SNAPSHOT</version>
+    <packaging>jar</packaging>    
     <name>GoogleMaps Add-on</name>
+    
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.7.0</vaadin.version>
-        <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-
-        <gwt-maps-api.version>3.10.0-alpha-7</gwt-maps-api.version>
-
-        <project.source.version>1.7</project.source.version>
-        <project.target.version>1.7</project.target.version>
-
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
-        <maven-source-plugin.version>2.4</maven-source-plugin.version>
-        <maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
+        <gwt-maps-api.version>3.10.0-alpha-7</gwt-maps-api.version>        
 
         <Implementation-Version>${project.version}</Implementation-Version>
         <Implementation-Title>${project.name}</Implementation-Title>
@@ -189,7 +182,7 @@
                         <phase>install</phase>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>            
         </plugins>
         <resources>
             <resource>

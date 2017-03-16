@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.vaadin.shared.AbstractComponentState;
+import com.vaadin.shared.ui.AbstractComponentContainerState;
 import com.vaadin.tapio.googlemaps.client.layers.GoogleMapKmlLayer;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
@@ -16,7 +16,7 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 /**
  * The shared state of the Google Maps. Contains also the default values.
  */
-public class GoogleMapState extends AbstractComponentState {
+public class GoogleMapState extends AbstractComponentContainerState {
     private static final long serialVersionUID = 646346522643L;
 
     public String apiKey = null;
