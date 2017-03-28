@@ -1,3 +1,13 @@
+# THIS REPOSITORY HAS MOVED
+
+This project is no longer being maintained here. It has moved to [https://github.com/parttio/Google-Maps-for-Vaadin](https://github.com/parttio/Google-Maps-for-Vaadin)
+
+No updates will be made to this repository.
+Filed issues will be ignored.
+
+
+
+
 # Google Maps Add-on for Vaadin 7
 
 Enables Google Maps in Vaadin 7 projects via JavaScript API 3!
