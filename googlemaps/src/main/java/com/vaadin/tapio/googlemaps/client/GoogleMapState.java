@@ -34,10 +34,10 @@ public class GoogleMapState extends AbstractComponentContainerState {
     public boolean keyboardShortcutsEnabled = true;
     public boolean scrollWheelEnabled = true;
 
-    public Set<GoogleMapControl> controls = new HashSet<GoogleMapControl>(
-        Arrays.asList(GoogleMapControl.MapType, GoogleMapControl.Pan,
-            GoogleMapControl.Rotate, GoogleMapControl.Scale,
-            GoogleMapControl.StreetView, GoogleMapControl.Zoom));
+    public Set<GoogleMapControl> controls = new HashSet<>(
+            Arrays.asList(GoogleMapControl.MapType, GoogleMapControl.Pan,
+                    GoogleMapControl.Rotate, GoogleMapControl.Scale,
+                    GoogleMapControl.StreetView, GoogleMapControl.Zoom));
 
     public boolean limitCenterBounds = false;
     public LatLon centerSWLimit = new LatLon(0.0, 0.0);
@@ -50,13 +50,19 @@ public class GoogleMapState extends AbstractComponentContainerState {
     public LatLon fitToBoundsNE = null;
     public LatLon fitToBoundsSW = null;
 
-    public Set<GoogleMapPolygon> polygons = new HashSet<GoogleMapPolygon>();
-    public Set<GoogleMapPolyline> polylines = new HashSet<GoogleMapPolyline>();
-    public Set<GoogleMapKmlLayer> kmlLayers = new HashSet<GoogleMapKmlLayer>();
+    public Set<GoogleMapPolygon> polygons = new HashSet<>();
+    public Set<GoogleMapPolyline> polylines = new HashSet<>();
+    public Set<GoogleMapKmlLayer> kmlLayers = new HashSet<>();
 
-    public Map<Long, GoogleMapMarker> markers = new HashMap<Long, GoogleMapMarker>();
+    public Map<Long, GoogleMapMarker> markers = new HashMap<>();
 
-    public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<Long, GoogleMapInfoWindow>();
+    public Map<Long, GoogleMapInfoWindow> infoWindows = new HashMap<>();
+
+    /**
+     * Set of windows 2 be closed
+     */
+    public Set<GoogleMapInfoWindow> infoWindows2Close = new HashSet<>();
+
     public boolean trafficLayerVisible = false;
 
     public String apiUrl = null;

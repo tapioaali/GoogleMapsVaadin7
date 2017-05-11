@@ -254,7 +254,7 @@ public class GoogleMap extends AbstractComponentContainer {
      * Removes all the markers from the map.
      */
     public void clearMarkers() {
-        getState().markers = new HashMap<Long, GoogleMapMarker>();
+        getState().markers = new HashMap<>();
     }
 
     /**
@@ -646,6 +646,7 @@ public class GoogleMap extends AbstractComponentContainer {
      */
     public void closeInfoWindow(GoogleMapInfoWindow infoWindow) {
         getState().infoWindows.remove(infoWindow.getId());
+        getState().infoWindows2Close.add(infoWindow);
     }
 
     /**
@@ -655,7 +656,8 @@ public class GoogleMap extends AbstractComponentContainer {
      * @return true, if the window is open.
      */
     public boolean isInfoWindowOpen(GoogleMapInfoWindow infoWindow) {
-        return getState().infoWindows.containsKey(infoWindow.getId());
+        return getState().infoWindows.containsKey(infoWindow.getId())
+                && !getState().infoWindows2Close.contains(infoWindow);
     }
 
     /**
